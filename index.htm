@@ -6,283 +6,192 @@
 <title>MAD-Policy — Multi-Agent Debate System</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;500;600;700&family=Barlow:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&display=block">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&display=block" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
 :root {
-  --bg:       #0c0c0c;
-  --bg2:      #111111;
-  --bg3:      #161616;
-  --bg4:      #1c1c1c;
-  --line:     rgba(255,255,255,0.08);
-  --line-md:  rgba(255,255,255,0.14);
-  --line-hi:  rgba(255,255,255,0.22);
-  --white:    #ffffff;
-  --off:      #cccccc;
-  --muted:    #666666;
-  --dim:      #999999;
-  --gov:      #4a7cf0;
-  --ent:      #e05a7a;
-  --council:  #8b6fc4;
-  --accent:   #e8d5a0;
-  --green:    #3fcb9a;
-  --gold:     #d4b870;
-  --orange:   #e07a4a;
-  --gap:      #f0a050;
+  --bg:       #100c08;
+  --bg2:      #131009;
+  --bg3:      #1a1610;
+  --bg4:      #231e14;
+  --line:     rgba(200,160,80,0.1);
+  --line-md:  rgba(200,160,80,0.18);
+  --line-hi:  rgba(200,160,80,0.3);
+  --white:    #f5efe6;
+  --off:      #e8dcc8;
+  --muted:    #9e8e76;
+  --dim:      #c4ae90;
+  --gov:      #4a7ec8;
+  --ent:      #c8382a;
+  --council:  #c8922a;
+  --accent:   #e8c87a;
+  --green:    #4a9e5c;
+  --gold:     #d4a030;
+  --orange:   #c86428;
+  --gap:      #c89a28;
 }
+
+html.light {
+  --bg:       #f5f0e8;
+  --bg2:      #ece6da;
+  --bg3:      #e4ddd0;
+  --bg4:      #d8d0c0;
+  --line:     rgba(120,90,40,0.12);
+  --line-md:  rgba(120,90,40,0.2);
+  --line-hi:  rgba(120,90,40,0.35);
+  --white:    #1a1510;
+  --off:      #2e2618;
+  --muted:    #5a4e3a;
+  --dim:      #3e3428;
+  --gov:      #2a5fa8;
+  --ent:      #a82018;
+  --council:  #a87218;
+  --accent:   #a87820;
+  --green:    #2a7e3c;
+  --gold:     #a48020;
+  --orange:   #a84418;
+  --gap:      #a87a18;
+}
+html.light body { background-color: #f5f0e8 !important; background-image: none !important; }
+html.light body::before, html.light body::after { opacity: 0.3; }
+html.light .sidebar { background: #ece6da !important; border-right-color: rgba(120,90,40,0.15) !important; }
+html.light .topbar { background: rgba(240,234,222,0.97) !important; border-bottom-color: rgba(120,90,40,0.15) !important; }
+html.light .panel { background: var(--bg2) !important; border-color: rgba(120,90,40,0.12) !important; }
+html.light .kpi-strip, html.light .pipeline-strip { background: var(--bg2) !important; border-color: rgba(120,90,40,0.12) !important; }
+html.light .ctrl-input { background: var(--bg3); border-color: rgba(120,90,40,0.2); color: var(--white); }
+html.light #loading { background: var(--bg); }
+
+.theme-toggle {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: transparent; border: 1px solid var(--line-md);
+  color: var(--muted); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px; line-height: 1; transition: all .2s; flex-shrink: 0;
+}
+.theme-toggle:hover { border-color: var(--line-hi); color: var(--white); }
+
 * { margin:0; padding:0; box-sizing:border-box; }
 html { scroll-behavior:smooth; }
 body {
   background: var(--bg);
   color: var(--white);
-  font-family: 'Barlow', 'Segoe UI', system-ui, -apple-system, sans-serif;
-  font-size: 14px;
-  line-height: 1.6;
-  min-height: 100vh;
+  font-family: 'Be Vietnam Pro', system-ui, sans-serif;
+  font-size: 16px; line-height: 1.6; min-height: 100vh;
+  background-color: #0e0b07;
+  background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%278%27%20height%3D%278%27%3E%3Crect%20width%3D%278%27%20height%3D%278%27%20fill%3D%27none%27/%3E%3Crect%20x%3D%270%27%20y%3D%270%27%20width%3D%273%27%20height%3D%273%27%20fill%3D%27rgba%28160%2C80%2C30%2C0.06%29%27/%3E%3Crect%20x%3D%274%27%20y%3D%274%27%20width%3D%273%27%20height%3D%273%27%20fill%3D%27rgba%2840%2C60%2C120%2C0.05%29%27/%3E%3Crect%20x%3D%274%27%20y%3D%270%27%20width%3D%273%27%20height%3D%273%27%20fill%3D%27rgba%28140%2C100%2C20%2C0.04%29%27/%3E%3Crect%20x%3D%270%27%20y%3D%274%27%20width%3D%273%27%20height%3D%273%27%20fill%3D%27rgba%2840%2C90%2C50%2C0.04%29%27/%3E%3C/svg%3E");
+  background-repeat: repeat; background-size: 8px 8px;
 }
-
-/* ─── LAYOUT ─── */
-.shell { display:flex; height:100vh; overflow:hidden; }
+body::before {
+  content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 70% 50% at 10% 15%, rgba(160,50,30,0.05) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 90% 85%, rgba(40,60,140,0.04) 0%, transparent 60%);
+}
+.shell { display:flex; height:100vh; overflow:hidden; position:relative; z-index:1; }
 
 /* ─── SIDEBAR ─── */
 .sidebar {
-  width: 280px;
-  flex-shrink: 0;
-  background: var(--bg);
-  border-right: 1px solid var(--line);
-  display: flex;
-  flex-direction: column;
-  position: relative;
+  width: 300px; flex-shrink: 0;
+  background: rgba(8,6,3,0.96) !important;
+  border-right: 1px solid rgba(180,120,30,0.18) !important;
+  display: flex; flex-direction: column;
+  position: relative; transition: width .25s ease; overflow: hidden;
 }
+.sidebar.collapsed { width: 56px; }
 .sidebar::before {
-  content:'';
-  position:absolute;
-  top:0; left:0; right:0;
-  height:3px;
-  background: linear-gradient(90deg, var(--gov), var(--council), var(--ent));
+  content:''; position:absolute; top:0; left:0; right:0; height:3px;
+  background: linear-gradient(90deg, var(--gov), var(--council), var(--ent)); z-index:1;
 }
+.sb-toggle {
+  position:absolute; top:14px; right:10px; z-index:10;
+  width:28px; height:28px; border-radius:2px;
+  background:transparent; border:1px solid var(--line);
+  color:var(--muted); cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  font-size:14px; transition:all .2s; flex-shrink:0;
+}
+.sb-toggle:hover { border-color:var(--line-hi); color:var(--white); }
+.sidebar.collapsed .sb-toggle { right:14px; }
+.sidebar.collapsed .sb-brand,
+.sidebar.collapsed .nav-section-label,
+.sidebar.collapsed .nav-content { opacity:0; pointer-events:none; }
+.sidebar.collapsed .nav-num { font-size:14px; width:56px; }
+.sidebar.collapsed .nav-item { justify-content:center; }
+.sidebar.collapsed .sb-nav { padding-top:60px; }
 .sb-brand {
-  padding: 36px 30px 28px;
-  border-bottom: 1px solid var(--line);
+  padding: 32px 28px 24px; border-bottom: 1px solid var(--line);
+  transition: background .2s; cursor:pointer;
 }
+.sb-brand:hover { background: rgba(255,255,255,0.03); }
 .brand-main {
   font-family: 'Bebas Neue', 'Arial Black', 'Impact', sans-serif;
-  font-size: 32px;
-  letter-spacing: 2px;
-  line-height: 1;
-  color: var(--white);
+  font-size: 36px; letter-spacing: 3px; line-height: 1; color: var(--white);
 }
-.brand-main span { color: var(--gov); }
-.brand-sub {
-  font-family: 'Barlow Condensed', 'Arial Narrow', sans-serif;
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-top: 6px;
-}
-.brand-desc {
-  font-size: 12px;
-  color: var(--dim);
-  margin-top: 12px;
-  line-height: 1.55;
-  border-left: 2px solid var(--gov);
-  padding-left: 10px;
-}
-
-.sb-nav {
-  flex: 1;
-  padding: 24px 0;
-  overflow-y: auto;
-}
-.nav-section-label {
-  font-family: 'Barlow Condensed', 'Arial Narrow', sans-serif;
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--muted);
-  padding: 0 30px 10px;
-}
-.nav-item {
-  display: flex;
-  align-items: center;
-  gap: 0;
-  padding: 0;
-  cursor: pointer;
-  transition: all .2s;
-  border-left: 2px solid transparent;
-  position: relative;
-  overflow: hidden;
-}
-.nav-item:hover { background: rgba(255,255,255,0.03); border-left-color: var(--line-hi); }
-.nav-item.active { background: rgba(255,255,255,0.05); border-left-color: var(--gov); }
-.nav-num {
-  font-family: 'Bebas Neue', 'Arial Black', 'Impact', sans-serif;
-  font-size: 36px;
-  color: var(--line-md);
-  width: 60px;
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: color .2s;
-  padding: 14px 0;
-}
-.nav-item.active .nav-num { color: rgba(74,124,240,0.3); }
-.nav-item:hover .nav-num { color: rgba(255,255,255,0.12); }
-.nav-content { flex: 1; padding: 14px 20px 14px 0; }
-.nav-title {
-  font-family: 'Barlow Condensed', 'Arial Narrow', sans-serif;
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  color: var(--dim);
-  transition: color .2s;
-  line-height: 1.3;
-}
-.nav-sub {
-  font-size: 11px;
-  color: var(--muted);
-  margin-top: 2px;
-}
-.nav-item.active .nav-title { color: var(--white); }
-.nav-item:hover .nav-title { color: var(--off); }
-.nav-divider { height: 1px; background: var(--line); margin: 16px 30px; }
-.sb-footer {
-  padding: 20px 30px;
-  border-top: 1px solid var(--line);
-}
-.sys-row { display:flex; align-items:center; gap:8px; }
-.sys-dot {
-  width:6px; height:6px; border-radius:50%;
-  background:var(--green); box-shadow:0 0 8px var(--green);
-  animation: pulse 2.5s ease infinite;
-}
-@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
-.sys-txt { font-size:11px; color:var(--muted); }
-.ver { font-family:'JetBrains Mono','Courier New',monospace; font-size:10px; color:var(--muted); margin-top:5px; }
+.brand-main span { background: linear-gradient(135deg, #d4a030, #c8382a); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.brand-sub { font-size: 15px; font-weight: 500; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); margin-top: 6px; }
+.brand-desc { font-size: 12px; color: var(--dim); margin-top: 10px; line-height: 1.55; border-left: 2px solid var(--gov); padding-left: 10px; max-width: 220px; }
+.sb-nav { flex:1; padding: 24px 0 40px; overflow-y: auto; }
+.nav-section-label { font-size: 11px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: var(--muted); padding: 0 30px 10px; white-space: nowrap; }
+.nav-item { display:flex; align-items:center; padding:0; cursor:pointer; transition:all .2s; border-left:2px solid transparent; position:relative; overflow:hidden; }
+.nav-item:hover { background:rgba(180,120,30,0.06) !important; border-left-color:var(--line-hi); }
+.nav-item.active { background:rgba(160,50,30,0.1) !important; border-left-color:var(--ent) !important; }
+.nav-num { font-family:'Bebas Neue',sans-serif; font-size:36px; color:var(--line-md); width:60px; flex-shrink:0; display:flex; align-items:center; justify-content:center; transition:color .2s; padding:14px 0; }
+.nav-item.active .nav-num { color:rgba(200,56,42,0.35); }
+.nav-item:hover .nav-num { color:rgba(255,255,255,0.12); }
+.nav-content { flex:1; padding:14px 16px 14px 0; overflow:hidden; }
+.nav-title { font-size:15px; font-weight:600; letter-spacing:1px; text-transform:uppercase; color:var(--dim); transition:color .2s; line-height:1.3; }
+.nav-sub { font-size:15px; color:var(--muted); margin-top:2px; }
+.nav-item.active .nav-title { color:var(--white); }
+.nav-item:hover .nav-title { color:var(--off); }
+.nav-divider { height:1px; background:var(--line); margin:16px 30px; }
 
 /* ─── MAIN ─── */
 .main { flex:1; overflow-y:auto; display:flex; flex-direction:column; }
 .topbar {
   display:flex; align-items:center; justify-content:space-between;
-  padding: 0 40px;
-  height: 56px;
-  border-bottom: 1px solid var(--line);
-  background: var(--bg);
-  position: sticky; top:0; z-index:10;
-  flex-shrink: 0;
+  padding:0 48px; height:60px;
+  border-bottom:1px solid rgba(180,120,30,0.15) !important;
+  background: rgba(8,6,3,0.96) !important; backdrop-filter:blur(8px);
+  position:sticky; top:0; z-index:10; flex-shrink:0;
 }
-.topbar-l {
-  display:flex; align-items:center; gap:12px;
-  font-family: 'Barlow Condensed', 'Arial Narrow', sans-serif;
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--muted);
+.topbar::after {
+  content:''; position:absolute; bottom:0; left:0; right:0; height:1px;
+  background:linear-gradient(90deg,transparent,rgba(180,50,30,0.5) 25%,rgba(180,130,30,0.6) 50%,rgba(50,80,160,0.4) 75%,transparent);
 }
-.topbar-sep { color: var(--line-hi); }
-.topbar-page { color: var(--dim); }
+.topbar-l { display:flex; align-items:center; gap:12px; font-size:14px; font-weight:500; letter-spacing:2px; text-transform:uppercase; color:var(--muted); }
+.topbar-sep { color:var(--line-hi); }
+.topbar-page { color:var(--dim); }
 .topbar-r { display:flex; align-items:center; gap:10px; }
-.badge {
-  display:inline-flex; align-items:center; gap:5px;
-  padding: 4px 10px;
-  border: 1px solid var(--line-md);
-  border-radius: 2px;
-  font-family: 'Barlow Condensed', 'Arial Narrow', sans-serif;
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--dim);
-}
-.badge-green { border-color: rgba(63,203,154,0.3); color: var(--green); }
-.badge-blue  { border-color: rgba(74,124,240,0.3); color: var(--gov); }
-.badge-gold  { border-color: rgba(212,184,112,0.3); color: var(--gold); }
-.badge-gap   { border-color: rgba(240,160,80,0.35); color: var(--gap); }
-.tclock { font-family:'JetBrains Mono','Courier New',monospace; font-size:11px; color:var(--muted); }
+.badge { display:inline-flex; align-items:center; gap:5px; padding:5px 12px; border:1px solid var(--line-md); border-radius:20px; font-size:12px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--dim); }
+.badge-green { border-color:rgba(63,203,154,0.3); color:var(--green); }
+.badge-blue  { border-color:rgba(74,124,240,0.3); color:var(--gov); }
+.badge-gold  { border-color:rgba(212,184,112,0.3); color:var(--gold); }
+.badge-gap   { border-color:rgba(240,160,80,0.35); color:var(--gap); }
+.tclock { font-family:'DM Mono','Courier New',monospace; font-size:15px; color:var(--muted); }
 
 /* ─── PAGES ─── */
 .page { display:none; flex:1; flex-direction:column; }
+.page.active { animation:fadeIn .25s ease; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
 .page.active { display:flex; }
 
 /* ─── PAGE HERO ─── */
 .page-hero {
-  padding: 50px 40px 40px;
-  border-bottom: 1px solid var(--line);
-  position: relative;
-  overflow: hidden;
+  padding:56px 48px 48px; border-bottom:1px solid var(--line);
+  position:relative; overflow:hidden;
 }
-.page-hero::after {
-  content:'';
-  position:absolute; top:0; right:0;
-  width:300px; height:100%;
-  background: radial-gradient(ellipse at right center, rgba(74,124,240,0.04) 0%, transparent 70%);
-  pointer-events:none;
-}
-.hero-eyebrow {
-  font-family: 'Barlow Condensed', 'Arial Narrow', sans-serif;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 4px;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 10px;
-  display:flex; align-items:center; gap:10px;
-}
-.hero-eyebrow::before {
-  content:'';
-  display:inline-block;
-  width:24px; height:1px;
-  background: currentColor;
-}
-.page-title {
-  font-family: 'Bebas Neue', 'Arial Black', 'Impact', sans-serif;
-  font-size: 64px;
-  letter-spacing: 3px;
-  line-height: 0.9;
-  color: var(--white);
-  text-transform: uppercase;
-}
-.page-desc {
-  font-size: 13px;
-  color: var(--dim);
-  margin-top: 14px;
-  max-width: 560px;
-  line-height: 1.7;
-  border-left: 2px solid var(--line-md);
-  padding-left: 14px;
-}
-.page-body { flex:1; padding: 32px 40px 40px; display:flex; flex-direction:column; gap:24px; }
+.page-hero::after { content:''; position:absolute; top:0; right:0; width:300px; height:100%; background:radial-gradient(ellipse at right center,rgba(74,124,240,0.04) 0%,transparent 70%); pointer-events:none; }
+.hero-eyebrow { font-size:15px; font-weight:600; letter-spacing:4px; text-transform:uppercase; color:var(--muted); margin-bottom:32px; display:flex; align-items:center; gap:10px; }
+.hero-eyebrow::before { content:''; display:inline-block; width:24px; height:1px; background:currentColor; }
+.page-title { font-size:clamp(36px,5vw,72px); font-weight:700; letter-spacing:clamp(1px,0.3vw,3px); line-height:0.95; color:var(--white); text-transform:uppercase; word-break:break-word; }
+.page-desc { font-size:14px; color:var(--dim); margin-top:18px; max-width:900px; line-height:1.75; border-left:2px solid var(--gov); padding-left:16px; opacity:0.85; word-break:break-word; }
+.page-body { flex:1; padding:36px 48px 48px; display:flex; flex-direction:column; gap:28px; }
 
 /* ─── SECTION HEADERS ─── */
-.sec-header {
-  display:flex; align-items:flex-end; justify-content:space-between;
-  margin-bottom: 16px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid var(--line);
-}
-.sec-num {
-  font-family: 'Bebas Neue', 'Arial Black', 'Impact', sans-serif;
-  font-size: 72px;
-  line-height: 1;
-  color: var(--line-md);
-  letter-spacing: 2px;
-  margin-right: -4px;
-}
-.sec-title {
-  font-family: 'Barlow Condensed', 'Arial Narrow', sans-serif;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--muted);
-  padding-bottom: 8px;
-}
+.sec-header { display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:16px; padding-bottom:12px; border-bottom:1px solid rgba(180,120,30,0.18) !important; }
+.sec-num { font-family:'Bebas Neue',sans-serif; font-size:80px; line-height:1; color:var(--line-md); letter-spacing:2px; margin-right:-4px; }
+.sec-title { font-size:15px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:var(--muted); padding-bottom:8px; }
 .sec-right { display:flex; align-items:center; gap:8px; padding-bottom:4px; }
 
 /* ─── GRID ─── */
@@ -292,514 +201,347 @@ body {
 
 /* ─── PANELS ─── */
 .panel {
-  background: var(--bg2);
-  border: 1px solid var(--line);
-  padding: 24px;
-  position: relative;
+  background:rgba(14,11,7,0.95) !important; border:1px solid rgba(180,120,30,0.12) !important;
+  padding:28px; position:relative; transition: border-color .2s, box-shadow .2s;
 }
-.panel-sm { padding: 18px; }
-.panel-hd {
-  display:flex; align-items:center; justify-content:space-between;
-  margin-bottom: 18px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid var(--line);
-}
-.panel-title {
-  font-family: 'Barlow Condensed', 'Arial Narrow', sans-serif;
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--muted);
-}
+.panel:hover { border-color:rgba(180,80,30,0.28) !important; box-shadow:0 4px 24px rgba(0,0,0,0.4); }
+.panel-sm { padding:18px; }
+.panel-hd { display:flex; align-items:center; justify-content:space-between; margin-bottom:18px; padding-bottom:12px; border-bottom:1px solid var(--line); }
+.panel-title { font-size:12px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:var(--muted); }
 
-/* ─── PIPELINE STRIP ─── */
-.pipeline-strip {
-  background: var(--bg2);
-  border: 1px solid var(--line);
-}
+/* ─── PIPELINE ─── */
+.pipeline-strip { background:rgba(14,11,7,0.95) !important; border:1px solid rgba(180,120,30,0.12) !important; }
 .pipeline-row { display:flex; align-items:stretch; }
-.p-step {
-  flex:1;
-  padding: 24px;
-  border-right: 1px solid var(--line);
-  position: relative;
-}
+.p-step { flex:1; padding:24px; border-right:1px solid var(--line); position:relative; }
 .p-step:last-child { border-right:none; }
-.p-step-num {
-  font-family: 'Bebas Neue', 'Arial Black', 'Impact', sans-serif;
-  font-size: 42px;
-  color: var(--line-hi);
-  line-height: 1;
-  margin-bottom: 8px;
-}
-.p-step-title {
-  font-family: 'Barlow Condensed', 'Arial Narrow', sans-serif;
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  color: var(--white);
-  margin-bottom: 4px;
-}
-.p-step-desc { font-size: 11px; color: var(--muted); line-height: 1.5; }
-.p-step-done {
-  position:absolute; top:16px; right:16px;
-  width:18px; height:18px; border-radius:50%;
-  background: var(--green);
-  display:flex; align-items:center; justify-content:center;
-}
-.p-step-done::after {
-  content:'';
-  width:7px; height:4px;
-  border-left: 1.5px solid #000;
-  border-bottom: 1.5px solid #000;
-  transform: rotate(-45deg) translate(1px,-1px);
-}
+.p-step-num { font-family:'Bebas Neue',sans-serif; font-size:42px; color:var(--line-hi); line-height:1; margin-bottom:8px; }
+.p-step-title { font-size:15px; font-weight:600; letter-spacing:1px; text-transform:uppercase; color:var(--white); margin-bottom:4px; }
+.p-step-desc { font-size:15px; color:var(--muted); line-height:1.5; }
+.p-step-done { position:absolute; top:16px; right:16px; width:18px; height:18px; border-radius:50%; background:var(--green); display:flex; align-items:center; justify-content:center; }
+.p-step-done::after { content:''; width:7px; height:4px; border-left:1.5px solid #000; border-bottom:1.5px solid #000; transform:rotate(-45deg) translate(1px,-1px); }
 
 /* ─── KB BARS ─── */
-.kb-row {
-  display:flex; align-items:center; gap:16px;
-  padding: 10px 0;
-  border-bottom: 1px solid var(--line);
-}
+.kb-row { display:flex; align-items:center; gap:16px; padding:10px 0; border-bottom:1px solid var(--line); }
 .kb-row:last-child { border-bottom:none; }
-.kb-label { font-size:12px; color:var(--dim); width:200px; flex-shrink:0; }
-.kb-bar { flex:1; height:2px; background:var(--bg4); }
-.kb-fill { height:100%; transition:width 1.2s ease; }
-.kb-val { font-family:'JetBrains Mono','Courier New',monospace; font-size:12px; width:50px; text-align:right; flex-shrink:0; }
+.kb-label { font-size:14px; color:var(--dim); width:200px; flex-shrink:0; }
+.kb-bar { flex:1; height:3px; background:var(--bg4); border-radius:2px; overflow:hidden; }
+.kb-fill { height:100%; transition:width 1.2s ease; border-radius:2px; }
+.kb-val { font-family:'DM Mono','Courier New',monospace; font-size:14px; width:50px; text-align:right; flex-shrink:0; }
 
 /* ─── AGENT MAP ─── */
 .agent-split { display:grid; grid-template-columns:1fr 1px 1fr; gap:0; }
-.agent-divider { background: var(--line); }
-.agent-col { padding: 24px; }
-.agent-col-ent { background: rgba(224,90,122,0.02); }
-.agent-label {
-  font-family: 'Bebas Neue', 'Arial Black', 'Impact', sans-serif;
-  font-size: 24px;
-  letter-spacing: 2px;
-  margin-bottom: 4px;
-}
-.agent-meta {
-  font-family: 'Barlow Condensed', 'Arial Narrow', sans-serif;
-  font-size: 10px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 14px;
-  padding-bottom: 14px;
-  border-bottom: 1px solid var(--line);
-}
-.doc-item {
-  display:flex; align-items:center; gap:10px;
-  padding: 8px 0;
-  border-bottom: 1px solid var(--line);
-  font-size: 12px;
-  color: var(--dim);
-}
+.agent-divider { background:var(--line); }
+.agent-col { padding:24px; }
+.agent-col-ent { background:rgba(224,90,122,0.02); }
+.agent-label { font-family:'Be Vietnam Pro',sans-serif; font-size:24px; letter-spacing:2px; margin-bottom:4px; }
+.agent-meta { font-size:12px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); margin-bottom:14px; padding-bottom:14px; border-bottom:1px solid var(--line); }
+.doc-item { display:flex; align-items:center; gap:10px; padding:8px 0; border-bottom:1px solid var(--line); font-size:14px; color:var(--dim); }
 .doc-item:last-child { border-bottom:none; }
 .doc-dot { width:4px; height:4px; border-radius:50%; flex-shrink:0; }
-.doc-count { font-family:'JetBrains Mono','Courier New',monospace; font-size:11px; margin-left:auto; }
+.doc-count { font-family:'DM Mono','Courier New',monospace; font-size:15px; margin-left:auto; }
 
 /* ─── TAGGING ACCURACY ─── */
 .acc-grid { display:grid; grid-template-columns:1fr 1px 1fr; gap:0; }
-.acc-col { padding:0; }
 .acc-col:first-child { padding-right:24px; }
 .acc-col:last-child { padding-left:24px; }
 .acc-divider { background:var(--line); }
-.acc-label {
-  font-family: 'Barlow Condensed', 'Arial Narrow', sans-serif;
-  font-size: 10px; letter-spacing:3px; text-transform:uppercase;
-  margin-bottom: 14px; padding-bottom:10px; border-bottom:1px solid var(--line);
-}
-.acc-row {
-  display:flex; align-items:center; gap:12px;
-  padding: 8px 0; border-bottom: 1px solid var(--line);
-}
+.acc-label { font-size:12px; letter-spacing:3px; text-transform:uppercase; margin-bottom:14px; padding-bottom:10px; border-bottom:1px solid var(--line); }
+.acc-row { display:flex; align-items:center; gap:12px; padding:8px 0; border-bottom:1px solid var(--line); }
 .acc-row:last-child { border-bottom:none; }
-.acc-name { font-size:12px; color:var(--dim); flex:1; }
-.acc-bar { width:80px; height:1px; background:var(--bg4); }
-.acc-fill { height:100%; }
-.acc-val { font-family:'JetBrains Mono','Courier New',monospace; font-size:12px; width:42px; text-align:right; }
+.acc-name { font-size:14px; color:var(--dim); flex:1; }
+.acc-bar { width:80px; height:3px; background:var(--bg4); border-radius:2px; overflow:hidden; }
+.acc-fill { height:100%; border-radius:2px; }
+.acc-val { font-family:'DM Mono','Courier New',monospace; font-size:14px; width:42px; text-align:right; }
 
 /* ─── CHART WRAP ─── */
 .chart-wrap { position:relative; width:100%; height:200px; }
 .chart-wrap-lg { position:relative; width:100%; height:240px; }
+.chart-caption { font-size:11px; color:var(--muted); text-align:center; margin-top:6px; letter-spacing:1px; }
 
-/* ─── DEBATE ─── */
-.ctrl-strip {
-  background: var(--bg2);
-  border: 1px solid var(--line);
-  padding: 20px 24px;
-  display:flex; align-items:center; gap:16px; flex-wrap:wrap;
-}
-.ctrl-label {
-  font-family: 'Barlow Condensed', 'Arial Narrow', sans-serif;
-  font-size: 11px; letter-spacing:2px; text-transform:uppercase;
-  color:var(--muted); white-space:nowrap;
-}
-.ctrl-input {
-  flex:1; min-width:200px;
-  background: var(--bg3); border: 1px solid var(--line-md);
-  color: var(--white); border-radius:0;
-  padding: 10px 14px; font-size:13px;
-  font-family: 'Barlow', 'Segoe UI', system-ui, sans-serif;
-  outline:none; transition:border-color .2s;
-}
-.ctrl-input:focus { border-color: var(--gov); }
-select.ctrl-input { width:80px; flex:none; cursor:pointer; }
-.btn {
-  display:inline-flex; align-items:center; gap:8px;
-  padding: 10px 20px;
-  border-radius:0; border:1px solid transparent;
-  font-family:'Barlow Condensed','Arial Narrow',sans-serif; font-size:12px;
-  font-weight:600; letter-spacing:2px; text-transform:uppercase;
-  cursor:pointer; transition:all .2s; white-space:nowrap;
-}
-.btn-white { background:var(--white); color:#000; border-color:var(--white); }
-.btn-white:hover { background: var(--off); }
-.btn-white:disabled { opacity:.4; cursor:not-allowed; }
-.btn-ghost { background:transparent; color:var(--dim); border-color:var(--line-md); }
-.btn-ghost:hover { border-color:var(--line-hi); color:var(--white); }
-.btn-gold { background:var(--gold); color:#000; border-color:var(--gold); }
-.btn-gold:hover { background:#c4a860; }
-.btn-gold:disabled { opacity:.4; cursor:not-allowed; }
-
-/* Progress */
-.prog-strip {
-  background: var(--bg2); border:1px solid var(--line);
-  padding:14px 24px;
-  display:flex; align-items:center; gap:16px;
-}
-.prog-lbl { font-family:'Barlow Condensed','Arial Narrow',sans-serif; font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); white-space:nowrap; min-width:220px; }
-.prog-track { flex:1; height:1px; background:var(--bg4); }
-.prog-fill { height:100%; background:linear-gradient(90deg,var(--gov),var(--council),var(--ent)); transition:width .6s ease; }
-.prog-status { font-family:'Barlow Condensed','Arial Narrow',sans-serif; font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--dim); white-space:nowrap; }
-
-/* Debate columns */
-.debate-cols { display:grid; grid-template-columns:1fr 1fr; gap:1px; }
-.debate-col { background:var(--bg2); border:1px solid var(--line); display:flex; flex-direction:column; }
-.debate-col-header {
-  padding:16px 20px; border-bottom:1px solid var(--line);
-  display:flex; align-items:center; justify-content:space-between;
-}
-.dch-name { font-family:'Bebas Neue','Arial Black','Impact',sans-serif; font-size:20px; letter-spacing:2px; }
-.dch-meta { font-size:11px; color:var(--muted); margin-top:1px; }
-.dch-dot { width:8px; height:8px; border-radius:50%; }
-.debate-feed { flex:1; min-height:260px; max-height:360px; overflow-y:auto; padding:16px 20px; }
-.msg-block { margin-bottom:14px; }
-.msg-round {
-  font-family:'Barlow Condensed','Arial Narrow',sans-serif; font-size:10px;
-  letter-spacing:2px; text-transform:uppercase; color:var(--muted);
-  margin-bottom:6px;
-}
-.msg-text {
-  font-size:13px; color:var(--dim); line-height:1.7;
-  border-left:2px solid var(--line-md); padding-left:12px;
-}
-.msg-text.gov-msg { border-left-color:var(--gov); }
-.msg-text.ent-msg { border-left-color:var(--ent); }
-.msg-text.mod-msg { border-left-color:var(--gold); color:var(--muted); font-style:italic; }
-
-/* Result panels */
-.result-panel {
-  background:var(--bg2); border:1px solid var(--line);
-  display:none;
-}
-.result-header {
-  padding:14px 24px; border-bottom:1px solid var(--line);
-  display:flex; align-items:center; justify-content:space-between;
-}
-.result-name {
-  font-family:'Barlow Condensed','Arial Narrow',sans-serif; font-size:11px;
-  font-weight:600; letter-spacing:3px; text-transform:uppercase; color:var(--muted);
-}
-.result-body { padding:20px 24px; font-size:13px; color:var(--dim); line-height:1.8; }
-
-/* thinking dots */
-.think-dots {
-  display:flex; align-items:center; gap:6px;
-  font-size:12px; color:var(--muted); padding:8px 0;
-}
-.dots { display:flex; gap:3px; }
-.dots span {
-  width:4px; height:4px; border-radius:50%; background:var(--muted);
-  animation:blink 1.2s ease infinite;
-}
-.dots span:nth-child(2){animation-delay:.2s} .dots span:nth-child(3){animation-delay:.4s}
-@keyframes blink{0%,80%,100%{opacity:.15}40%{opacity:1}}
-
-/* ─── TIER 3 ─── */
-.policy-table { width:100%; border-collapse:collapse; }
-.policy-row {
-  border-bottom:1px solid var(--line); cursor:pointer;
-  transition:background .15s;
-}
-.policy-row:hover { background:rgba(255,255,255,0.02); }
-.policy-row.sel { background:rgba(74,124,240,0.05); }
-.policy-row td { padding:16px 20px; }
-.pol-num {
-  font-family:'Bebas Neue','Arial Black','Impact',sans-serif; font-size:32px;
-  color:var(--line-hi); width:60px;
-}
-.pol-name { font-family:'Barlow Condensed','Arial Narrow',sans-serif; font-size:16px; font-weight:600; letter-spacing:1px; color:var(--white); }
-.pol-desc { font-size:12px; color:var(--muted); margin-top:3px; }
-.pol-score {
-  font-family:'Bebas Neue','Arial Black','Impact',sans-serif; font-size:28px;
-  text-align:right; width:80px;
-}
-
-.pros-cons { display:grid; grid-template-columns:1fr 1fr; gap:1px; }
-.pc-col { padding:20px; background:var(--bg2); }
-.pc-col-con { background:rgba(224,90,122,0.02); }
-.pc-label {
-  font-family:'Barlow Condensed','Arial Narrow',sans-serif; font-size:10px;
-  font-weight:600; letter-spacing:3px; text-transform:uppercase;
-  margin-bottom:14px; padding-bottom:10px; border-bottom:1px solid var(--line);
-}
-.pc-item {
-  display:flex; align-items:flex-start; gap:8px;
-  padding:6px 0; border-bottom:1px solid var(--line); font-size:12px; color:var(--dim);
-}
-.pc-item:last-child { border-bottom:none; }
-.pc-dash { color:var(--line-hi); margin-top:1px; flex-shrink:0; }
-
-/* Impact bars */
-.impact-row {
-  display:flex; align-items:center; gap:16px;
-  padding:10px 0; border-bottom:1px solid var(--line);
-}
-.impact-row:last-child { border-bottom:none; }
-.impact-label { font-size:12px; color:var(--dim); width:160px; flex-shrink:0; }
-.impact-track { flex:1; height:1px; background:var(--bg4); }
-.impact-fill { height:1px; }
-.impact-val { font-family:'JetBrains Mono','Courier New',monospace; font-size:12px; width:50px; text-align:right; }
-
-/* Evidence */
-.ev-item { display:flex; gap:20px; padding:14px 0; border-bottom:1px solid var(--line); }
-.ev-item:last-child { border-bottom:none; }
-.ev-num { font-family:'Bebas Neue','Arial Black','Impact',sans-serif; font-size:28px; color:var(--line-hi); width:40px; flex-shrink:0; line-height:1; padding-top:2px; }
-.ev-text { font-size:13px; color:var(--dim); line-height:1.65; }
-.ev-source { font-family:'JetBrains Mono','Courier New',monospace; font-size:10px; color:var(--gov); margin-top:4px; }
-
-/* ─── DATA GAPS ─── */
-.gap-item {
-  display:flex; gap:16px; padding:16px 0;
-  border-bottom:1px solid var(--line);
-  align-items:flex-start;
-}
-.gap-item:last-child { border-bottom:none; }
-.gap-num {
-  font-family:'Bebas Neue','Arial Black','Impact',sans-serif; font-size:28px;
-  color: rgba(240,160,80,0.25);
-  width:40px; flex-shrink:0; line-height:1; padding-top:2px;
-}
-.gap-severity {
-  display:inline-flex; align-items:center;
-  padding:2px 8px; border:1px solid; border-radius:1px;
-  font-family:'Barlow Condensed','Arial Narrow',sans-serif; font-size:10px;
-  font-weight:600; letter-spacing:1.5px; text-transform:uppercase;
-  margin-bottom:5px;
-}
-.gap-high  { border-color:rgba(224,90,122,0.4); color:var(--ent); }
-.gap-med   { border-color:rgba(240,160,80,0.4); color:var(--gap); }
-.gap-low   { border-color:rgba(102,102,102,0.4); color:var(--muted); }
-.gap-title { font-family:'Barlow Condensed','Arial Narrow',sans-serif; font-size:15px; font-weight:600; color:var(--white); margin-bottom:4px; letter-spacing:.5px; }
-.gap-desc  { font-size:12px; color:var(--dim); line-height:1.65; }
-.gap-action {
-  font-family:'JetBrains Mono','Courier New',monospace; font-size:10px;
-  color:var(--gap); margin-top:6px;
-  padding-top:6px; border-top:1px solid var(--line);
-}
-
-/* Tabs */
-.tab-row { display:flex; border-bottom:1px solid var(--line); }
-.tab {
-  padding:10px 16px;
-  font-family:'Barlow Condensed','Arial Narrow',sans-serif; font-size:11px;
-  font-weight:600; letter-spacing:2px; text-transform:uppercase;
-  color:var(--muted); cursor:pointer; border-bottom:1px solid transparent;
-  margin-bottom:-1px; transition:all .15s;
-}
-.tab:hover { color:var(--dim); }
-.tab.active { color:var(--white); border-bottom-color:var(--white); }
-
-/* ─── DASHBOARD ─── */
+/* ─── KPI STRIP ─── */
 .kpi-strip {
-  background:var(--bg2); border:1px solid var(--line);
-  display:grid; grid-template-columns:repeat(5,1fr);
-  gap:0;
+  background:rgba(14,11,7,0.95) !important; border:1px solid rgba(180,120,30,0.12) !important;
+  display:grid; grid-template-columns:repeat(5,1fr); gap:0; overflow:hidden;
 }
-.kpi-cell {
-  padding:24px;
-  border-right:1px solid var(--line);
-  position:relative; overflow:hidden;
-}
+.kpi-cell { padding:20px 18px; border-right:1px solid var(--line); position:relative; overflow:hidden; min-width:0; }
 .kpi-cell:last-child { border-right:none; }
-.kpi-cell::before {
-  content:attr(data-num);
-  position:absolute; bottom:-8px; right:10px;
-  font-family:'Bebas Neue','Arial Black','Impact',sans-serif; font-size:72px;
-  color:var(--bg4); line-height:1; pointer-events:none;
-}
-.kpi-label { font-size:11px; color:var(--muted); margin-bottom:8px; text-transform:uppercase; letter-spacing:1px; font-family:'Barlow Condensed','Arial Narrow',sans-serif; }
-.kpi-val { font-family:'Bebas Neue','Arial Black','Impact',sans-serif; font-size:40px; line-height:1; color:var(--white); letter-spacing:1px; }
-.kpi-sub { font-size:11px; color:var(--dim); margin-top:6px; }
+.kpi-label { font-size:11px; color:var(--muted); margin-bottom:8px; text-transform:uppercase; letter-spacing:1px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.kpi-val { font-family:'Bebas Neue','Arial Black','Impact',sans-serif; font-size:42px; line-height:1; color:var(--white); letter-spacing:1px; }
+.kpi-sub { font-size:11px; color:var(--dim); margin-top:6px; line-height:1.4; white-space:nowrap; }
 
-/* Benchmark table */
+/* ─── BENCHMARK TABLE ─── */
 .bm-table { width:100%; border-collapse:collapse; }
 .bm-table thead tr { border-bottom:1px solid var(--line); }
-.bm-table th {
-  padding:10px 16px; text-align:left;
-  font-family:'Barlow Condensed','Arial Narrow',sans-serif; font-size:10px;
-  font-weight:600; letter-spacing:2px; text-transform:uppercase;
-  color:var(--muted);
-}
-.bm-table td { padding:12px 16px; border-bottom:1px solid var(--line); font-size:12px; color:var(--dim); }
+.bm-table th { padding:10px 16px; text-align:left; font-size:12px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--muted); }
+.bm-table td { padding:12px 16px; border-bottom:1px solid var(--line); font-size:14px; color:var(--dim); }
 .bm-table tr:hover td { background:rgba(255,255,255,0.01); }
 .bm-table tr:last-child td { border-bottom:none; }
-.mono { font-family:'JetBrains Mono','Courier New',monospace; font-size:12px; }
+.mono { font-family:'DM Mono','Courier New',monospace; font-size:14px; }
 .pos { color:var(--green); } .neg { color:var(--ent); } .neu { color:var(--gold); }
-.effect-tag {
-  display:inline-flex; align-items:center;
-  padding:2px 8px;
-  border:1px solid; border-radius:1px;
-  font-family:'Barlow Condensed','Arial Narrow',sans-serif; font-size:10px;
-  font-weight:600; letter-spacing:1.5px; text-transform:uppercase;
-}
+.effect-tag { display:inline-flex; align-items:center; padding:2px 8px; border:1px solid; border-radius:1px; font-size:12px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; }
 .et-green { border-color:rgba(63,203,154,0.3); color:var(--green); }
 .et-gold  { border-color:rgba(212,184,112,0.3); color:var(--gold); }
 .et-muted { border-color:var(--line-md); color:var(--muted); }
 
-/* Consensus ring */
-.consensus-wrap {
-  display:flex; flex-direction:column; align-items:center;
-  padding:24px;
-}
+/* ─── DEBATE ─── */
+.ctrl-strip { background:rgba(14,11,7,0.95) !important; border:1px solid rgba(180,120,30,0.12) !important; border-radius:6px; padding:20px 24px; display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
+.ctrl-label { font-size:15px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); white-space:nowrap; }
+.ctrl-input { flex:1; min-width:200px; background:var(--bg3); border:1px solid rgba(200,160,80,0.18); color:var(--white); border-radius:5px; padding:10px 14px; font-size:15px; font-family:'Be Vietnam Pro',system-ui,sans-serif; outline:none; transition:border-color .2s; }
+.ctrl-input:focus { border-color:var(--gov); }
+select.ctrl-input { width:80px; flex:none; cursor:pointer; }
+.btn { display:inline-flex; align-items:center; gap:8px; padding:11px 22px; border-radius:5px; border:1px solid transparent; font-size:14px; font-weight:600; letter-spacing:2px; text-transform:uppercase; cursor:pointer; transition:all .2s; white-space:nowrap; }
+.btn-white { background:var(--white); color:#000; border-color:var(--white); }
+.btn-white:hover { background:var(--off); }
+.btn-white:disabled { opacity:.4; cursor:not-allowed; }
+.btn-ghost { background:transparent; color:var(--dim); border-color:var(--line-md); }
+.btn-ghost:hover { border-color:var(--line-hi); color:var(--white); }
+.prog-strip { background:rgba(14,11,7,0.95) !important; border:1px solid rgba(120,160,255,0.1); border-radius:6px; padding:16px 24px; display:flex; align-items:center; gap:16px; }
+.prog-lbl { font-size:15px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); white-space:nowrap; min-width:220px; }
+.prog-track { flex:1; height:1px; background:var(--bg4); }
+.prog-fill { height:100%; background:linear-gradient(90deg,#4a7ec8,#c8922a,#c8382a); transition:width .6s ease; }
+.prog-status { font-size:15px; letter-spacing:2px; text-transform:uppercase; color:var(--dim); white-space:nowrap; }
+.debate-cols { display:grid; grid-template-columns:1fr 1fr; gap:1px; }
+.debate-col { background:rgba(14,11,7,0.95) !important; border:1px solid rgba(120,160,255,0.1); border-radius:6px; display:flex; flex-direction:column; overflow:hidden; }
+.debate-col-header { padding:16px 20px; border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:space-between; }
+.dch-name { font-family:'Bebas Neue',sans-serif; font-size:20px; letter-spacing:2px; }
+.dch-meta { font-size:15px; color:var(--muted); margin-top:1px; }
+.dch-dot { width:8px; height:8px; border-radius:50%; }
+.debate-feed { flex:1; min-height:260px; max-height:360px; overflow-y:auto; padding:16px 20px; }
+.msg-block { margin-bottom:14px; }
+.msg-round { font-size:12px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); margin-bottom:6px; }
+.msg-text { font-size:15px; color:var(--dim); line-height:1.7; border-left:2px solid var(--line-md); padding-left:12px; }
+.msg-text.gov-msg { border-left-color:var(--gov); }
+.msg-text.ent-msg { border-left-color:var(--ent); }
+.msg-text.mod-msg { border-left-color:var(--gold); color:var(--muted); font-style:italic; }
+.result-panel { background:rgba(14,11,7,0.95) !important; border:1px solid rgba(120,160,255,0.1); border-radius:6px; display:none; overflow:hidden; }
+.result-header { padding:14px 24px; border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:space-between; }
+.result-name { font-size:15px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:var(--muted); }
+.result-body { padding:20px 24px; font-size:15px; color:var(--dim); line-height:1.8; }
+.think-dots { display:flex; align-items:center; gap:6px; font-size:14px; color:var(--muted); padding:8px 0; }
+.dots { display:flex; gap:3px; }
+.dots span { width:4px; height:4px; border-radius:50%; background:var(--muted); animation:blink 1.2s ease infinite; }
+.dots span:nth-child(2){animation-delay:.2s} .dots span:nth-child(3){animation-delay:.4s}
+@keyframes blink{0%,80%,100%{opacity:.15}40%{opacity:1}}
+.msg-round-badge { display:inline-flex; align-items:center; gap:5px; padding:1px 7px; border-radius:2px; font-size:10px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; margin-left:8px; vertical-align:middle; }
+.badge-r1 { background:rgba(74,126,200,0.12); color:var(--gov); }
+.badge-r2 { background:rgba(200,146,42,0.12); color:var(--council); }
+.badge-r3 { background:rgba(200,56,42,0.12); color:var(--ent); }
+.err-box { background:rgba(224,90,122,0.06); border:1px solid rgba(224,90,122,0.2); padding:12px 16px; font-size:14px; color:var(--ent); display:none; }
+
+/* ─── TIER 3 ─── */
+.policy-table { width:100%; border-collapse:collapse; }
+.policy-row { border-bottom:1px solid var(--line); cursor:pointer; transition:background .15s; }
+.policy-row:hover { background:rgba(255,255,255,0.02); }
+.policy-row.sel { background:rgba(74,124,240,0.05); }
+.policy-row td { padding:16px 20px; }
+.pol-num { font-family:'Bebas Neue',sans-serif; font-size:32px; color:var(--line-hi); width:60px; }
+.pol-name { font-size:16px; font-weight:600; letter-spacing:1px; color:var(--white); }
+.pol-desc { font-size:14px; color:var(--muted); margin-top:3px; }
+.pol-score { font-family:'Bebas Neue',sans-serif; font-size:28px; text-align:right; width:80px; }
+.pros-cons { display:grid; grid-template-columns:1fr 1fr; gap:1px; }
+.pc-col { padding:20px; background:rgba(14,11,7,0.95) !important; }
+.pc-col-con { background:rgba(224,90,122,0.02) !important; }
+.pc-label { font-size:12px; font-weight:600; letter-spacing:3px; text-transform:uppercase; margin-bottom:14px; padding-bottom:10px; border-bottom:1px solid var(--line); }
+.pc-item { display:flex; align-items:flex-start; gap:8px; padding:6px 0; border-bottom:1px solid var(--line); font-size:14px; color:var(--dim); }
+.pc-item:last-child { border-bottom:none; }
+.pc-dash { color:var(--line-hi); margin-top:1px; flex-shrink:0; }
+.impact-row { display:flex; align-items:center; gap:16px; padding:12px 0; border-bottom:1px solid var(--line); }
+.impact-row:last-child { border-bottom:none; }
+.impact-label { font-size:14px; color:var(--dim); width:180px; flex-shrink:0; line-height:1.4; }
+.impact-track { flex:1; height:3px; background:var(--bg4); min-width:40px; border-radius:2px; overflow:hidden; }
+.impact-fill { height:3px; border-radius:2px; transition:width 0.8s cubic-bezier(.25,.8,.25,1); }
+.impact-val { font-family:'DM Mono','Courier New',monospace; font-size:15px; width:90px; text-align:right; flex-shrink:0; }
+.ev-item { display:flex; gap:20px; padding:14px 0; border-bottom:1px solid var(--line); }
+.ev-item:last-child { border-bottom:none; }
+.ev-num { font-family:'Bebas Neue',sans-serif; font-size:28px; color:var(--line-hi); width:40px; flex-shrink:0; line-height:1; padding-top:2px; }
+.ev-text { font-size:15px; color:var(--dim); line-height:1.65; }
+.ev-source { font-family:'DM Mono','Courier New',monospace; font-size:12px; color:var(--gov); margin-top:4px; }
+.gap-item { display:flex; gap:16px; padding:16px 0; border-bottom:1px solid var(--line); align-items:flex-start; }
+.gap-item:last-child { border-bottom:none; }
+.gap-num { font-family:'Bebas Neue',sans-serif; font-size:28px; color:rgba(240,160,80,0.25); width:40px; flex-shrink:0; line-height:1; padding-top:2px; }
+.gap-severity { display:inline-flex; align-items:center; padding:2px 8px; border:1px solid; border-radius:1px; font-size:12px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; margin-bottom:5px; }
+.gap-high { border-color:rgba(224,90,122,0.4); color:var(--ent); }
+.gap-med  { border-color:rgba(240,160,80,0.4); color:var(--gap); }
+.gap-low  { border-color:rgba(102,102,102,0.4); color:var(--muted); }
+.gap-title { font-size:15px; font-weight:600; color:var(--white); margin-bottom:4px; letter-spacing:.5px; }
+.gap-desc  { font-size:14px; color:var(--dim); line-height:1.65; }
+.gap-action { font-family:'DM Mono','Courier New',monospace; font-size:12px; color:var(--gap); margin-top:6px; padding-top:6px; border-top:1px solid var(--line); }
+.tab-row { display:flex; border-bottom:1px solid var(--line); }
+.tab { padding:10px 16px; font-size:15px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--muted); cursor:pointer; border-bottom:1px solid transparent; margin-bottom:-1px; transition:all .15s; }
+.tab:hover { color:var(--dim); }
+.tab.active { color:var(--white); border-bottom-color:var(--white); }
 .cons-ring-wrap { position:relative; }
-.cons-ring-label {
-  position:absolute; top:50%; left:50%;
-  transform:translate(-50%,-50%);
-  text-align:center;
-}
-.cons-pct { font-family:'Bebas Neue','Arial Black','Impact',sans-serif; font-size:40px; color:var(--white); line-height:1; }
-.cons-sub { font-family:'Barlow Condensed','Arial Narrow',sans-serif; font-size:10px; color:var(--muted); letter-spacing:2px; text-transform:uppercase; }
-.agent-breakdown { width:100%; margin-top:20px; }
-.ab-row { display:flex; align-items:center; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--line); font-size:12px; }
+.cons-ring-label { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); text-align:center; }
+.cons-pct { font-family:'Bebas Neue',sans-serif; font-size:40px; color:var(--white); line-height:1; }
+.cons-sub { font-size:12px; color:var(--muted); letter-spacing:2px; text-transform:uppercase; }
+.ab-row { display:flex; align-items:center; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--line); font-size:14px; }
 .ab-row:last-child { border-bottom:none; }
+@keyframes skeleton-shimmer { 0%{background-position:-400px 0} 100%{background-position:400px 0} }
+.skeleton { background:linear-gradient(90deg,var(--bg3) 25%,var(--bg4) 50%,var(--bg3) 75%); background-size:800px 100%; animation:skeleton-shimmer 1.6s infinite; border-radius:3px; }
+.skeleton-line { height:14px; margin:8px 0; }
+.skeleton-line-sm { height:10px; width:60%; margin:6px 0; }
+.skeleton-line-lg { height:18px; margin:10px 0; }
+.skeleton-block { height:80px; margin:10px 0; border-radius:4px; }
 
-/* Error */
-.err-box { background:rgba(224,90,122,0.06); border:1px solid rgba(224,90,122,0.2); padding:12px 16px; font-size:12px; color:var(--ent); display:none; }
-
-/* Scrollbar */
-::-webkit-scrollbar{width:4px}
+/* ─── SCROLLBAR ─── */
+::-webkit-scrollbar{width:5px}
 ::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:var(--line-hi);border-radius:2px}
+::-webkit-scrollbar-thumb{background:rgba(200,140,40,0.4);border-radius:4px}
+::-webkit-scrollbar-thumb:hover{background:rgba(200,140,40,0.6)}
 
-/* Loading */
-#loading {
-  position:fixed; inset:0; background:var(--bg);
-  display:flex; flex-direction:column; align-items:center; justify-content:center;
-  z-index:999; gap:20px; transition:opacity .5s;
-}
-.ld-title { font-family:'Bebas Neue','Arial Black','Impact',sans-serif; font-size:56px; letter-spacing:6px; color:var(--white); }
-.ld-title span { color:var(--gov); }
-.ld-sub { font-family:'Barlow Condensed','Arial Narrow',sans-serif; font-size:11px; letter-spacing:4px; text-transform:uppercase; color:var(--muted); }
-.ld-bar { width:200px; height:1px; background:var(--bg4); position:relative; overflow:hidden; }
-.ld-bar-fill { position:absolute; left:-100%; top:0; width:100%; height:100%; background:linear-gradient(90deg,transparent,var(--gov),transparent); animation:sweep 1.2s ease infinite; }
-@keyframes sweep { to{left:100%;} }
-@keyframes spin { to{transform:rotate(360deg);} }
-.spin { animation:spin .8s linear infinite; display:inline-block; }
+/* ─── OVERFLOW ─── */
 .overflow-x { overflow-x:auto; }
+
+/* ─── LOADING SCREEN ─── */
+#loading {
+  position:fixed; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  z-index:999; transition:opacity .8s ease; background:#080504; overflow:hidden;
+}
+#loading .ld-bg {
+  position:absolute; inset:0;
+  background:url('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCAAoACgDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAABgUE/8QAJBAAAQQCAgICAwAAAAAAAAAAAQIDBBEFEiExBhNBUWH/xAAUAQEAAAAAAAAAAAAAAAAAAAAA/8QAFBEBAAAAAAAAAAAAAAAAAAAAAP/aAAwDAQACEQMRAD8AmtF6U1GxHutzOXBrMpK20hIJKlrKUj7JAH3VC6V0i5nLiXJ0laYqFbUhsH5OACSevQAJ/dWd0pqe30xkFW1lPW1u5aBSsBClp4BCiOQCDg/eq3XuuIOm7mla2JEky2ShDTm0gHySCOeOKA7cXpaBOluvzmUOOKBCSACEnHgbhhpHSFrp6Cph7W4tBXuCFhJCSfCRgcY4x/VfyNbPXt8l2GpLhUpQ2tuMnCCOx8kH1iirO3EUVF3vgN+KKKAuL/9k=') center center / cover no-repeat;
+  filter:brightness(0.25) saturate(0.5); transform:scale(1.04); animation:bgBreath 8s ease-in-out infinite alternate;
+}
+@keyframes bgBreath { 0%{transform:scale(1.04)} 100%{transform:scale(1.08)} }
+#loading .ld-overlay { position:absolute; inset:0; background:radial-gradient(ellipse 60% 70% at 50% 50%,rgba(4,2,1,0.55) 0%,rgba(4,2,1,0.82) 100%); }
+#loading::before { content:''; position:absolute; bottom:0; left:0; right:0; height:4px; background:linear-gradient(90deg,#c8382a,#d4a030,#4a7ec8,#4a9e5c,#c8922a,#c8382a); background-size:400% 100%; animation:borderWeave 4s linear infinite; z-index:2; }
+#loading::after { content:''; position:absolute; top:0; left:0; right:0; height:4px; background:linear-gradient(90deg,#4a7ec8,#c8922a,#c8382a,#4a9e5c,#d4a030,#4a7ec8); background-size:400% 100%; animation:borderWeave 4s linear infinite reverse; z-index:2; }
+@keyframes borderWeave { 0%{background-position:0% 0} 100%{background-position:400% 0} }
+.ld-content { position:relative; z-index:2; display:flex; flex-direction:column; align-items:center; gap:14px; text-align:center; }
+.ld-eyebrow { font-size:11px; letter-spacing:6px; text-transform:uppercase; color:#c8922a; opacity:0.9; }
+.ld-main-title { display:flex; flex-direction:column; align-items:center; gap:0; line-height:0.88; text-align:center; opacity:0; transition:opacity 0.3s ease; }
+.fonts-loaded .ld-main-title { opacity:1; }
+.ld-title-line1 { font-size:clamp(18px,3vw,32px); font-weight:300; letter-spacing:14px; text-transform:uppercase; color:#c8922a; opacity:0.92; margin-bottom:4px; }
+.ld-title-line2 { font-family:'Bebas Neue','Be Vietnam Pro',sans-serif; font-size:clamp(80px,13vw,152px); letter-spacing:8px; line-height:0.9; color:#f5efe6; transform:skewX(-4deg); display:inline-block; }
+.ld-title-line3 { font-size:clamp(24px,4vw,48px); font-weight:600; letter-spacing:22px; text-transform:uppercase; color:#c8382a; margin-top:2px; }
+.ld-ornament { display:flex; align-items:center; gap:14px; width:280px; }
+.ld-ornament-line { flex:1; height:1px; background:linear-gradient(90deg,transparent,#d4a030,#c8382a); }
+.ld-ornament-line:last-child { background:linear-gradient(90deg,#c8382a,#d4a030,transparent); }
+.ld-ornament-diamond { width:8px; height:8px; background:#d4a030; transform:rotate(45deg); }
+.ld-tagline { font-size:11px; letter-spacing:4px; text-transform:uppercase; color:#9e8e76; opacity:0.8; }
+.ld-bar { width:180px; height:2px; background:rgba(200,160,80,0.12); position:relative; overflow:hidden; border-radius:2px; }
+.ld-bar-fill { position:absolute; left:-100%; top:0; width:100%; height:100%; background:linear-gradient(90deg,transparent,#d4a030,#c8382a,#4a7ec8,transparent); animation:sweepBar 1.6s ease infinite; }
+@keyframes sweepBar { to{left:100%} }
+.ld-sub { font-size:11px; letter-spacing:5px; text-transform:uppercase; color:#7a6a52; }
+@keyframes sweep { to{left:100%} }
+@keyframes spin { to{transform:rotate(360deg)} }
+.spin { animation:spin .8s linear infinite; display:inline-block; }
+
+/* ─── API KEY MODAL ─── */
+.key-modal-bg { position:fixed; inset:0; z-index:500; background:rgba(4,2,1,0.82); display:flex; align-items:center; justify-content:center; backdrop-filter:blur(4px); }
+.key-modal { background:var(--bg2); border:1px solid rgba(200,160,80,0.25); border-top:2px solid var(--gold); padding:32px 36px; width:480px; max-width:90vw; border-radius:4px; }
+.key-modal-title { font-family:'Bebas Neue',sans-serif; font-size:28px; letter-spacing:3px; color:var(--white); margin-bottom:6px; }
+.key-modal-sub { font-size:13px; color:var(--muted); margin-bottom:20px; line-height:1.6; }
+.key-modal-input { width:100%; background:var(--bg3); border:1px solid rgba(200,160,80,0.2); border-radius:4px; color:var(--white); padding:10px 14px; font-family:'DM Mono',monospace; font-size:14px; outline:none; transition:border-color .2s; margin-bottom:16px; }
+.key-modal-input:focus { border-color:var(--gold); }
+.key-modal-actions { display:flex; gap:10px; justify-content:flex-end; }
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 1200px) {
+  .page-body { padding:24px 28px 36px; }
+  .page-hero { padding:36px 28px 32px; }
+  .topbar { padding:0 28px; }
+  .g4 { grid-template-columns:repeat(2,1fr); }
+  .kpi-strip { grid-template-columns:repeat(3,1fr); }
+}
+@media (max-width: 900px) {
+  .sidebar { width:56px; }
+  .sidebar .sb-brand, .sidebar .nav-section-label, .sidebar .nav-content { opacity:0; pointer-events:none; }
+  .g2, .debate-cols, .pros-cons { grid-template-columns:1fr; }
+  .agent-split { grid-template-columns:1fr; }
+  .agent-divider { display:none; }
+  .kpi-strip { grid-template-columns:1fr 1fr; }
+  .g3 { grid-template-columns:1fr; }
+  .page-hero { padding:24px 20px; }
+  .page-body { padding:20px; gap:20px; }
+  .topbar { padding:0 16px; }
+}
 </style>
 </head>
 <body>
 
+<!-- ══ LOADING SCREEN ══ -->
 <div id="loading">
-  <div class="ld-title">MAD<span>-POLICY</span></div>
-  <div class="ld-bar"><div class="ld-bar-fill"></div></div>
-  <div class="ld-sub">Khởi động hệ thống phân tích</div>
+  <div class="ld-bg"></div>
+  <div class="ld-overlay"></div>
+  <div class="ld-content">
+    <div class="ld-eyebrow">Nghiên cứu Khoa học · NCKH 2026</div>
+    <div class="ld-ornament">
+      <div class="ld-ornament-line"></div>
+      <div class="ld-ornament-diamond"></div>
+      <div class="ld-ornament-line"></div>
+    </div>
+    <div class="ld-main-title">
+      <div class="ld-title-line1">Multi-Agent</div>
+      <div class="ld-title-line2">Debate</div>
+      <div class="ld-title-line3">System</div>
+    </div>
+    <div class="ld-ornament">
+      <div class="ld-ornament-line"></div>
+      <div class="ld-ornament-diamond"></div>
+      <div class="ld-ornament-line"></div>
+    </div>
+    <div class="ld-tagline">Phân tích Chính sách Thuế Carbon · Ngành Dệt May Việt Nam</div>
+    <div class="ld-bar"><div class="ld-bar-fill"></div></div>
+    <div class="ld-sub">MAD-Policy · Đang khởi động hệ thống</div>
+  </div>
 </div>
 
 <div class="shell">
 
-  <!-- SIDEBAR -->
-  <aside class="sidebar">
-    <div class="sb-brand">
+  <!-- ══ SIDEBAR ══ -->
+  <aside class="sidebar" id="sidebar">
+    <button class="sb-toggle" onclick="toggleSidebar()" aria-label="Toggle Sidebar">‹</button>
+    <div class="sb-brand" onclick="go('t1')">
       <div class="brand-main">MAD<span>-Policy</span></div>
       <div class="brand-sub">Multi-Agent Debate System</div>
-      <div class="brand-desc">Phân tích Chính sách Thuế Carbon<br>Ngành Dệt May Việt Nam · NCKH 2024</div>
+      <div class="brand-desc">Phân tích Chính sách Thuế Carbon<br>Ngành Dệt May Việt Nam · NCKH 2026</div>
     </div>
-
     <nav class="sb-nav">
       <div class="nav-section-label">Kiến trúc 3 tầng</div>
-
       <div class="nav-item active" onclick="go('t1')">
         <div class="nav-num">01</div>
-        <div class="nav-content">
-          <div class="nav-title">Chuẩn Bị Tri Thức</div>
-          <div class="nav-sub">Knowledge Preparation</div>
-        </div>
+        <div class="nav-content"><div class="nav-title">Chuẩn Bị Tri Thức</div><div class="nav-sub">Knowledge Preparation</div></div>
       </div>
       <div class="nav-item" onclick="go('t2')">
         <div class="nav-num">02</div>
-        <div class="nav-content">
-          <div class="nav-title">Tranh Luận Đa Agent</div>
-          <div class="nav-sub">Multi-Agent Debate</div>
-        </div>
+        <div class="nav-content"><div class="nav-title">Tranh Luận Đa Agent</div><div class="nav-sub">Multi-Agent Debate</div></div>
       </div>
       <div class="nav-item" onclick="go('t3')">
         <div class="nav-num">03</div>
-        <div class="nav-content">
-          <div class="nav-title">Tổng Hợp Chính Sách</div>
-          <div class="nav-sub">Policy Synthesis</div>
-        </div>
+        <div class="nav-content"><div class="nav-title">Tổng Hợp Chính Sách</div><div class="nav-sub">Policy Synthesis</div></div>
       </div>
-
       <div class="nav-divider"></div>
       <div class="nav-section-label">Thực nghiệm</div>
-
       <div class="nav-item" onclick="go('db')">
         <div class="nav-num">—</div>
-        <div class="nav-content">
-          <div class="nav-title">Dashboard</div>
-          <div class="nav-sub">Benchmark Results</div>
-        </div>
+        <div class="nav-content"><div class="nav-title">Dashboard</div><div class="nav-sub">Benchmark Results</div></div>
       </div>
     </nav>
-
-    <div class="sb-footer">
-      <div class="sys-row">
-        <div class="sys-dot"></div>
-        <div class="sys-txt">Claude Sonnet · Anthropic API</div>
-      </div>
-      <div class="ver">NCKH 2024 · v1.1 · n=30</div>
-    </div>
   </aside>
 
-  <!-- MAIN -->
+  <!-- ══ MAIN ══ -->
   <main class="main">
     <div class="topbar">
       <div class="topbar-l">
-        <span>MAD-Policy</span>
+        <span style="cursor:pointer;" onclick="go('t1')">MAD-Policy</span>
         <span class="topbar-sep">/</span>
         <span class="topbar-page" id="crumb">Tier 1 — Chuẩn Bị Tri Thức</span>
       </div>
       <div class="topbar-r">
         <span class="badge">Dệt May Việt Nam</span>
         <span class="badge badge-green">100% Success · 30/30</span>
+        <button class="theme-toggle" onclick="toggleTheme()" id="theme-btn" title="Light/Dark mode">🌙</button>
         <span class="tclock" id="clk"></span>
       </div>
     </div>
 
-    <!-- ══════════ PAGE T1 ══════════ -->
+    <!-- ══════ PAGE T1 ══════ -->
     <div class="page active" id="page-t1">
       <div class="page-hero">
-        <div class="hero-eyebrow" style="color:var(--gov);">Tier 01 — Domain-Specific Knowledge Preparation</div>
-        <div class="page-title">Chuẩn Bị<br>Tri Thức</div>
-        <div class="page-desc">50 văn bản PDF đa ngôn ngữ → 170 JSON chunks → 1.690 documents trong ChromaDB với 384-dimensional embeddings.</div>
+        <div class="page-title">Chuẩn Bị Tri Thức</div>
+        <div class="page-desc">Dual Semantic Chunking — phân tách riêng văn bản pháp lý và kinh doanh, vector hóa 384 chiều, lưu trữ trong ChromaDB để RAG retrieval chính xác theo Agent.</div>
       </div>
-
       <div class="page-body">
         <!-- Pipeline -->
         <div>
@@ -809,40 +551,14 @@ select.ctrl-input { width:80px; flex:none; cursor:pointer; }
           </div>
           <div class="pipeline-strip">
             <div class="pipeline-row">
-              <div class="p-step">
-                <div class="p-step-num">01</div>
-                <div class="p-step-title">50 PDF Sources</div>
-                <div class="p-step-desc">Văn bản pháp lý, nghiên cứu, báo cáo ngành đa ngôn ngữ</div>
-                <div class="p-step-done"></div>
-              </div>
-              <div class="p-step">
-                <div class="p-step-num">02</div>
-                <div class="p-step-title">OCR + NLP</div>
-                <div class="p-step-desc">Trích xuất và chuẩn hóa văn bản đa ngôn ngữ VI/EN</div>
-                <div class="p-step-done"></div>
-              </div>
-              <div class="p-step">
-                <div class="p-step-num">03</div>
-                <div class="p-step-title">Legal/Business Chunking</div>
-                <div class="p-step-desc">Phân đoạn ngữ nghĩa theo loại văn bản pháp lý và kinh doanh</div>
-                <div class="p-step-done"></div>
-              </div>
-              <div class="p-step">
-                <div class="p-step-num">04</div>
-                <div class="p-step-title">Embedding 384d</div>
-                <div class="p-step-desc">Vector hóa ngữ nghĩa 384 chiều cho tìm kiếm similarity</div>
-                <div class="p-step-done"></div>
-              </div>
-              <div class="p-step">
-                <div class="p-step-num">05</div>
-                <div class="p-step-title">ChromaDB · 1.690</div>
-                <div class="p-step-desc">Lưu trữ và indexing vector trong cơ sở dữ liệu ChromaDB</div>
-                <div class="p-step-done"></div>
-              </div>
+              <div class="p-step"><div class="p-step-num">01</div><div class="p-step-title">50 PDF Sources</div><div class="p-step-desc">Văn bản pháp lý, nghiên cứu, báo cáo ngành đa ngôn ngữ</div><div class="p-step-done"></div></div>
+              <div class="p-step"><div class="p-step-num">02</div><div class="p-step-title">OCR + NLP</div><div class="p-step-desc">Trích xuất và chuẩn hóa văn bản đa ngôn ngữ VI/EN</div><div class="p-step-done"></div></div>
+              <div class="p-step"><div class="p-step-num">03</div><div class="p-step-title">Legal/Business Chunking</div><div class="p-step-desc">Phân đoạn ngữ nghĩa theo loại văn bản pháp lý và kinh doanh</div><div class="p-step-done"></div></div>
+              <div class="p-step"><div class="p-step-num">04</div><div class="p-step-title">Embedding 384d</div><div class="p-step-desc">paraphrase-multilingual-MiniLM-L12-v2 · vector hóa ngữ nghĩa</div><div class="p-step-done"></div></div>
+              <div class="p-step"><div class="p-step-num">05</div><div class="p-step-title">ChromaDB · 1.690</div><div class="p-step-desc">2 collections · legal_chunks + business_cbam</div><div class="p-step-done"></div></div>
             </div>
           </div>
         </div>
-
         <!-- KB Stats + Agent Map -->
         <div class="g2" style="gap:1px;">
           <div class="panel">
@@ -850,28 +566,13 @@ select.ctrl-input { width:80px; flex:none; cursor:pointer; }
               <div class="panel-title">Knowledge Base — Thống kê thực tế</div>
               <span class="badge">1.690 docs total</span>
             </div>
-            <div class="kb-row">
-              <div class="kb-label">legal_chunks — 50 files</div>
-              <div class="kb-bar"><div class="kb-fill" style="width:94%;background:var(--gov);"></div></div>
-              <div class="kb-val" style="color:var(--gov);">1.597</div>
-            </div>
-            <div class="kb-row">
-              <div class="kb-label">business_cbam — 35 files</div>
-              <div class="kb-bar"><div class="kb-fill" style="width:5.5%;background:var(--ent);"></div></div>
-              <div class="kb-val" style="color:var(--ent);">93</div>
-            </div>
-            <div class="kb-row">
-              <div class="kb-label">Tổng cộng</div>
-              <div class="kb-bar"><div class="kb-fill" style="width:100%;background:linear-gradient(90deg,var(--gov),var(--ent));"></div></div>
-              <div class="kb-val" style="color:var(--white);">1.690</div>
-            </div>
-            <div style="margin-top:20px;">
-              <div class="chart-wrap"><canvas id="chartKB"></canvas></div>
-            </div>
+            <div class="kb-row"><div class="kb-label">legal_chunks — 50 files</div><div class="kb-bar"><div class="kb-fill" style="width:94%;background:var(--gov);"></div></div><div class="kb-val" style="color:var(--gov);">1.597</div></div>
+            <div class="kb-row"><div class="kb-label">business_cbam — 35 files</div><div class="kb-bar"><div class="kb-fill" style="width:5.5%;background:var(--ent);"></div></div><div class="kb-val" style="color:var(--ent);">93</div></div>
+            <div class="kb-row"><div class="kb-label">Tổng cộng</div><div class="kb-bar"><div class="kb-fill" style="width:100%;background:linear-gradient(90deg,var(--gov),var(--ent));"></div></div><div class="kb-val" style="color:var(--white);">1.690</div></div>
+            <div style="margin-top:20px;"><div class="chart-wrap"><canvas id="chartKB"></canvas></div></div>
           </div>
-
           <div class="panel" style="padding:0;">
-            <div class="panel-hd" style="padding:18px 24px; margin-bottom:0; border-bottom:1px solid var(--line);">
+            <div class="panel-hd" style="padding:18px 24px;margin-bottom:0;border-bottom:1px solid var(--line);">
               <div class="panel-title">Phân bổ tài liệu theo Agent (RAG Filter)</div>
             </div>
             <div class="agent-split" style="height:calc(100% - 57px);">
@@ -895,993 +596,671 @@ select.ctrl-input { width:80px; flex:none; cursor:pointer; }
             </div>
           </div>
         </div>
-
-        <!-- Semantic Tagging -->
+        <!-- Semantic Tagging — SỐ LIỆU THỰC TẾ từ accuracy_report.json -->
         <div class="panel" style="padding:0;">
-          <div class="panel-hd" style="padding:18px 24px; margin-bottom:0;">
-            <div class="panel-title">Semantic Tagging Accuracy — n = 193 mẫu</div>
+          <div class="panel-hd" style="padding:18px 24px;margin-bottom:0;">
+            <div class="panel-title">Semantic Tagging Accuracy — n = 193 mẫu (accuracy_report.json)</div>
             <span class="badge badge-blue">Enhanced Rule-Based</span>
           </div>
           <div class="acc-grid" style="padding:24px;">
             <div class="acc-col">
-              <div class="acc-label" style="color:var(--gov);">Legal Tagging (n=100)</div>
-              <div class="acc-row"><div class="acc-name">Clause Type Accuracy</div><div class="acc-bar"><div class="acc-fill" style="width:95%;background:var(--gov);"></div></div><div class="acc-val" style="color:var(--gov);">95.0%</div></div>
-              <div class="acc-row"><div class="acc-name">Subjects F1</div><div class="acc-bar"><div class="acc-fill" style="width:85.8%;background:var(--gov);"></div></div><div class="acc-val" style="color:var(--gov);">85.8%</div></div>
-              <div class="acc-row"><div class="acc-name">Domains F1</div><div class="acc-bar"><div class="acc-fill" style="width:80.3%;background:var(--green);"></div></div><div class="acc-val" style="color:var(--green);">80.3%</div></div>
-              <div class="acc-row"><div class="acc-name">Overall F1</div><div class="acc-bar"><div class="acc-fill" style="width:87%;background:var(--gov);"></div></div><div class="acc-val" style="color:var(--white);font-weight:600;">87.0%</div></div>
+              <div class="acc-label" style="color:var(--gov);">Legal Tagging (n=100) — Overall F1: 74.9%</div>
+              <div class="acc-row"><div class="acc-name">Clause Type Accuracy</div><div class="acc-bar"><div class="acc-fill" style="width:80%;background:var(--gov);"></div></div><div class="acc-val" style="color:var(--gov);">80.0%</div></div>
+              <div class="acc-row"><div class="acc-name">Subjects F1</div><div class="acc-bar"><div class="acc-fill" style="width:71.1%;background:var(--gov);"></div></div><div class="acc-val" style="color:var(--gov);">71.1%</div></div>
+              <div class="acc-row"><div class="acc-name">Domains F1</div><div class="acc-bar"><div class="acc-fill" style="width:73.6%;background:var(--green);"></div></div><div class="acc-val" style="color:var(--green);">73.6%</div></div>
+              <div class="acc-row"><div class="acc-name">Overall F1</div><div class="acc-bar"><div class="acc-fill" style="width:74.9%;background:var(--gov);"></div></div><div class="acc-val" style="color:var(--white);font-weight:600;">74.9%</div></div>
+              <div style="margin-top:10px;font-size:11px;color:var(--muted);border-top:1px solid var(--line);padding-top:8px;">MAE LLM Judge: Coherence=0.17 · Factuality=0.10 (cả hai &lt; 0.5 threshold)</div>
             </div>
             <div class="acc-divider"></div>
             <div class="acc-col">
-              <div class="acc-label" style="color:var(--ent);">Business Tagging (n=93)</div>
-              <div class="acc-row"><div class="acc-name">CBAM Accuracy</div><div class="acc-bar"><div class="acc-fill" style="width:94.6%;background:var(--green);"></div></div><div class="acc-val" style="color:var(--green);">94.6%</div></div>
-              <div class="acc-row"><div class="acc-name">Focus F1</div><div class="acc-bar"><div class="acc-fill" style="width:54.8%;background:var(--gold);"></div></div><div class="acc-val" style="color:var(--gold);">54.8%</div></div>
-              <div class="acc-row"><div class="acc-name">Stance Accuracy</div><div class="acc-bar"><div class="acc-fill" style="width:37.6%;background:var(--ent);"></div></div><div class="acc-val" style="color:var(--ent);">37.6%</div></div>
-              <div class="acc-row"><div class="acc-name">Overall F1</div><div class="acc-bar"><div class="acc-fill" style="width:62.4%;background:var(--orange);"></div></div><div class="acc-val" style="color:var(--white);font-weight:600;">62.4%</div></div>
+              <div class="acc-label" style="color:var(--ent);">Business Tagging (n=93) — Overall F1: 74.9%</div>
+              <div class="acc-row"><div class="acc-name">Stance Accuracy</div><div class="acc-bar"><div class="acc-fill" style="width:97.8%;background:var(--green);"></div></div><div class="acc-val" style="color:var(--green);">97.8%</div></div>
+              <div class="acc-row"><div class="acc-name">CBAM Accuracy</div><div class="acc-bar"><div class="acc-fill" style="width:93.5%;background:var(--gov);"></div></div><div class="acc-val" style="color:var(--gov);">93.5%</div></div>
+              <div class="acc-row"><div class="acc-name">Focus F1</div><div class="acc-bar"><div class="acc-fill" style="width:33.4%;background:var(--ent);"></div></div><div class="acc-val" style="color:var(--ent);">33.4%</div></div>
+              <div class="acc-row"><div class="acc-name">Overall F1</div><div class="acc-bar"><div class="acc-fill" style="width:74.9%;background:var(--orange);"></div></div><div class="acc-val" style="color:var(--white);font-weight:600;">74.9%</div></div>
+              <div style="margin-top:10px;font-size:11px;color:var(--muted);border-top:1px solid var(--line);padding-top:8px;">Agreement Coherence: exact 83.3% / within±1 100% · Factuality: exact 90.0% / within±1 100%</div>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- ══════════ PAGE T2 ══════════ -->
+    <!-- ══════ PAGE T2 ══════ -->
     <div class="page" id="page-t2">
       <div class="page-hero">
-        <div class="hero-eyebrow" style="color:var(--gold);">Tier 02 — Multi-Agent Debate System</div>
-        <div class="page-title">Tranh Luận<br>Đa Agent</div>
-        <div class="page-desc">3 vòng × 2 agents + Moderator + Expert Council. 10 lượt/debate · Thời gian trung bình 70.2 giây.</div>
+        <div class="page-title">Tranh Luận Đa Agent</div>
+        <div class="page-desc">3 vòng tranh luận có cấu trúc — Trình bày → Phản biện chéo → Bảo vệ lập luận. Moderator điều phối trung lập · Expert Council phân tích độc lập sau 3 vòng.</div>
       </div>
-
       <div class="page-body">
-
-        <!-- ── API Key Modal overlay ── -->
-        <div id="key-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:200;align-items:center;justify-content:center;">
-          <div style="background:var(--bg2);border:1px solid var(--line-md);padding:36px 40px;width:480px;max-width:90vw;">
-            <div style="font-family:'Bebas Neue','Arial Black',sans-serif;font-size:28px;letter-spacing:2px;margin-bottom:6px;">OpenAI API Key</div>
-            <div style="font-size:12px;color:var(--muted);margin-bottom:20px;line-height:1.6;">Key chỉ lưu trong <code style="color:var(--gov);font-size:11px;">sessionStorage</code> của trình duyệt.<br>Không được gửi đi đâu ngoài <code style="color:var(--gov);font-size:11px;">api.openai.com</code>. Đóng tab là mất.</div>
-            <input type="password" id="key-input-modal" placeholder="sk-proj-..." autocomplete="off"
-              style="width:100%;background:var(--bg3);border:1px solid var(--line-md);color:var(--white);padding:12px 14px;font-family:'JetBrains Mono','Courier New',monospace;font-size:13px;letter-spacing:1px;outline:none;margin-bottom:14px;"
-              onkeydown="if(event.key==='Enter') saveKey()">
-            <div style="display:flex;gap:10px;">
-              <button class="btn btn-white" style="flex:1;" onclick="saveKey()">✓ Xác nhận & bắt đầu</button>
-              <button class="btn btn-ghost" onclick="closeKeyModal()">Huỷ</button>
-            </div>
-            <div id="key-modal-err" style="display:none;margin-top:10px;font-size:12px;color:var(--ent);"></div>
-          </div>
-        </div>
-
-        <!-- Controls -->
         <div class="ctrl-strip">
           <div class="ctrl-label">Câu hỏi:</div>
           <input type="text" id="pq" class="ctrl-input" value="Liệu Việt Nam có nên áp thuế carbon 10 USD/tCO2 lên ngành dệt may từ năm 2026?">
           <div class="ctrl-label">Vòng:</div>
-          <select id="rds" class="ctrl-input">
-            <option>2</option><option selected>3</option><option>4</option>
-          </select>
+          <select id="rds" class="ctrl-input"><option>2</option><option selected>3</option><option>4</option></select>
           <button class="btn btn-white" id="sbtn" onclick="startDebate()">▶ Bắt đầu</button>
           <button class="btn btn-ghost" onclick="resetD()">↺ Đặt lại</button>
-          <button class="btn btn-ghost" onclick="openKeyModal()" id="key-btn" style="font-size:10px;padding:10px 12px;">🔑 API Key</button>
-          <span class="badge" id="key-status" style="color:var(--muted);">No key</span>
         </div>
-
         <div id="err-box" class="err-box"></div>
-
         <div class="prog-strip">
           <div class="prog-lbl">Tiến trình · Gov→Ent×3 vòng + Mod×2 + Expert + Mod final = 10 lượt</div>
           <div class="prog-track"><div class="prog-fill" id="prog" style="width:0%"></div></div>
           <div class="prog-status" id="rlbl">Chờ bắt đầu</div>
         </div>
-
         <div class="debate-cols">
           <div class="debate-col">
             <div class="debate-col-header">
-              <div>
-                <div class="dch-name" style="color:var(--gov);">Government Agent</div>
-                <div class="dch-meta">MONRE · RAG + Claude · Vòng 1: Trình bày → 2: Phản biện chéo → 3: Bảo vệ</div>
-              </div>
+              <div><div class="dch-name" style="color:var(--gov);">Government Agent</div><div class="dch-meta">MONRE · RAG + GPT-4o-mini · Claim–Counter 3 rounds</div></div>
               <div class="dch-dot" style="background:var(--gov);"></div>
             </div>
             <div class="debate-feed" id="gb"></div>
           </div>
           <div class="debate-col">
             <div class="debate-col-header">
-              <div>
-                <div class="dch-name" style="color:var(--ent);">Enterprise Agent</div>
-                <div class="dch-meta">VITAS · RAG + Claude · Vòng 1: Trình bày → 2: Phản biện chéo → 3: Bảo vệ</div>
-              </div>
+              <div><div class="dch-name" style="color:var(--ent);">Enterprise Agent</div><div class="dch-meta">VITAS · RAG + GPT-4o-mini · Claim–Counter 3 rounds</div></div>
               <div class="dch-dot" style="background:var(--ent);"></div>
             </div>
             <div class="debate-feed" id="eb"></div>
           </div>
         </div>
-
         <div id="t3-nav-btn" style="display:none;">
-          <button class="btn btn-white" style="width:100%;padding:14px;font-size:13px;letter-spacing:2px;" onclick="go('t3')">
-            → XEM KẾT QUẢ TIER 3: TỔNG HỢP CHÍNH SÁCH
-          </button>
+          <button class="btn btn-white" style="width:100%;padding:14px;font-size:15px;letter-spacing:2px;" onclick="go('t3')">→ XEM KẾT QUẢ TIER 3: TỔNG HỢP CHÍNH SÁCH</button>
         </div>
-
-        <!-- Expert Council — TRƯỚC (khớp debate_manager.py: expert_synthesis trước summarize_debate) -->
         <div class="result-panel" id="cw">
-          <div class="result-header">
-            <div class="result-name">Expert Council — Phân tích độc lập sau 3 vòng</div>
-            <span class="badge" style="color:var(--council);border-color:rgba(139,111,196,0.3);">Analyze · Compare · Synthesize</span>
-          </div>
+          <div class="result-header"><div class="result-name">Expert Council — Phân tích độc lập sau 3 vòng</div><span class="badge" style="color:var(--council);border-color:rgba(200,146,42,0.3);">Analyze · Compare · Synthesize</span></div>
           <div class="result-body" id="ctxt"></div>
         </div>
-
-        <!-- Moderator tổng kết — SAU Expert (khớp summarize_debate() cuối cùng) -->
         <div class="result-panel" id="mw">
-          <div class="result-header">
-            <div class="result-name">Moderator — Academic summary toàn bộ tranh luận</div>
-            <span class="badge" style="color:var(--gold);border-color:rgba(212,184,112,0.3);">Neutral · No recommendations</span>
-          </div>
+          <div class="result-header"><div class="result-name">Moderator — Academic summary toàn bộ tranh luận</div><span class="badge" style="color:var(--gold);border-color:rgba(212,184,112,0.3);">Neutral · No recommendations</span></div>
           <div class="result-body" id="mtxt"></div>
         </div>
       </div>
     </div>
 
-    <!-- ══════════ PAGE T3 ══════════ -->
+    <!-- ══════ PAGE T3 ══════ -->
     <div class="page" id="page-t3">
       <div class="page-hero">
-        <div class="hero-eyebrow" style="color:var(--ent);">Tier 03 — Policy Synthesis & Outputs</div>
-        <div class="page-title">Tổng Hợp<br>Chính Sách</div>
-        <div class="page-desc">6 loại đầu ra: Policy Options · Pros/Cons · Impact Analysis · Evidence · Decision Support · <span style="color:var(--gap);">Data Gaps</span>.</div>
+        <div class="page-title">Tổng Hợp Chính Sách</div>
+        <div class="page-desc">Tier3Synthesizer tổng hợp 5 module đầu ra từ kết quả tranh luận — Policy Options, Pros &amp; Cons, Impact Analysis, Evidence, Decision Support.</div>
       </div>
-
-      <!-- Empty state -->
       <div id="t3-empty" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;padding:60px 40px;">
-        <div style="font-family:'Bebas Neue','Arial Black','Impact',sans-serif;font-size:48px;color:var(--line-hi);letter-spacing:3px;">CHƯA CÓ DỮ LIỆU</div>
-        <div style="font-size:13px;color:var(--muted);text-align:center;max-width:400px;line-height:1.7;">Tier 3 sẽ tự động điền sau khi tranh luận ở Tier 2 hoàn tất.<br>Vui lòng chạy debate trước.</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:48px;font-weight:700;color:var(--line-hi);letter-spacing:3px;">CHƯA CÓ DỮ LIỆU</div>
+        <div style="font-size:15px;color:var(--muted);text-align:center;max-width:400px;line-height:1.7;">Tier 3 sẽ tự động điền sau khi tranh luận ở Tier 2 hoàn tất.</div>
         <button class="btn btn-ghost" onclick="go('t2')">→ Đến Tier 2 để chạy debate</button>
       </div>
-
-      <!-- Loading state -->
       <div id="t3-loading" style="flex:1;display:none;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:60px 40px;">
-        <div style="font-size:13px;color:var(--muted);" id="t3-load-msg">Đang tổng hợp kết quả từ debate...</div>
-        <div style="width:200px;height:1px;background:var(--bg4);overflow:hidden;position:relative;">
-          <div style="position:absolute;left:-100%;top:0;width:100%;height:100%;background:linear-gradient(90deg,transparent,var(--council),transparent);animation:sweep 1.2s ease infinite;"></div>
+        <div style="font-size:15px;color:var(--muted);" id="t3-load-msg">Đang tổng hợp kết quả từ debate...</div>
+        <div style="width:200px;height:1px;background:var(--bg4);overflow:hidden;position:relative;"><div style="position:absolute;left:-100%;top:0;width:100%;height:100%;background:linear-gradient(90deg,transparent,var(--council),transparent);animation:sweep 1.2s ease infinite;"></div></div>
+        <div style="width:100%;max-width:600px;margin-top:20px;display:flex;flex-direction:column;gap:10px;">
+          <div class="skeleton skeleton-line-lg" style="width:40%;"></div>
+          <div class="skeleton skeleton-block"></div>
+          <div class="skeleton skeleton-line" style="width:70%;"></div>
+          <div class="skeleton skeleton-line-sm"></div>
+          <div class="skeleton skeleton-block" style="height:50px;"></div>
         </div>
       </div>
-
-      <!-- Dynamic content -->
       <div id="t3-content" class="page-body" style="display:none;">
-
-        <!-- 01 Policy Options -->
         <div>
-          <div class="sec-header">
-            <div style="display:flex;align-items:baseline;gap:16px;">
-              <div class="sec-num">01</div>
-              <div class="sec-title">Phương án chính sách</div>
-            </div>
-            <div class="sec-right"><span class="badge badge-blue" id="t3-pol-badge">3 kịch bản</span></div>
-          </div>
-          <div class="panel" style="padding:0;">
-            <table class="policy-table" id="t3-pol-table"></table>
-          </div>
+          <div class="sec-header"><div style="display:flex;align-items:baseline;gap:16px;"><div class="sec-num">01</div><div class="sec-title">Phương án chính sách</div></div><div class="sec-right"><span class="badge badge-blue" id="t3-pol-badge">3 kịch bản</span></div></div>
+          <div class="panel" style="padding:0;"><table class="policy-table" id="t3-pol-table"></table></div>
         </div>
-
-        <!-- 02 Pros/Cons + 03 Impact -->
         <div class="g2" style="gap:1px;">
           <div>
-            <div class="sec-header">
-              <div style="display:flex;align-items:baseline;gap:16px;">
-                <div class="sec-num">02</div>
-                <div class="sec-title">Ưu điểm / Nhược điểm</div>
-              </div>
-            </div>
+            <div class="sec-header"><div style="display:flex;align-items:baseline;gap:16px;"><div class="sec-num">02</div><div class="sec-title">Ưu điểm / Nhược điểm</div></div></div>
             <div class="pros-cons" style="border:1px solid var(--line);">
-              <div class="pc-col">
-                <div class="pc-label" style="color:var(--green);">Ưu điểm</div>
-                <div id="t3-pros"></div>
-              </div>
-              <div class="pc-col pc-col-con">
-                <div class="pc-label" style="color:var(--ent);">Nhược điểm</div>
-                <div id="t3-cons"></div>
-              </div>
+              <div class="pc-col"><div class="pc-label" style="color:var(--green);">Ưu điểm</div><div id="t3-pros"></div></div>
+              <div class="pc-col pc-col-con"><div class="pc-label" style="color:var(--ent);">Nhược điểm</div><div id="t3-cons"></div></div>
             </div>
           </div>
-
           <div>
-            <div class="sec-header">
-              <div style="display:flex;align-items:baseline;gap:16px;">
-                <div class="sec-num">03</div>
-                <div class="sec-title">Phân tích tác động</div>
-              </div>
-            </div>
+            <div class="sec-header"><div style="display:flex;align-items:baseline;gap:16px;"><div class="sec-num">03</div><div class="sec-title">Phân tích tác động</div></div></div>
             <div class="panel" style="padding-top:0;">
-              <div class="tab-row">
-                <div class="tab active" onclick="stab(this,'eco')">Kinh tế</div>
-                <div class="tab" onclick="stab(this,'env')">Môi trường</div>
-                <div class="tab" onclick="stab(this,'soc')">Xã hội</div>
-              </div>
+              <div class="tab-row"><div class="tab active" onclick="stab(this,'eco')">Kinh tế</div><div class="tab" onclick="stab(this,'env')">Môi trường</div><div class="tab" onclick="stab(this,'soc')">Xã hội</div></div>
               <div style="padding-top:16px;" id="tab-eco"></div>
               <div style="padding-top:16px;display:none;" id="tab-env"></div>
               <div style="padding-top:16px;display:none;" id="tab-soc"></div>
             </div>
           </div>
         </div>
-
-        <!-- 04 Evidence -->
         <div>
-          <div class="sec-header">
-            <div style="display:flex;align-items:baseline;gap:16px;">
-              <div class="sec-num">04</div>
-              <div class="sec-title">Cơ sở bằng chứng — trích từ tranh luận</div>
-            </div>
-            <div class="sec-right"><span class="badge badge-green" id="t3-cit-badge">citations</span></div>
-          </div>
+          <div class="sec-header"><div style="display:flex;align-items:baseline;gap:16px;"><div class="sec-num">04</div><div class="sec-title">Cơ sở bằng chứng</div></div><div class="sec-right"><span class="badge badge-green" id="t3-cit-badge">citations</span></div></div>
           <div class="panel" style="padding:0 24px;" id="t3-evidence"></div>
         </div>
-
-        <!-- 05 Decision Support -->
         <div>
-          <div class="sec-header">
-            <div style="display:flex;align-items:baseline;gap:16px;">
-              <div class="sec-num">05</div>
-              <div class="sec-title">Hỗ trợ Ra quyết định</div>
-            </div>
-            <div class="sec-right">
-              <button class="btn btn-ghost" style="font-size:11px;padding:7px 14px;" onclick="exportR()">↓ Xuất báo cáo</button>
-            </div>
-          </div>
+          <div class="sec-header"><div style="display:flex;align-items:baseline;gap:16px;"><div class="sec-num">05</div><div class="sec-title">Hỗ trợ Ra quyết định</div></div><div class="sec-right" style="gap:8px;"><button class="btn btn-ghost" style="font-size:13px;padding:7px 12px;" onclick="copyJSON()">⎘ Copy JSON</button><button class="btn btn-ghost" style="font-size:15px;padding:7px 14px;" onclick="exportR()">↓ Xuất báo cáo</button></div></div>
           <div style="display:grid;grid-template-columns:1fr 260px;gap:1px;">
+            <div class="panel"><div id="t3-rec-title" style="font-size:20px;font-weight:600;color:var(--white);line-height:1.4;margin-bottom:14px;"></div><div id="t3-rec-body" style="font-size:15px;color:var(--muted);line-height:1.75;border-left:2px solid var(--line-md);padding-left:14px;"></div><div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap;" id="t3-badges"></div></div>
             <div class="panel">
-              <div id="t3-rec-title" style="font-family:'Barlow Condensed','Arial Narrow',sans-serif;font-size:20px;font-weight:600;color:var(--white);line-height:1.4;margin-bottom:14px;letter-spacing:.5px;"></div>
-              <div id="t3-rec-body" style="font-size:13px;color:var(--muted);line-height:1.75;border-left:2px solid var(--line-md);padding-left:14px;"></div>
-              <div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap;" id="t3-badges"></div>
-            </div>
-            <div class="panel">
-              <div class="consensus-wrap">
-                <div class="cons-ring-wrap">
-                  <svg width="160" height="160" viewBox="0 0 160 160">
-                    <circle cx="80" cy="80" r="64" fill="none" stroke="var(--bg4)" stroke-width="2"/>
-                    <circle cx="80" cy="80" r="64" fill="none" stroke="url(#cgrad2)" stroke-width="2"
-                      stroke-dasharray="402" stroke-dashoffset="200" stroke-linecap="square"
-                      transform="rotate(-90 80 80)" id="t3-ring"/>
-                    <defs>
-                      <linearGradient id="cgrad2" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" stop-color="var(--gov)"/>
-                        <stop offset="50%" stop-color="var(--council)"/>
-                        <stop offset="100%" stop-color="var(--ent)"/>
-                      </linearGradient>
-                    </defs>
-                  </svg>
-                  <div class="cons-ring-label">
-                    <div class="cons-pct" id="t3-cons-pct">—</div>
-                    <div class="cons-sub">đồng thuận</div>
-                  </div>
-                </div>
-                <div class="agent-breakdown" id="t3-agent-breakdown"></div>
+              <div style="display:flex;flex-direction:column;align-items:center;padding:24px;">
+                <div class="cons-ring-wrap"><svg width="160" height="160" viewBox="0 0 160 160"><circle cx="80" cy="80" r="64" fill="none" stroke="var(--bg4)" stroke-width="2"/><circle cx="80" cy="80" r="64" fill="none" stroke="url(#cgrad2)" stroke-width="2" stroke-dasharray="402" stroke-dashoffset="200" stroke-linecap="square" transform="rotate(-90 80 80)" id="t3-ring"/><defs><linearGradient id="cgrad2" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="var(--gov)"/><stop offset="50%" stop-color="var(--council)"/><stop offset="100%" stop-color="var(--ent)"/></linearGradient></defs></svg><div class="cons-ring-label"><div class="cons-pct" id="t3-cons-pct">—</div><div class="cons-sub">đồng thuận</div></div></div>
+                <div style="width:100%;margin-top:20px;" id="t3-agent-breakdown"></div>
               </div>
             </div>
           </div>
         </div>
-
-        <!-- ══ 06 DATA GAPS ══ -->
         <div>
-          <div class="sec-header">
-            <div style="display:flex;align-items:baseline;gap:16px;">
-              <div class="sec-num" style="color:rgba(240,160,80,0.2);">06</div>
-              <div class="sec-title" style="color:var(--gap);">Xác định khoảng trống tài liệu — Identify Data Gaps</div>
-            </div>
-            <div class="sec-right">
-              <span class="badge badge-gap" id="t3-gap-badge">gaps detected</span>
-            </div>
-          </div>
-          <!-- Description strip -->
-          <div style="background:rgba(240,160,80,0.04);border:1px solid rgba(240,160,80,0.15);padding:14px 20px;margin-bottom:1px;font-size:12px;color:var(--dim);line-height:1.6;">
-            <span style="color:var(--gap);font-family:'Barlow Condensed','Arial Narrow',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;font-weight:600;">Mô tả · </span>
-            Trong quá trình tranh luận, các agent đề cập đến thông tin, số liệu hoặc văn bản chính sách mà Knowledge Base hiện tại chưa có — tạo ra khoảng trống cần bổ sung để nâng cao chất lượng phân tích.
-          </div>
+          <div class="sec-header"><div style="display:flex;align-items:baseline;gap:16px;"><div class="sec-num" style="color:rgba(240,160,80,0.2);">06</div><div class="sec-title" style="color:var(--gap);">Xác định khoảng trống tài liệu</div></div><div class="sec-right"><span class="badge badge-gap" id="t3-gap-badge">gaps detected</span></div></div>
           <div class="panel" style="padding:0 24px;" id="t3-gaps"></div>
         </div>
-
       </div>
     </div>
 
-    <!-- ══════════ DASHBOARD ══════════ -->
+    <!-- ══════ DASHBOARD ══════ -->
     <div class="page" id="page-db">
       <div class="page-hero">
-        <div class="hero-eyebrow" style="color:var(--council);">Kết quả Thực nghiệm · n=30</div>
-        <div class="page-title">Dashboard<br>& Benchmark</div>
-        <div class="page-desc">MAD-Policy vs Single-Agent Baseline · 100% success rate · Paired t-test & Cohen's d analysis.</div>
+        <div class="hero-eyebrow" style="color:var(--council);">n=30 · Paired t-test · Cohen's d · LLM Judge · 100% Success Rate</div>
+        <div class="page-title">Dashboard & Benchmark</div>
+        <div class="page-desc">So sánh MAD-Policy với Single-Agent Zero-shot Baseline trên 5 chỉ số định lượng — Word Count, Citations, Factuality, Diversity và thời gian xử lý. Dữ liệu từ benchmark_results_vi.json (n=30).</div>
       </div>
-
       <div class="page-body">
+
+        <!-- KPI Strip — CANONICAL values -->
         <div class="kpi-strip">
-          <div class="kpi-cell" data-num="01">
-            <div class="kpi-label">Knowledge Base</div>
-            <div class="kpi-val">1.690</div>
-            <div class="kpi-sub">documents · 384-dim embeddings</div>
+          <div class="kpi-cell"><div class="kpi-label">Knowledge Base</div><div class="kpi-val">1.690</div><div class="kpi-sub">docs · 384-dim · ChromaDB</div></div>
+          <div class="kpi-cell"><div class="kpi-label">Citations (+715%)</div><div class="kpi-val" style="color:var(--gov);">17.7</div><div class="kpi-sub">vs 2.2 baseline · p&lt;0.001</div></div>
+          <div class="kpi-cell"><div class="kpi-label">Factuality Score</div><div class="kpi-val" style="color:var(--green);">8.70</div><div class="kpi-sub">vs ~8.0 baseline · LLM Judge</div></div>
+          <div class="kpi-cell"><div class="kpi-label">Diversity Score</div><div class="kpi-val" style="color:var(--council);">0.675</div><div class="kpi-sub">Jaccard · Multi-Agent only</div></div>
+          <div class="kpi-cell"><div class="kpi-label">Avg Time / Debate</div><div class="kpi-val" style="color:var(--orange);">170.0s</div><div class="kpi-sub">+235.5% vs ~50.7s baseline</div></div>
+        </div>
+
+        <!-- FIGURE 1: WC grouped bar | Citations bar | Diversity hist | Scatter -->
+        <div>
+          <div class="sec-header">
+            <div style="display:flex;align-items:baseline;gap:16px;"><div class="sec-num">F1</div><div class="sec-title">Figure 1 — Phân tích chỉ số chính</div></div>
+            <div class="sec-right"><span class="badge badge-green">n=30 · benchmark_results_vi.json</span></div>
           </div>
-          <div class="kpi-cell" data-num="02">
-            <div class="kpi-label">Citations (+463.1%)</div>
-            <div class="kpi-val" style="color:var(--gov);">12.2</div>
-            <div class="kpi-sub">vs baseline 2.2 · p&lt;0.001</div>
-          </div>
-          <div class="kpi-cell" data-num="03">
-            <div class="kpi-label">Factuality Score</div>
-            <div class="kpi-val" style="color:var(--green);">8.40</div>
-            <div class="kpi-sub">vs baseline 8.20 · LLM Judge</div>
-          </div>
-          <div class="kpi-cell" data-num="04">
-            <div class="kpi-label">Diversity Score</div>
-            <div class="kpi-val" style="color:var(--council);">0.678</div>
-            <div class="kpi-sub">Jaccard distance · Multi-Agent</div>
-          </div>
-          <div class="kpi-cell" data-num="05">
-            <div class="kpi-label">Avg Time / Debate</div>
-            <div class="kpi-val" style="color:var(--orange);">70.2s</div>
-            <div class="kpi-sub">p=0.597 ns · +38.5% vs baseline</div>
+          <div class="g2" style="gap:1px;">
+            <!-- (a) Word Count grouped bar -->
+            <div class="panel">
+              <div class="panel-hd"><div class="panel-title">(a) Word Count — MAD vs Baseline</div><span class="badge badge-green">Cohen's d=24.487 · Large</span></div>
+              <div class="chart-wrap-lg"><canvas id="chartWC"></canvas></div>
+              <div class="chart-caption">MAD avg=2,888.0 ± 80.2 · Baseline avg=490 · +495.6%</div>
+            </div>
+            <!-- (b) Citations bar + gold connector line -->
+            <div class="panel">
+              <div class="panel-hd"><div class="panel-title">(b) Citations per Debate</div><span class="badge badge-green">+715% · Cohen's d=7.573</span></div>
+              <div class="chart-wrap-lg"><canvas id="chartCit"></canvas></div>
+              <div class="chart-caption">MAD avg=17.7 ± 1.9 · Baseline=2.2 · p&lt;0.001***</div>
+            </div>
+            <!-- (c) Diversity histogram -->
+            <div class="panel">
+              <div class="panel-hd"><div class="panel-title">(c) Diversity Score Distribution</div><span class="badge" style="color:var(--council);border-color:rgba(200,146,42,0.3);">mean=0.675 · median=0.675</span></div>
+              <div class="chart-wrap-lg"><canvas id="chartDiv"></canvas></div>
+              <div class="chart-caption">Jaccard similarity · bins [0.600–0.750] · n=30 debates</div>
+            </div>
+            <!-- (d) Scatter -->
+            <div class="panel">
+              <div class="panel-hd"><div class="panel-title">(d) Coherence vs Factuality Scatter</div><span class="badge badge-blue">LLM Judge 1–10</span></div>
+              <div class="chart-wrap-lg"><canvas id="chartCF"></canvas></div>
+              <div class="chart-caption">MAD: coh=8, fact=9 (26/30) · Baseline: coh=9.5–10, fact=8.0</div>
+            </div>
           </div>
         </div>
 
-        <div class="g2" style="gap:1px;">
-          <div class="panel">
-            <div class="panel-hd">
-              <div class="panel-title">Word Count — MAD-Policy vs Baseline</div>
-              <span class="badge badge-green">Cohen's d = 14.375</span>
-            </div>
-            <div class="chart-wrap-lg"><canvas id="chartWC"></canvas></div>
+        <!-- FIGURE 2: Cohen's d bar | WC per Q | Cit per Q -->
+        <div>
+          <div class="sec-header">
+            <div style="display:flex;align-items:baseline;gap:16px;"><div class="sec-num">F2</div><div class="sec-title">Figure 2 — Effect Size & Per-Question Improvement</div></div>
+            <div class="sec-right"><span class="badge badge-blue">Cohen (1988): Large ≥ 0.8</span></div>
           </div>
-          <div class="panel">
-            <div class="panel-hd">
-              <div class="panel-title">Citations per Debate</div>
-              <span class="badge badge-green">+463.1% · p&lt;0.001</span>
+          <div class="g2" style="gap:1px;">
+            <!-- (a) Cohen's d horizontal bar -->
+            <div class="panel">
+              <div class="panel-hd"><div class="panel-title">(a) Cohen's d Effect Size</div><span class="badge badge-green">d=0.8 threshold</span></div>
+              <div class="chart-wrap-lg"><canvas id="chartCohen"></canvas></div>
+              <div class="chart-caption">WC: d=24.487 · Cit: d=7.573 · Time: d=0.326 (Negligible)</div>
             </div>
-            <div class="chart-wrap-lg"><canvas id="chartCit"></canvas></div>
-          </div>
-        </div>
-
-        <div class="g2" style="gap:1px;">
-          <div class="panel">
-            <div class="panel-hd">
-              <div class="panel-title">Diversity Score Distribution (MAD-Policy)</div>
-              <span class="badge" style="color:var(--council);border-color:rgba(139,111,196,0.3);">n=30 debates</span>
+            <!-- (b) WC improvement per Q -->
+            <div class="panel">
+              <div class="panel-hd"><div class="panel-title">(b) Word Count Improvement per Question</div><span class="badge badge-green">avg +495.6%</span></div>
+              <div class="chart-wrap-lg"><canvas id="chartWCQ"></canvas></div>
+              <div class="chart-caption">30 câu hỏi · mean line = 495.6%</div>
             </div>
-            <div class="chart-wrap-lg"><canvas id="chartDiv"></canvas></div>
-          </div>
-          <div class="panel">
-            <div class="panel-hd">
-              <div class="panel-title">Coherence vs Factuality Scatter</div>
-              <span class="badge badge-blue">LLM Judge 1–10</span>
+            <!-- (c) Citation improvement per Q -->
+            <div class="panel" style="grid-column:1/-1;">
+              <div class="panel-hd"><div class="panel-title">(c) Citation Improvement per Question (%)</div><span class="badge badge-green">avg +715%</span></div>
+              <div class="chart-wrap-lg"><canvas id="chartCitQ"></canvas></div>
+              <div class="chart-caption">30 câu hỏi · mean line = 715% · range 536%–855%</div>
             </div>
-            <div class="chart-wrap-lg"><canvas id="chartCF"></canvas></div>
           </div>
         </div>
 
+        <!-- FIGURE 3: Semantic Tagging -->
+        <div>
+          <div class="sec-header">
+            <div style="display:flex;align-items:baseline;gap:16px;"><div class="sec-num">F3</div><div class="sec-title">Figure 3 — Semantic Tagging Accuracy</div></div>
+            <div class="sec-right"><span class="badge badge-blue">accuracy_report.json · n=193</span></div>
+          </div>
+          <div class="g2" style="gap:1px;">
+            <div class="panel">
+              <div class="panel-hd"><div class="panel-title">(a) Legal Tagging (n=100)</div><span class="badge badge-green">80% threshold</span></div>
+              <div class="chart-wrap-lg"><canvas id="chartLegal"></canvas></div>
+              <div class="chart-caption">Overall F1=74.9% · Clause Type=80.0% · Subjects F1=71.1% · Domains F1=73.6%</div>
+            </div>
+            <div class="panel">
+              <div class="panel-hd"><div class="panel-title">(b) Business Tagging (n=93)</div><span class="badge" style="color:var(--ent);border-color:rgba(200,56,42,0.3);">Focus F1=33.4% ⚠ Low</span></div>
+              <div class="chart-wrap-lg"><canvas id="chartBiz"></canvas></div>
+              <div class="chart-caption">Stance=97.8% · CBAM=93.5% · Focus F1=33.4% (red) · Overall F1=74.9%</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- FIGURE 4: MAE LLM Judge -->
+        <div>
+          <div class="sec-header">
+            <div style="display:flex;align-items:baseline;gap:16px;"><div class="sec-num">F4</div><div class="sec-title">Figure 4 — LLM Judge Validation</div></div>
+            <div class="sec-right"><span class="badge badge-green">MAE &lt; 0.5 threshold</span></div>
+          </div>
+          <div class="g2" style="gap:1px;">
+            <div class="panel">
+              <div class="panel-hd"><div class="panel-title">(a) MAE — LLM Judge vs Human Evaluator</div><span class="badge badge-green">both &lt; 0.5</span></div>
+              <div class="chart-wrap-lg"><canvas id="chartMAE"></canvas></div>
+              <div class="chart-caption">Coherence MAE=0.17 · Factuality MAE=0.10 · MAE=0.5 threshold · MAE=1.0 ref</div>
+            </div>
+            <div class="panel">
+              <div class="panel-hd"><div class="panel-title">(b) Agreement Rate — LLM vs Human</div><span class="badge badge-green">within±1: 100%</span></div>
+              <div class="chart-wrap-lg"><canvas id="chartAgr"></canvas></div>
+              <div class="chart-caption">Coh exact=83.3% / within±1=100% · Fact exact=90.0% / within±1=100%</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- FIGURE 5: Correlation Heatmap -->
+        <div>
+          <div class="sec-header">
+            <div style="display:flex;align-items:baseline;gap:16px;"><div class="sec-num">F5</div><div class="sec-title">Figure 5 — Correlation Matrix (Pearson r)</div></div>
+            <div class="sec-right"><span class="badge badge-blue">lower triangle · dark red positive / light blue negative</span></div>
+          </div>
+          <div class="panel">
+            <div class="panel-hd"><div class="panel-title">Tương quan giữa các chỉ số benchmark (n=30)</div></div>
+            <div class="chart-wrap-lg" style="height:300px;"><canvas id="chartHeat"></canvas></div>
+            <div class="chart-caption">WC/Cit=0.15 · WC/Div=0.21 · Cit/Fact=0.18 · Div/Fact=-0.12 · Time/WC=0.21</div>
+          </div>
+        </div>
+
+        <!-- Benchmark Table — CANONICAL -->
         <div class="panel" style="padding:0;">
           <div class="panel-hd" style="padding:18px 24px;margin-bottom:0;">
-            <div class="panel-title">Bảng so sánh tổng quan — Paired t-test & Cohen's d</div>
-            <span class="badge badge-green">n = 30 · 100% success</span>
+            <div class="panel-title">Bảng tổng hợp benchmark — Paired t-test & Cohen's d</div>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span class="badge badge-green">n=30 · 100% success</span>
+              <button class="btn btn-ghost" style="font-size:11px;padding:5px 12px;letter-spacing:1.5px;" onclick="exportCSV()">↓ CSV</button>
+            </div>
           </div>
           <div class="overflow-x">
             <table class="bm-table">
-              <thead>
-                <tr>
-                  <th>Chỉ số</th><th>MAD-Policy</th><th>Baseline</th>
-                  <th>Cải thiện</th><th>t-statistic</th><th>p-value</th>
-                  <th>Cohen's d</th><th>Effect</th>
-                </tr>
-              </thead>
+              <thead><tr><th>Chỉ số</th><th>MAD-Policy</th><th>Baseline</th><th>Cải thiện</th><th>Cohen's d</th><th>Effect</th></tr></thead>
               <tbody>
-                <tr>
-                  <td>Word Count</td>
-                  <td class="mono">2,237.8 ± 92.8</td><td class="mono">490.4 ± 53.8</td>
-                  <td class="mono pos">+356.3%</td><td class="mono">78.736</td>
-                  <td class="mono pos">&lt;0.001***</td><td class="mono pos">14.375</td>
-                  <td><span class="effect-tag et-green">Large</span></td>
-                </tr>
-                <tr>
-                  <td>Citations</td>
-                  <td class="mono">12.2 ± 1.9</td><td class="mono">2.2 ± 0.7</td>
-                  <td class="mono pos">+463.1%</td><td class="mono">25.474</td>
-                  <td class="mono pos">&lt;0.001***</td><td class="mono pos">4.651</td>
-                  <td><span class="effect-tag et-green">Large</span></td>
-                </tr>
-                <tr>
-                  <td>Factuality</td>
-                  <td class="mono">8.40 / 10</td><td class="mono">8.20 / 10</td>
-                  <td class="mono pos">+0.20</td><td class="mono">—</td>
-                  <td class="mono neu">—</td><td class="mono neu">—</td>
-                  <td><span class="effect-tag et-gold">Better</span></td>
-                </tr>
-                <tr>
-                  <td>Coherence</td>
-                  <td class="mono">8.00 (SD=0)</td><td class="mono">8.73 / 10</td>
-                  <td class="mono neg">-0.73</td><td class="mono">—</td>
-                  <td class="mono neu">—</td><td class="mono neu">—</td>
-                  <td><span class="effect-tag" style="color:var(--council);border-color:rgba(139,111,196,0.3);">⚠ SD=0</span></td>
-                </tr>
-                <tr>
-                  <td>Diversity Score</td>
-                  <td class="mono">0.678 (Jaccard)</td><td class="mono">N/A</td>
-                  <td class="mono neu">—</td><td class="mono">—</td>
-                  <td class="mono">—</td><td class="mono">—</td>
-                  <td><span class="effect-tag et-muted">Multi-Agent</span></td>
-                </tr>
-                <tr>
-                  <td>Time (seconds)</td>
-                  <td class="mono">70.2 ± 12.2s</td><td class="mono">50.7s</td>
-                  <td class="mono neu">+38.5%</td><td class="mono">0.534</td>
-                  <td class="mono neu">0.597 ns</td><td class="mono neu">0.098</td>
-                  <td><span class="effect-tag et-muted">Negligible</span></td>
-                </tr>
+                <tr><td>Word Count</td><td class="mono">2,888.0 ± 80.2</td><td class="mono">490 ± ~54</td><td class="mono pos">+495.6%</td><td class="mono pos">24.487</td><td><span class="effect-tag et-green">Large</span></td></tr>
+                <tr><td>Citations</td><td class="mono">17.7 ± 1.9</td><td class="mono">2.2</td><td class="mono pos">+715%</td><td class="mono pos">7.573</td><td><span class="effect-tag et-green">Large</span></td></tr>
+                <tr><td>Factuality</td><td class="mono">8.70 / 10</td><td class="mono">~8.0 / 10</td><td class="mono pos">+0.70</td><td class="mono neu">—</td><td><span class="effect-tag et-gold">Better</span></td></tr>
+                <tr><td>Coherence</td><td class="mono">8.0 (MAE=0.17)</td><td class="mono">~8.7 / 10</td><td class="mono neg">-0.73</td><td class="mono neu">—</td><td><span class="effect-tag" style="color:var(--council);border-color:rgba(200,146,42,0.3);">Low Var</span></td></tr>
+                <tr><td>Diversity Score</td><td class="mono">0.675 (Jaccard)</td><td class="mono">N/A</td><td class="mono neu">—</td><td class="mono neu">—</td><td><span class="effect-tag et-muted">Multi-Agent</span></td></tr>
+                <tr><td>Time (seconds)</td><td class="mono">170.0s</td><td class="mono">~50.7s</td><td class="mono neu">+235.5%</td><td class="mono neu">0.326</td><td><span class="effect-tag et-muted">Negligible</span></td></tr>
               </tbody>
             </table>
           </div>
-          <div style="padding:12px 24px;font-size:11px;color:var(--muted);font-style:italic;border-top:1px solid var(--line);">
-            *** p &lt; 0.001; ns = not significant. Phân loại Cohen (1988): Large d ≥ 0.8.
+          <div style="padding:12px 24px;font-size:13px;color:var(--muted);font-style:italic;border-top:1px solid var(--line);">
+            Nguồn: benchmark_results_vi.json · accuracy_report.json · n=30. Cohen (1988): Large d ≥ 0.8. Baseline = Single-Agent Zero-shot GPT-4o-mini.
           </div>
         </div>
+
       </div>
     </div>
 
   </main>
 </div>
 
+<!-- API Key Modal -->
+<div class="key-modal-bg" id="key-modal" style="display:none;">
+  <div class="key-modal">
+    <div class="key-modal-title">OpenAI API Key</div>
+    <div class="key-modal-sub">Nhập key để khởi động debate engine. Key chỉ lưu trong bộ nhớ phiên này.</div>
+    <input type="password" class="key-modal-input" id="key-modal-input" placeholder="sk-proj-...">
+    <div class="key-modal-actions">
+      <button class="btn btn-ghost" onclick="document.getElementById('key-modal').style.display='none'">Huỷ</button>
+      <button class="btn btn-white" onclick="confirmKey()">Xác nhận & Bắt đầu</button>
+    </div>
+  </div>
+</div>
+
 <script>
+/* ─── FONT LOAD ─── */
+document.fonts.load('1em "Bebas Neue"').then(()=>document.documentElement.classList.add('fonts-loaded')).catch(()=>document.documentElement.classList.add('fonts-loaded'));
+setTimeout(()=>document.documentElement.classList.add('fonts-loaded'),1500);
+
+/* ─── THEME ─── */
+function toggleTheme(){const l=document.documentElement.classList.toggle('light');document.getElementById('theme-btn').textContent=l?'☀️':'🌙';localStorage.setItem('mad_theme',l?'light':'dark');}
+
 /* ─── NAV ─── */
-const pages = {
-  t1:{id:'page-t1',lbl:'Tier 01 — Chuẩn Bị Tri Thức'},
-  t2:{id:'page-t2',lbl:'Tier 02 — Tranh Luận Đa Agent'},
-  t3:{id:'page-t3',lbl:'Tier 03 — Tổng Hợp Chính Sách'},
-  db:{id:'page-db',lbl:'Dashboard & Benchmark'}
-};
-const keys = ['t1','t2','t3','db'];
-
-function go(k) {
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.getElementById(pages[k].id).classList.add('active');
-  document.getElementById('crumb').textContent = pages[k].lbl;
-  document.querySelectorAll('.nav-item').forEach((el,i)=>el.classList.toggle('active', keys[i]===k));
-  if(k==='db') setTimeout(initCharts,100);
-}
-
-/* ─── CLOCK ─── */
-function tick(){ document.getElementById('clk').textContent = new Date().toLocaleTimeString('vi-VN',{hour:'2-digit',minute:'2-digit',second:'2-digit'}); }
-setInterval(tick,1000); tick();
+const pages={t1:{id:'page-t1',lbl:'Tier 01 — Chuẩn Bị Tri Thức'},t2:{id:'page-t2',lbl:'Tier 02 — Tranh Luận Đa Agent'},t3:{id:'page-t3',lbl:'Tier 03 — Tổng Hợp Chính Sách'},db:{id:'page-db',lbl:'Dashboard & Benchmark'}};
+const keys=['t1','t2','t3','db'];
+function go(k){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(pages[k].id).classList.add('active');document.getElementById('crumb').textContent=pages[k].lbl;document.querySelectorAll('.nav-item').forEach((el,i)=>el.classList.toggle('active',keys[i]===k));if(k==='db')setTimeout(initCharts,120);}
+function toggleSidebar(){const sb=document.getElementById('sidebar'),btn=sb.querySelector('.sb-toggle');sb.classList.toggle('collapsed');btn.textContent=sb.classList.contains('collapsed')?'›':'‹';}
+function tick(){document.getElementById('clk').textContent=new Date().toLocaleTimeString('vi-VN',{hour:'2-digit',minute:'2-digit',second:'2-digit'});}
+setInterval(tick,1000);tick();
 
 /* ─── LOADING ─── */
 window.addEventListener('load',()=>{
-  setTimeout(()=>{
-    const o=document.getElementById('loading');
-    o.style.opacity='0';
-    setTimeout(()=>{ o.style.display='none'; initChartKB(); },500);
-  },1400);
+  if(localStorage.getItem('mad_theme')==='light'){document.documentElement.classList.add('light');const b=document.getElementById('theme-btn');if(b)b.textContent='☀️';}
+  setTimeout(()=>{const o=document.getElementById('loading');o.style.opacity='0';setTimeout(()=>{o.style.display='none';initChartKB();},500);},1400);
 });
 
-/* ─── CHART DEFAULTS ─── */
-const C = {gov:'#4a7cf0',ent:'#e05a7a',council:'#8b6fc4',green:'#3fcb9a',gold:'#d4b870',orange:'#e07a4a',muted:'#666',bg3:'#161616',bg4:'#1c1c1c'};
-const baseOpts = {
-  responsive:true, maintainAspectRatio:false,
-  plugins:{
-    legend:{labels:{color:C.muted,font:{size:11},boxWidth:10}},
-    tooltip:{backgroundColor:'#161616',borderColor:'rgba(255,255,255,0.1)',borderWidth:1,titleColor:'#ccc',bodyColor:'#888'}
-  },
-  scales:{
-    x:{grid:{color:'rgba(255,255,255,0.03)'},ticks:{color:C.muted,font:{size:10}}},
-    y:{grid:{color:'rgba(255,255,255,0.03)'},ticks:{color:C.muted,font:{size:10}}}
-  }
-};
+/* ─── CHART HELPERS ─── */
+const C={gov:'#4a7ec8',ent:'#c8382a',council:'#c8922a',green:'#4a9e5c',gold:'#d4a030',orange:'#c86428',muted:'#9e8e76',dim:'#c4ae90'};
+function cc(){const l=document.documentElement.classList.contains('light');return{muted:l?'#5a4e3a':'#9e8e76',dim:l?'#3e3428':'#c4ae90',grid:l?'rgba(0,0,0,0.06)':'rgba(255,255,255,0.04)',tt_bg:l?'#f0eadf':'#131009',tt_ttl:l?'#1a1510':'#e8dcc8',tt_body:l?'#3e3428':'#c4ae90'};}
+function baseOpts(xLabel,yLabel){const c=cc();return{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:c.muted,font:{size:11,family:"'Be Vietnam Pro',sans-serif"},boxWidth:12,padding:14}},tooltip:{backgroundColor:c.tt_bg,borderColor:'rgba(200,160,80,0.25)',borderWidth:1,titleColor:c.tt_ttl,bodyColor:c.tt_body,padding:10,cornerRadius:3}},scales:{x:{grid:{color:c.grid},ticks:{color:c.muted,font:{size:10}},title:xLabel?{display:true,text:xLabel,color:c.muted,font:{size:10}}:undefined},y:{grid:{color:c.grid},ticks:{color:c.muted,font:{size:10}},title:yLabel?{display:true,text:yLabel,color:c.muted,font:{size:10}}:undefined,beginAtZero:true}}};}
 
-function initChartKB(){
-  const ctx=document.getElementById('chartKB');
-  if(!ctx||ctx._c)return;
-  ctx._c=new Chart(ctx,{type:'doughnut',data:{
-    labels:['Legal (1.597)','Business (93)'],
-    datasets:[{data:[1597,93],backgroundColor:[C.gov,C.ent],borderColor:'#111',borderWidth:3,hoverOffset:4}]
-  },options:{responsive:true,maintainAspectRatio:false,cutout:'76%',plugins:{
-    legend:{position:'bottom',labels:{color:C.muted,font:{size:11},padding:12,boxWidth:10}},
-    tooltip:{backgroundColor:'#161616',borderColor:'rgba(255,255,255,0.1)',borderWidth:1,titleColor:'#ccc',bodyColor:'#888'}
-  }}});
-}
+function initChartKB(){const ctx=document.getElementById('chartKB');if(!ctx||ctx._c)return;const c=cc();ctx._c=new Chart(ctx,{type:'doughnut',data:{labels:['Legal chunks — 1.597','Business CBAM — 93'],datasets:[{data:[1597,93],backgroundColor:[C.gov,C.ent],borderColor:document.documentElement.classList.contains('light')?'#ece6da':'#111',borderWidth:3,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,cutout:'74%',plugins:{legend:{position:'bottom',labels:{color:c.muted,font:{size:11,family:"'Be Vietnam Pro',sans-serif"},padding:14,boxWidth:12}},tooltip:{backgroundColor:c.tt_bg,borderColor:'rgba(200,160,80,0.25)',borderWidth:1,titleColor:c.tt_ttl,bodyColor:c.tt_body,padding:10,cornerRadius:3}}}});}
 
 let chartsReady=false;
 function initCharts(){
   if(chartsReady)return; chartsReady=true;
-  const mk=o=>JSON.parse(JSON.stringify(Object.assign({},baseOpts,o)));
 
-  const wc=document.getElementById('chartWC');
-  if(wc&&!wc._c){
-    const lb=Array.from({length:30},(_,i)=>i+1);
-    const md=[2127,2198,2243,2156,2312,2189,2267,2201,2178,2334,2209,2256,2143,2289,2178,2301,2234,2267,2156,2312,2223,2189,2278,2234,2201,2267,2156,2289,2178,2234];
-    const bl=[478,512,467,523,489,501,534,456,498,521,467,489,523,478,512,501,489,534,467,498,521,456,489,512,478,501,534,467,523,489];
-    wc._c=new Chart(wc,{type:'bar',data:{labels:lb,datasets:[
-      {label:'MAD-Policy',data:md,backgroundColor:'rgba(74,124,240,0.65)',borderColor:C.gov,borderWidth:1,borderRadius:1},
-      {label:'Baseline',data:bl,backgroundColor:'rgba(102,102,102,0.4)',borderColor:C.muted,borderWidth:1,borderRadius:1}
-    ]},options:mk({})});
+  /* ── FIGURE 1 (a) Word Count grouped bar ── */
+  const wcCtx=document.getElementById('chartWC');
+  if(wcCtx&&!wcCtx._c){
+    const labels=Array.from({length:30},(_,i)=>`Q${i+1}`);
+    const madWC=[2888,2901,2876,2895,2912,2867,2843,2879,2891,2924,2856,2898,2863,2905,2878,2893,2912,2867,2851,2908,2887,2876,2915,2893,2869,2883,2907,2878,2896,2871];
+    const blWC= [478,512,467,523,489,501,534,456,498,521,467,489,523,478,512,501,489,534,467,498,521,456,489,512,478,501,534,467,523,489];
+    const opts=baseOpts('Câu hỏi (n=30)','Số từ');opts.plugins.legend.display=true;
+    wcCtx._c=new Chart(wcCtx,{type:'bar',data:{labels,datasets:[{label:'MAD-Policy (avg 2,888)',data:madWC,backgroundColor:'rgba(74,126,200,0.65)',borderColor:C.gov,borderWidth:1,borderRadius:2},{label:'Baseline (avg 490)',data:blWC,backgroundColor:'rgba(200,146,42,0.4)',borderColor:C.council,borderWidth:1,borderRadius:2}]},options:opts});
   }
 
-  const ci=document.getElementById('chartCit');
-  if(ci&&!ci._c){
-    ci._c=new Chart(ci,{type:'bar',data:{labels:['Baseline','MAD-Policy'],datasets:[{data:[2.2,12.2],backgroundColor:[C.muted,C.gov],borderColor:[C.muted,C.gov],borderWidth:1,borderRadius:2}]},options:mk({plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,max:18}}})});
+  /* ── FIGURE 1 (b) Citations horizontal bar + gold line annotation ── */
+  const citCtx=document.getElementById('chartCit');
+  if(citCtx&&!citCtx._c){
+    const opts=baseOpts('Số citations trung bình','');
+    opts.indexAxis='y'; opts.plugins.legend.display=false;
+    opts.scales.x.max=22;
+    citCtx._c=new Chart(citCtx,{type:'bar',data:{labels:['Baseline (Single-Agent)','MAD-Policy'],datasets:[{data:[2.2,17.7],backgroundColor:['rgba(200,146,42,0.45)','rgba(74,126,200,0.7)'],borderColor:[C.council,C.gov],borderWidth:1,borderRadius:3,barThickness:38}]},options:opts});
   }
 
-  const dv=document.getElementById('chartDiv');
-  if(dv&&!dv._c){
-    const dd=[0.593,0.612,0.634,0.645,0.657,0.662,0.671,0.674,0.678,0.679,0.682,0.685,0.689,0.691,0.695,0.698,0.701,0.705,0.709,0.712,0.715,0.719,0.722,0.725,0.728,0.731,0.733,0.735,0.737,0.678];
-    const bins=[0.59,0.61,0.63,0.65,0.67,0.69,0.71,0.73,0.75];
-    const cnts=bins.slice(0,-1).map((b,i)=>dd.filter(v=>v>=b&&v<bins[i+1]).length);
-    dv._c=new Chart(dv,{type:'bar',data:{labels:bins.slice(0,-1).map((b,i)=>b.toFixed(2)+'-'+bins[i+1].toFixed(2)),datasets:[{label:'Frequency',data:cnts,backgroundColor:'rgba(74,124,240,0.55)',borderColor:C.gov,borderWidth:1,borderRadius:1}]},options:mk({plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{stepSize:1}}}})});
+  /* ── FIGURE 1 (c) Diversity histogram — ACTUAL bins ── */
+  const divCtx=document.getElementById('chartDiv');
+  if(divCtx&&!divCtx._c){
+    // Actual: [0.600→0.625: 2, 0.625→0.650: 3, 0.650→0.675: 11, 0.675→0.700: 6, 0.700→0.725: 5, 0.725→0.750: 1, ≥0.750: 1]
+    const binLabels=['0.600–0.625','0.625–0.650','0.650–0.675','0.675–0.700','0.700–0.725','0.725–0.750','≥0.750'];
+    const binCounts=[2,3,11,6,5,1,1];
+    const opts=baseOpts('Jaccard Diversity Score','Số debate');
+    opts.plugins.legend.display=false;
+    // add mean/median annotation via afterDraw
+    opts.plugins.dlines={mean:3.58}; // mean at bin ~0.675 position (3.58 from 0)
+    const bgColors=binCounts.map((_,i)=>`rgba(74,126,200,${0.3+i*0.1})`);
+    divCtx._c=new Chart(divCtx,{type:'bar',data:{labels:binLabels,datasets:[{label:'Số debate',data:binCounts,backgroundColor:bgColors,borderColor:C.gov,borderWidth:1,borderRadius:2}]},options:opts});
+    // draw mean/median lines after render
+    divCtx._c.options.animation={onComplete:function(){const ch=this;const ctx2=ch.ctx;const ds=ch.getDatasetMeta(0);if(!ds.data.length)return;ctx2.save();ctx2.strokeStyle=C.gold;ctx2.lineWidth=2;ctx2.setLineDash([4,4]);const meanX=(ds.data[2].x+ds.data[3].x)/2; // between bin 2 & 3 ≈ 0.675
+      const top=ch.chartArea.top,bot=ch.chartArea.bottom;ctx2.beginPath();ctx2.moveTo(meanX,top);ctx2.lineTo(meanX,bot);ctx2.stroke();ctx2.setLineDash([]);ctx2.fillStyle=C.gold;ctx2.font="11px 'Be Vietnam Pro', sans-serif";ctx2.fillText('mean=0.675',meanX+4,top+16);ctx2.restore();}};
   }
 
-  const cf=document.getElementById('chartCF');
-  if(cf&&!cf._c){
-    const mp=Array.from({length:30},()=>({x:8+(Math.random()-.5)*.4,y:7+(Math.random()>.6?2:0)+(Math.random()-.5)*.3}));
-    const bp=Array.from({length:30},()=>({x:8+(Math.random()-.5)*1.2,y:8+(Math.random()-.5)*1.2}));
-    cf._c=new Chart(cf,{type:'scatter',data:{datasets:[
-      {label:'MAD-Policy',data:mp,backgroundColor:'rgba(74,124,240,0.7)',pointRadius:5,pointBorderColor:'#111',pointBorderWidth:1},
-      {label:'Baseline',data:bp,backgroundColor:'rgba(102,102,102,0.55)',pointStyle:'rectRot',pointRadius:5,pointBorderColor:'#111',pointBorderWidth:1}
-    ]},options:mk({scales:{x:{min:5.5,max:11.5,title:{display:true,text:'Coherence',color:C.muted,font:{size:11}}},y:{min:5.5,max:11.5,title:{display:true,text:'Factuality',color:C.muted,font:{size:11}}}}})});
+  /* ── FIGURE 1 (d) Scatter — ACTUAL groups ── */
+  const cfCtx=document.getElementById('chartCF');
+  if(cfCtx&&!cfCtx._c){
+    // MAD: (coh=8,fact=9)×26, (coh=8,fact=7)×3, (coh=7,fact=6)×1
+    const madPts=[...Array(26).fill(null).map(()=>({x:8+(Math.random()-.5)*.12,y:9+(Math.random()-.5)*.12})),...Array(3).fill(null).map(()=>({x:8+(Math.random()-.5)*.12,y:7+(Math.random()-.5)*.12})),{x:7.05,y:6.05}];
+    // Baseline: cluster coh=9.5–10, fact=8.0
+    const blPts=Array.from({length:30},()=>({x:9.5+(Math.random()*.5),y:8+(Math.random()-.5)*.4}));
+    const opts=baseOpts('Coherence Score (1–10)','Factuality Score (1–10)');
+    opts.scales.x.min=5;opts.scales.x.max=11;opts.scales.y.min=5;opts.scales.y.max=11;
+    // crosshair at (8,9) for MAD cluster
+    cfCtx._c=new Chart(cfCtx,{type:'scatter',data:{datasets:[{label:'MAD-Policy (n=30)',data:madPts,backgroundColor:'rgba(74,126,200,0.75)',pointRadius:5,pointBorderColor:'rgba(0,0,0,0.2)',pointBorderWidth:1},{label:'Baseline (n=30)',data:blPts,backgroundColor:'rgba(200,56,42,0.55)',pointStyle:'triangle',pointRadius:5,pointBorderColor:'rgba(0,0,0,0.2)',pointBorderWidth:1}]},options:opts});
+  }
+
+  /* ── FIGURE 2 (a) Cohen's d horizontal bar ── */
+  const cohenCtx=document.getElementById('chartCohen');
+  if(cohenCtx&&!cohenCtx._c){
+    const opts=baseOpts("Cohen's d value",'');opts.indexAxis='y';opts.plugins.legend.display=false;opts.scales.x.max=26;
+    cohenCtx._c=new Chart(cohenCtx,{type:'bar',data:{labels:['Time (s)','Citations','Word Count'],datasets:[{data:[0.326,7.573,24.487],backgroundColor:['rgba(200,146,42,0.4)','rgba(74,126,200,0.6)','rgba(74,158,92,0.65)'],borderColor:[C.council,C.gov,C.green],borderWidth:1,borderRadius:3,barThickness:32}]},options:opts});
+  }
+
+  /* ── FIGURE 2 (b) WC improvement per Q ── */
+  const wcqCtx=document.getElementById('chartWCQ');
+  if(wcqCtx&&!wcqCtx._c){
+    const vals=[465,507,516,513,475,462,458,468,481,502,460,495,500,473,494,507,496,494,493,487,492,501,505,496,479,483,513,493,496,479];
+    const opts=baseOpts('Câu hỏi','WC Improvement (%)');
+    opts.plugins.legend.display=false;
+    wcqCtx._c=new Chart(wcqCtx,{type:'bar',data:{labels:Array.from({length:30},(_,i)=>`Q${i+1}`),datasets:[{data:vals,backgroundColor:'rgba(74,126,200,0.55)',borderColor:C.gov,borderWidth:1,borderRadius:2}]},options:opts});
+  }
+
+  /* ── FIGURE 2 (c) Citation improvement per Q ── */
+  const citqCtx=document.getElementById('chartCitQ');
+  if(citqCtx&&!citqCtx._c){
+    const vals=[718,673,809,673,764,855,627,627,627,855,673,809,627,627,627,764,627,673,627,718,627,855,673,673,673,536,673,855,764,764];
+    const opts=baseOpts('Câu hỏi','Citation Improvement (%)');
+    opts.plugins.legend.display=false;
+    citqCtx._c=new Chart(citqCtx,{type:'bar',data:{labels:Array.from({length:30},(_,i)=>`Q${i+1}`),datasets:[{data:vals,backgroundColor:vals.map(v=>v>=800?'rgba(74,158,92,0.75)':v>=700?'rgba(74,126,200,0.65)':'rgba(200,146,42,0.5)'),borderColor:vals.map(v=>v>=800?C.green:v>=700?C.gov:C.council),borderWidth:1,borderRadius:2}]},options:opts});
+  }
+
+  /* ── FIGURE 3 (a) Legal tagging bar ── */
+  const legalCtx=document.getElementById('chartLegal');
+  if(legalCtx&&!legalCtx._c){
+    const opts=baseOpts('','Score (%)');opts.plugins.legend.display=false;opts.scales.y.max=110;
+    const vals=[80.0,71.1,73.6,74.9];
+    const cols=['rgba(74,126,200,0.7)','rgba(74,126,200,0.55)','rgba(74,158,92,0.65)','rgba(255,255,255,0.8)'];
+    legalCtx._c=new Chart(legalCtx,{type:'bar',data:{labels:['Clause Type','Subjects F1','Domains F1','Overall F1'],datasets:[{data:vals,backgroundColor:cols,borderColor:[C.gov,C.gov,C.green,'rgba(255,255,255,0.6)'],borderWidth:1,borderRadius:3,barThickness:40}]},options:opts});
+  }
+
+  /* ── FIGURE 3 (b) Business tagging bar ── */
+  const bizCtx=document.getElementById('chartBiz');
+  if(bizCtx&&!bizCtx._c){
+    const opts=baseOpts('','Score (%)');opts.plugins.legend.display=false;opts.scales.y.max=110;
+    const vals=[97.8,93.5,33.4,74.9];
+    const cols=['rgba(74,158,92,0.7)','rgba(74,126,200,0.65)','rgba(200,56,42,0.75)','rgba(200,146,42,0.8)'];
+    bizCtx._c=new Chart(bizCtx,{type:'bar',data:{labels:['Stance','CBAM','Focus F1','Overall F1'],datasets:[{data:vals,backgroundColor:cols,borderColor:[C.green,C.gov,C.ent,C.council],borderWidth:1,borderRadius:3,barThickness:40}]},options:opts});
+  }
+
+  /* ── FIGURE 4 (a) MAE bar ── */
+  const maeCtx=document.getElementById('chartMAE');
+  if(maeCtx&&!maeCtx._c){
+    const opts=baseOpts('Dimension','MAE');opts.plugins.legend.display=false;opts.scales.y.max=1.2;
+    maeCtx._c=new Chart(maeCtx,{type:'bar',data:{labels:['Coherence MAE','Factuality MAE'],datasets:[{data:[0.17,0.10],backgroundColor:['rgba(74,126,200,0.65)','rgba(74,158,92,0.65)'],borderColor:[C.gov,C.green],borderWidth:1,borderRadius:3,barThickness:50}]},options:opts});
+  }
+
+  /* ── FIGURE 4 (b) Agreement grouped bar ── */
+  const agrCtx=document.getElementById('chartAgr');
+  if(agrCtx&&!agrCtx._c){
+    const opts=baseOpts('Agreement Type','Rate (%)');opts.scales.y.max=110;opts.plugins.legend.display=true;
+    agrCtx._c=new Chart(agrCtx,{type:'bar',data:{labels:['Coherence','Factuality'],datasets:[{label:'Exact match',data:[83.3,90.0],backgroundColor:'rgba(74,126,200,0.65)',borderColor:C.gov,borderWidth:1,borderRadius:2,barThickness:30},{label:'Within ±1',data:[100,100],backgroundColor:'rgba(74,158,92,0.55)',borderColor:C.green,borderWidth:1,borderRadius:2,barThickness:30}]},options:opts});
+  }
+
+  /* ── FIGURE 5 Correlation Heatmap ── */
+  const heatCtx=document.getElementById('chartHeat');
+  if(heatCtx&&!heatCtx._c){
+    // Pearson r matrix (lower triangle only)
+    // WC/Cit=0.15, WC/Div=0.21, WC/Fact=0.05, WC/Time=0.21
+    // Cit/Div=-0.10, Cit/Fact=0.18, Cit/Time=0.11
+    // Div/Fact=-0.12, Div/Time=0.12
+    // Fact/Time=0.08
+    const labels=['WC','Cit','Div','Fact','Time'];
+    const matrix=[
+      [1,    0.15, 0.21, 0.05, 0.21],
+      [0.15, 1,   -0.10, 0.18, 0.11],
+      [0.21,-0.10, 1,   -0.12, 0.12],
+      [0.05, 0.18,-0.12, 1,    0.08],
+      [0.21, 0.11, 0.12, 0.08, 1   ]
+    ];
+    // Build scatter-style dataset for heatmap simulation using bar chart
+    // Use custom plugin to draw colored cells
+    const c=cc();
+    heatCtx._c=new Chart(heatCtx,{
+      type:'scatter',
+      data:{datasets:[{data:[],backgroundColor:'transparent'}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{enabled:false}},scales:{x:{display:false},y:{display:false}}},
+      plugins:[{id:'heatmap',afterDraw(chart){
+        const {ctx:ctx2,chartArea:{left,top,width,height}}=chart;
+        const n=5; const cellW=width/n; const cellH=height/n;
+        ctx2.save();
+        ctx2.font=`bold 12px 'Be Vietnam Pro', sans-serif`;
+        // draw header labels
+        labels.forEach((lb,i)=>{
+          ctx2.fillStyle=c.muted; ctx2.textAlign='center';
+          ctx2.fillText(lb,left+i*cellW+cellW/2,top-6);
+          ctx2.fillText(lb,left-32,top+i*cellH+cellH/2+4);
+        });
+        // draw cells (lower triangle + diagonal)
+        for(let row=0;row<n;row++){for(let col=0;col<=row;col++){
+          const r=matrix[row][col];
+          const x=left+col*cellW; const y=top+row*cellH;
+          // color: positive=dark red, negative=light blue, 1=gold
+          let bg;
+          if(r===1){bg='rgba(212,160,48,0.55)';}
+          else if(r>0){bg=`rgba(200,56,42,${0.1+r*0.7})`;}
+          else{bg=`rgba(74,126,200,${0.1+Math.abs(r)*0.8})`;}
+          ctx2.fillStyle=bg;
+          ctx2.fillRect(x+2,y+2,cellW-4,cellH-4);
+          ctx2.strokeStyle='rgba(200,160,80,0.1)';ctx2.lineWidth=1;
+          ctx2.strokeRect(x+2,y+2,cellW-4,cellH-4);
+          // value label
+          ctx2.fillStyle=r===1?C.gold:(Math.abs(r)>0.15?'#f5efe6':c.muted);
+          ctx2.textAlign='center';
+          ctx2.fillText(r===1?'1.00':r.toFixed(2),x+cellW/2,y+cellH/2+4);
+        }}
+        ctx2.restore();
+      }}]
+    });
   }
 }
 
-/* ═══════════════════════════════════════
-   API KEY MANAGEMENT — sessionStorage
-   Key không bao giờ xuất hiện trong source.
-   Chỉ sống trong tab hiện tại, đóng tab là mất.
-   ═══════════════════════════════════════ */
-function getApiKey()   { return sessionStorage.getItem('oai_key') || ''; }
-function setApiKey(k)  { sessionStorage.setItem('oai_key', k); updateKeyBadge(); }
-function clearApiKey() { sessionStorage.removeItem('oai_key'); updateKeyBadge(); }
+/* ─── API KEY ─── */
+let OPENAI_KEY = '';
+function confirmKey(){const v=document.getElementById('key-modal-input').value.trim();if(!v)return;OPENAI_KEY=v;document.getElementById('key-modal').style.display='none';_doStartDebate();}
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&document.getElementById('key-modal').style.display!=='none')confirmKey();});
 
-function updateKeyBadge() {
-  const k = getApiKey();
-  const badge = document.getElementById('key-status');
-  if (!badge) return;
-  if (k && k.startsWith('sk-') && k.length > 20) {
-    badge.textContent = '✓ Key OK';
-    badge.style.color = 'var(--green)';
-    badge.style.borderColor = 'rgba(63,203,154,0.3)';
-  } else {
-    badge.textContent = 'No key';
-    badge.style.color = 'var(--muted)';
-    badge.style.borderColor = '';
-  }
+/* ─── DEBATE ENGINE ─── */
+let isD=false;
+const SG=`Bạn là Government Agent — đại diện Bộ Tài nguyên và Môi trường (MONRE) Việt Nam. Ưu tiên: tính bền vững môi trường dài hạn, khung pháp lý, cam kết quốc tế (Net Zero 2050, Paris Agreement, EU CBAM). Giọng học thuật, trang trọng. KHÔNG giới thiệu bản thân. CITATION BẮT BUỘC: [Nguồn: <tên văn bản>], tối thiểu 2 citations/lượt.`;
+const SE=`Bạn là Enterprise Agent — đại diện Hiệp hội Dệt May Việt Nam (VITAS). Ưu tiên: kiểm soát chi phí, tiếp cận thị trường xuất khẩu (EU), tính khả thi vận hành, ổn định 2,7 triệu lao động. Giọng học thuật, trang trọng. KHÔNG giới thiệu bản thân. CITATION BẮT BUỘC: [Nguồn: <tên văn bản>], tối thiểu 2 citations/lượt.`;
+const SM=`Bạn là MODERATOR TRUNG LẬP trong tranh luận chính sách học thuật về thuế carbon ngành dệt may Việt Nam. NGUYÊN TẮC: giọng học thuật trung lập, KHÔNG có ý kiến cá nhân, KHÔNG đề xuất chính sách, CHỈ tóm tắt và cấu trúc lập luận đã có.`;
+const SC=`Bạn là CHUYÊN GIA PHÂN TÍCH CHÍNH SÁCH ĐỘC LẬP — chuyên ngành kinh tế môi trường. NHIỆM VỤ: Phân tích toàn bộ tranh luận 3 vòng: tóm tắt lập trường, so sánh, xác định trade-offs và điểm đồng thuận. NGUYÊN TẮC: KHÔNG đề xuất chính sách mới. Tối thiểu 3 citations.`;
+const RNAMES={1:'Trình bày',2:'Phản biện chéo',3:'Bảo vệ lập luận'};
+
+async function callLLM(sys,msg,max=1000){
+  const r=await fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${OPENAI_KEY}`},body:JSON.stringify({model:'gpt-4o-mini',max_tokens:max,messages:[{role:'system',content:sys},{role:'user',content:msg}]})});
+  if(!r.ok){const t=await r.text();if(r.status===401)throw new Error('API key không hợp lệ (401)');if(r.status===429)throw new Error('Rate limit (429) — chờ vài giây');throw new Error(`OpenAI ${r.status}: ${t.slice(0,120)}`);}
+  const d=await r.json();const txt=d.choices?.[0]?.message?.content;if(txt)return txt;throw new Error('OpenAI không trả về nội dung');
 }
-function openKeyModal() {
-  const modal = document.getElementById('key-overlay');
-  modal.style.display = 'flex';
-  const inp = document.getElementById('key-input-modal');
-  inp.value = getApiKey();
-  inp.focus();
-  document.getElementById('key-modal-err').style.display = 'none';
+function addMsg(id,txt,cls,label,round){const c=document.getElementById(id);const d=document.createElement('div');d.className='msg-block';if(round)d.setAttribute('data-round',round);const rn={1:'Vòng 1',2:'Vòng 2',3:'Vòng 3'};const badge=round?` <span class="msg-round-badge badge-r${round}">${rn[round]||''}</span>`:'';d.innerHTML=`<div class="msg-round">${label}${badge}</div><div class="msg-text ${cls}">${txt}</div>`;c.appendChild(d);c.scrollTop=c.scrollHeight;}
+function addThink(id,lbl){const c=document.getElementById(id);const d=document.createElement('div');d.className='think-dots';d.id='think-'+id;d.innerHTML=`<div class="dots"><span></span><span></span><span></span></div><span>${lbl} đang lập luận...</span>`;c.appendChild(d);c.scrollTop=c.scrollHeight;}
+function rmThink(id){const e=document.getElementById('think-'+id);if(e)e.remove();}
+const w=ms=>new Promise(r=>setTimeout(r,ms));
+
+async function startDebate(){
+  if(!OPENAI_KEY){document.getElementById('key-modal').style.display='flex';setTimeout(()=>document.getElementById('key-modal-input').focus(),50);return;}
+  _doStartDebate();
 }
-function closeKeyModal() {
-  document.getElementById('key-overlay').style.display = 'none';
-}
-function saveKey() {
-  const v = document.getElementById('key-input-modal').value.trim();
-  const errEl = document.getElementById('key-modal-err');
-  if (!v.startsWith('sk-') || v.length < 20) {
-    errEl.style.display = 'block';
-    errEl.textContent = 'Key không hợp lệ — phải bắt đầu bằng sk- và đủ độ dài';
-    return;
-  }
-  setApiKey(v);
-  closeKeyModal();
-}
-window.addEventListener('click', e => {
-  if (e.target === document.getElementById('key-overlay')) closeKeyModal();
-});
-window.addEventListener('load', updateKeyBadge);
-
-/* ═══════════════════════════════════════
-   DEBATE ENGINE
-   ═══════════════════════════════════════ */
-let isD = false;
-
-/* ── callLLM — OpenAI gpt-4o-mini ── */
-async function callLLM(sys, msg, maxTokens = 1000) {
-  const apiKey = getApiKey();
-  if (!apiKey) {
-    openKeyModal();
-    throw new Error('Chưa có API key — nhập key rồi nhấn Bắt đầu lại');
-  }
-  const res = await fetch('https://api.openai.com/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${apiKey}`
-    },
-    body: JSON.stringify({
-      model: 'gpt-4o-mini',
-      max_tokens: maxTokens,
-      messages: [
-        { role: 'system', content: sys },
-        { role: 'user',   content: msg }
-      ]
-    })
-  });
-  if (!res.ok) {
-    const t = await res.text();
-    if (res.status === 401) { clearApiKey(); throw new Error('API key không hợp lệ (401) — nhập lại key'); }
-    if (res.status === 429) throw new Error('Rate limit (429) — chờ vài giây rồi thử lại');
-    throw new Error(`OpenAI ${res.status}: ${t.slice(0,160)}`);
-  }
-  const d = await res.json();
-  const txt = d.choices?.[0]?.message?.content;
-  if (txt) return txt;
-  throw new Error('OpenAI không trả về nội dung');
-}
-
-/* System prompts */
-const SG = `Bạn là Government Agent — đại diện Bộ Tài nguyên và Môi trường (MONRE) Việt Nam.
-Nhiệm vụ: thiết kế và thực thi cơ chế định giá carbon, đảm bảo Việt Nam thực hiện cam kết quốc tế (Net Zero 2050, Paris Agreement, EU CBAM).
-Ưu tiên: tính bền vững môi trường dài hạn, khung pháp lý, lộ trình chuyển đổi công bằng.
-Phong cách lập luận: top-down, quy định pháp lý, dài hạn. Trích dẫn văn bản pháp lý cụ thể.
-Giọng học thuật, trang trọng. KHÔNG giới thiệu bản thân. CITATION BẮT BUỘC: [Nguồn: <tên văn bản>], tối thiểu 2 citations/lượt.`;
-
-const SE = `Bạn là Enterprise Agent — đại diện Hiệp hội Dệt May Việt Nam (VITAS), bao gồm SME và doanh nghiệp xuất khẩu.
-Nhiệm vụ: bảo vệ năng lực cạnh tranh xuất khẩu, giảm thiểu chi phí tuân thủ, đảm bảo tính khả thi cho SME, ổn định việc làm 2,7 triệu lao động.
-Ưu tiên: kiểm soát chi phí, tiếp cận thị trường xuất khẩu (EU), tính khả thi vận hành, ổn định việc làm.
-Phong cách: bottom-up, nhạy cảm chi phí, định hướng khả thi. Định lượng tác động kinh tế khi có thể.
-Giọng học thuật, trang trọng. KHÔNG giới thiệu bản thân. CITATION BẮT BUỘC: [Nguồn: <tên văn bản>], tối thiểu 2 citations/lượt.`;
-
-const SM = `Bạn là MODERATOR TRUNG LẬP trong tranh luận chính sách học thuật về thuế carbon ngành dệt may Việt Nam.
-NGUYÊN TẮC NGHIÊM NGẶT: giọng học thuật trung lập, KHÔNG có ý kiến cá nhân, KHÔNG đề xuất chính sách, KHÔNG thêm thông tin mới, CHỈ tóm tắt và cấu trúc lập luận đã có.`;
-
-const SC = `Bạn là CHUYÊN GIA PHÂN TÍCH CHÍNH SÁCH ĐỘC LẬP — chuyên ngành kinh tế môi trường và đánh giá chính sách công.
-NHIỆM VỤ — Phân tích toàn bộ tranh luận 3 vòng:
-1. Tóm tắt lập trường Chính phủ (qua 3 vòng)
-2. Tóm tắt lập trường Doanh nghiệp (qua 3 vòng)
-3. So sánh hai quan điểm
-4. Xác định: trade-offs chính | điểm đồng thuận | bất đồng cốt lõi | sự tiến triển lập trường
-NGUYÊN TẮC: KHÔNG đề xuất chính sách mới | KHÔNG đứng về phía nào | CHỈ tổng hợp những gì đã tranh luận.
-Giọng trung lập, học thuật. Tối thiểu 3 trích dẫn [Nguồn: ...].`;
-
-const CITATION_RULE = `CITATION BẮT BUỘC: Mỗi lập luận tham chiếu văn bản pháp lý PHẢI có trích dẫn inline. Format: [Nguồn: <tên văn bản>]. Ví dụ: [Nguồn: Nghị định 06/2022/NĐ-CP]. Tối thiểu 2 citations mỗi lượt phát biểu.`;
-
-const ROUND_NAMES = {1:'Trình bày', 2:'Phản biện chéo', 3:'Bảo vệ lập luận'};
-
-function buildPromptR1(agentName, topic) {
-  const isGov = agentName.includes('Government');
-  const instruction = isGov
-    ? `Trình bày lập trường ban đầu của Chính phủ:\n- Đưa ra 2–3 luận điểm chính dựa trên văn bản pháp luật cụ thể\n- Nêu rõ cơ sở pháp lý và cam kết quốc tế\n- Thể hiện lộ trình chính sách dài hạn`
-    : `Phản hồi từ góc độ doanh nghiệp:\n- Trình bày 2–3 quan ngại chính (chi phí, năng lực, cạnh tranh)\n- Tập trung vào tác động thực tế với SME\n- Đề xuất hướng hỗ trợ mong muốn từ Chính phủ`;
-  return `VÒNG 1 — TRÌNH BÀY QUAN ĐIỂM BAN ĐẦU\nCHỦ ĐỀ: ${topic}\nBạn là ${agentName}.\n${instruction}\nGiọng văn học thuật | 150–200 từ\n${CITATION_RULE}`;
-}
-
-function buildPromptR2(agentName, topic, history) {
-  const histText = history.filter(h=>h.agent!=='Moderator').map(h=>`[${h.agent.toUpperCase()} - Vòng ${h.round}]\n${h.content}`).join('\n\n');
-  const isGov = agentName.includes('Government');
-  const opponent = isGov ? 'Doanh nghiệp' : 'Chính phủ';
-  const yourRole = isGov ? 'Chính phủ' : 'Doanh nghiệp';
-  return `VÒNG 2 — PHẢN BIỆN CHÉO\nCHỦ ĐỀ: ${topic}\nLỊCH SỬ VÒNG 1:\n${histText}\nBạn là ${agentName} — đại diện ${yourRole}.\nNHIỆM VỤ — Phản biện lập luận của ${opponent}:\n1. Tóm tắt lập luận của ${opponent} (1–2 câu)\n2. Chỉ ra 2 điểm yếu hoặc thiếu sót cụ thể\n3. Dẫn chứng cụ thể từ tài liệu để bác bỏ hoặc làm rõ\n4. Củng cố lập trường của mình với bằng chứng bổ sung\nGiọng văn học thuật, phản biện có căn cứ | 150–200 từ\n${CITATION_RULE}`;
-}
-
-function buildPromptR3(agentName, topic, history) {
-  const recent = history.filter(h=>h.agent!=='Moderator').slice(-6).map(h=>`[${h.agent.toUpperCase()} - Vòng ${h.round}]\n${h.content}`).join('\n\n');
-  return `VÒNG 3 — BẢO VỆ LẬP LUẬN CUỐI CÙNG\nCHỦ ĐỀ: ${topic}\nLỊCH SỬ TRANH LUẬN:\n${recent}\nBạn là ${agentName}.\nNHIỆM VỤ:\n1. Thừa nhận ngắn gọn điểm hợp lý trong lập luận đối phương (1 câu)\n2. Bảo vệ lập trường cốt lõi với lý lẽ mạnh nhất\n3. Đề xuất 1 điểm có thể tìm được sự đồng thuận giữa hai bên\n4. Kết luận lập trường cuối cùng một cách rõ ràng\nGiọng văn học thuật, mang tính xây dựng | 150–200 từ\n${CITATION_RULE}`;
-}
-
-function addMsg(id, txt, cls, label) {
-  const c = document.getElementById(id);
-  const d = document.createElement('div');
-  d.className = 'msg-block';
-  d.innerHTML = `<div class="msg-round">${label}</div><div class="msg-text ${cls}">${txt}</div>`;
-  c.appendChild(d);
-  c.scrollTop = c.scrollHeight;
-}
-
-function addThink(id, label) {
-  const c = document.getElementById(id);
-  const d = document.createElement('div');
-  d.className = 'think-dots'; d.id = 'think-' + id;
-  d.innerHTML = `<div class="dots"><span></span><span></span><span></span></div><span>${label} đang lập luận...</span>`;
-  c.appendChild(d); c.scrollTop = c.scrollHeight;
-}
-function rmThink(id) { const e = document.getElementById('think-' + id); if (e) e.remove(); }
-const w = ms => new Promise(r => setTimeout(r, ms));
-
-async function startDebate() {
-  if (isD) return; isD = true;
-  document.getElementById('err-box').style.display = 'none';
-  const q = document.getElementById('pq').value.trim();
-  if (!q) { isD = false; return; }
-  const nr = parseInt(document.getElementById('rds').value);
-  const btn = document.getElementById('sbtn');
-  btn.disabled = true; btn.innerHTML = '<span class="spin">↻</span> Đang tranh luận...';
-  ['gb','eb'].forEach(id => { document.getElementById(id).innerHTML = ''; });
-  document.getElementById('cw').style.display = 'none';
-  document.getElementById('mw').style.display = 'none';
-
-  let debateHistory = [];
-  const total = nr * 2 + (nr - 1) + 2;
-  let step = 0;
-  const setP = () => { document.getElementById('prog').style.width = ((step / total) * 100) + '%'; };
-
-  try {
-    for (let r = 1; r <= nr; r++) {
-      const rName = ROUND_NAMES[r] || `Vòng ${r}`;
-
-      /* Government Agent */
-      setP(); document.getElementById('rlbl').textContent = `Vòng ${r} — ${rName} — Government`;
-      addThink('gb', 'Government Agent');
-      let gPrompt;
-      if (r === 1)      gPrompt = buildPromptR1('Government Agent', q);
-      else if (r === 2) gPrompt = buildPromptR2('Government Agent', q, debateHistory);
-      else              gPrompt = buildPromptR3('Government Agent', q, debateHistory);
-      const gr = await callLLM(SG, gPrompt);
-      rmThink('gb');
-      addMsg('gb', gr, 'gov-msg', `Government Agent — Vòng ${r}: ${rName}`);
-      debateHistory.push({round: r, agent: 'Government Agent', content: gr});
-      step++; await w(300);
-
-      /* Enterprise Agent */
-      setP(); document.getElementById('rlbl').textContent = `Vòng ${r} — ${rName} — Enterprise`;
-      addThink('eb', 'Enterprise Agent');
-      let ePrompt;
-      if (r === 1)      ePrompt = buildPromptR1('Enterprise Agent', q);
-      else if (r === 2) ePrompt = buildPromptR2('Enterprise Agent', q, debateHistory);
-      else              ePrompt = buildPromptR3('Enterprise Agent', q, debateHistory);
-      const er = await callLLM(SE, ePrompt);
-      rmThink('eb');
-      addMsg('eb', er, 'ent-msg', `Enterprise Agent — Vòng ${r}: ${rName}`);
-      debateHistory.push({round: r, agent: 'Enterprise Agent', content: er});
-      step++; await w(300);
-
-      /* Moderator giữa vòng */
-      if (r < nr) {
-        document.getElementById('rlbl').textContent = `Moderator — Chuyển vòng ${r + 1}`;
-        const nextName = ROUND_NAMES[r + 1] || `Vòng ${r + 1}`;
-        const modPrompt = `STAGE: ROUND ${r}/${nr}\nLAST SPEAKER: Enterprise Agent\nSTATEMENT:\n"""${er}"""\nCONTEXT (Gov vòng ${r}): "${gr}"\nTASK:\n1. Tóm tắt lập luận chính (2–3 câu)\n2. Nhận xét trung lập (1 câu)\n3. Mời Government phản hồi với 1 câu hỏi liên quan đến "${nextName}"\nLength: 80–120 words. Kết thúc bằng: "Invite Government to respond."`;
-        const mr = await callLLM(SM, modPrompt);
-        addMsg('gb', mr, 'mod-msg', `Moderator — Chuyển sang Vòng ${r + 1}: ${nextName}`);
-        addMsg('eb', mr, 'mod-msg', `Moderator — Chuyển sang Vòng ${r + 1}: ${nextName}`);
-        debateHistory.push({round: r, agent: 'Moderator', content: mr});
-        step++; await w(200);
+async function _doStartDebate(){
+  if(isD)return;isD=true;
+  document.getElementById('err-box').style.display='none';
+  const q=document.getElementById('pq').value.trim();if(!q){isD=false;return;}
+  const nr=parseInt(document.getElementById('rds').value);
+  const btn=document.getElementById('sbtn');btn.disabled=true;btn.innerHTML='<span class="spin">↻</span> Đang tranh luận...';
+  ['gb','eb'].forEach(id=>{document.getElementById(id).innerHTML='';});
+  document.getElementById('cw').style.display='none';document.getElementById('mw').style.display='none';
+  let history=[];const total=nr*2+(nr-1)+2;let step=0;
+  const setP=()=>{document.getElementById('prog').style.width=((step/total)*100)+'%';};
+  try{
+    for(let r=1;r<=nr;r++){
+      const rn=RNAMES[r]||`Vòng ${r}`;
+      setP();document.getElementById('rlbl').textContent=`Vòng ${r} — ${rn} — Government`;
+      addThink('gb','Government Agent');
+      const gp=r===1?`VÒNG 1 — TRÌNH BÀY QUAN ĐIỂM\nCHỦ ĐỀ: ${q}\nBạn là Government Agent.\nTrình bày 2–3 luận điểm chính dựa trên văn bản pháp lý. Giọng học thuật | 150–200 từ\n[Nguồn: <tên văn bản>] tối thiểu 2 lần.`:
+        r===2?`VÒNG 2 — PHẢN BIỆN CHÉO\nCHỦ ĐỀ: ${q}\nLỊCH SỬ:\n${history.filter(h=>h.a!=='Mod').map(h=>`[${h.a} V${h.r}]\n${h.c}`).join('\n\n')}\nBạn là Government Agent. Phản biện Enterprise. 150–200 từ. [Nguồn:...] 2 lần.`:
+        `VÒNG 3 — BẢO VỆ LẬP LUẬN\nCHỦ ĐỀ: ${q}\nLỊCH SỬ GẦN:\n${history.slice(-6).map(h=>`[${h.a} V${h.r}]\n${h.c}`).join('\n\n')}\nBạn là Government Agent. Bảo vệ lập trường cốt lõi. 150–200 từ. [Nguồn:...] 2 lần.`;
+      const gr=await callLLM(SG,gp);rmThink('gb');
+      addMsg('gb',gr,'gov-msg',`Government Agent — Vòng ${r}: ${rn}`,r);
+      history.push({r,a:'Government Agent',c:gr});step++;await w(300);
+      setP();document.getElementById('rlbl').textContent=`Vòng ${r} — ${rn} — Enterprise`;
+      addThink('eb','Enterprise Agent');
+      const ep=r===1?`VÒNG 1 — TRÌNH BÀY QUAN ĐIỂM\nCHỦ ĐỀ: ${q}\nBạn là Enterprise Agent.\nTrình bày 2–3 quan ngại chính (chi phí, năng lực, cạnh tranh). Giọng học thuật | 150–200 từ\n[Nguồn: <tên văn bản>] tối thiểu 2 lần.`:
+        r===2?`VÒNG 2 — PHẢN BIỆN CHÉO\nCHỦ ĐỀ: ${q}\nLỊCH SỬ:\n${history.filter(h=>h.a!=='Mod').map(h=>`[${h.a} V${h.r}]\n${h.c}`).join('\n\n')}\nBạn là Enterprise Agent. Phản biện Government. 150–200 từ. [Nguồn:...] 2 lần.`:
+        `VÒNG 3 — BẢO VỆ LẬP LUẬN\nCHỦ ĐỀ: ${q}\nLỊCH SỬ GẦN:\n${history.slice(-6).map(h=>`[${h.a} V${h.r}]\n${h.c}`).join('\n\n')}\nBạn là Enterprise Agent. Bảo vệ lập trường cốt lõi. 150–200 từ. [Nguồn:...] 2 lần.`;
+      const er=await callLLM(SE,ep);rmThink('eb');
+      addMsg('eb',er,'ent-msg',`Enterprise Agent — Vòng ${r}: ${rn}`,r);
+      history.push({r,a:'Enterprise Agent',c:er});step++;await w(300);
+      if(r<nr){
+        document.getElementById('rlbl').textContent=`Moderator — Chuyển vòng ${r+1}`;
+        const mr=await callLLM(SM,`Tóm tắt trung lập vòng ${r}. Lập luận Gov: "${gr.slice(0,200)}..." Lập luận Ent: "${er.slice(0,200)}...". Tóm tắt 80–100 từ rồi mời Gov phát biểu vòng ${r+1}.`);
+        addMsg('gb',mr,'mod-msg',`Moderator — Chuyển sang Vòng ${r+1}`);addMsg('eb',mr,'mod-msg',`Moderator — Chuyển sang Vòng ${r+1}`);
+        history.push({r,a:'Mod',c:mr});step++;await w(200);
       }
     }
+    step++;setP();document.getElementById('rlbl').textContent='Expert Council — Phân tích độc lập';
+    document.getElementById('cw').style.display='block';
+    document.getElementById('ctxt').innerHTML='<div class="think-dots"><div class="dots"><span></span><span></span><span></span></div><span>Expert Council đang phân tích...</span></div>';
+    const govV=history.filter(h=>h.a==='Government Agent').map((h,i)=>`V${i+1}: ${h.c}`).join('\n');
+    const entV=history.filter(h=>h.a==='Enterprise Agent').map((h,i)=>`V${i+1}: ${h.c}`).join('\n');
+    const cr=await callLLM(SC,`CHỦ ĐỀ: ${q}\nGOV:\n${govV}\nENT:\n${entV}\nPhân tích học thuật trung lập | 300–400 từ`);
+    document.getElementById('ctxt').textContent=cr;history.push({r:'post',a:'Expert',c:cr});
+    step++;setP();document.getElementById('rlbl').textContent='Moderator — Tổng kết';
+    document.getElementById('mw').style.display='block';
+    document.getElementById('mtxt').innerHTML='<div class="think-dots"><div class="dots"><span></span><span></span><span></span></div><span>Moderator đang tổng kết...</span></div>';
+    const mfr=await callLLM(SM,`ACADEMIC SUMMARY của debate:\n${history.map(h=>`[${h.a} V${h.r}]\n${h.c}`).join('\n\n')}\nTóm tắt vị trí hai bên, điểm đồng thuận, bất đồng. NO recommendation. 200–300 từ.`);
+    document.getElementById('mtxt').textContent=mfr;
+    document.getElementById('prog').style.width='100%';document.getElementById('rlbl').textContent=`✓ Hoàn tất — ${nr} vòng`;
+    document.getElementById('t3-nav-btn').style.display='block';
+    generateTier3(history,q);
+  }catch(err){
+    rmThink('gb');rmThink('eb');
+    const eb=document.getElementById('err-box');eb.style.display='block';eb.textContent=`Lỗi: ${err.message}`;
+    document.getElementById('rlbl').textContent='Lỗi — thử lại';
+  }finally{btn.disabled=false;btn.innerHTML='▶ Chạy lại';isD=false;}
+}
+function resetD(){isD=false;document.getElementById('err-box').style.display='none';['gb','eb'].forEach(id=>{document.getElementById(id).innerHTML='';});document.getElementById('cw').style.display='none';document.getElementById('mw').style.display='none';document.getElementById('t3-nav-btn').style.display='none';document.getElementById('t3-empty').style.display='flex';document.getElementById('t3-loading').style.display='none';document.getElementById('t3-content').style.display='none';document.getElementById('prog').style.width='0%';document.getElementById('rlbl').textContent='Chờ bắt đầu';const b=document.getElementById('sbtn');b.disabled=false;b.innerHTML='▶ Bắt đầu';}
 
-    /* ══ Expert Council TRƯỚC ══ */
-    step++; setP();
-    document.getElementById('rlbl').textContent = 'Expert Council — Phân tích độc lập';
-    document.getElementById('cw').style.display = 'block';
-    document.getElementById('ctxt').innerHTML = '<div class="think-dots"><div class="dots"><span></span><span></span><span></span></div><span>Expert Council đang phân tích toàn bộ tranh luận...</span></div>';
-    const govViews = debateHistory.filter(h=>h.agent==='Government Agent').map((h,i)=>`Vòng ${i+1}: ${h.content}`).join('\n');
-    const entViews = debateHistory.filter(h=>h.agent==='Enterprise Agent').map((h,i)=>`Vòng ${i+1}: ${h.content}`).join('\n');
-    const expertPrompt = `CHỦ ĐỀ: ${q}\nLẬP LUẬN CHÍNH PHỦ:\n${govViews}\nLẬP LUẬN DOANH NGHIỆP:\n${entViews}\nĐẦU RA: Phân tích học thuật có cấu trúc | Giọng trung lập | 300–400 từ`;
-    const cr = await callLLM(SC, expertPrompt);
-    document.getElementById('ctxt').textContent = cr;
-    debateHistory.push({round: 'post', agent: 'Expert', content: cr});
+/* ─── TABS ─── */
+function stab(el,tab){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');['eco','env','soc'].forEach(t=>{const x=document.getElementById('tab-'+t);if(x)x.style.display=t===tab?'block':'none';});}
+function selPol(row){document.querySelectorAll('.policy-row').forEach(r=>r.classList.remove('sel'));row.classList.add('sel');}
 
-    /* ══ Moderator tổng kết SAU Expert ══ */
-    step++; setP();
-    document.getElementById('rlbl').textContent = 'Moderator — Tổng kết toàn bộ';
-    document.getElementById('mw').style.display = 'block';
-    document.getElementById('mtxt').innerHTML = '<div class="think-dots"><div class="dots"><span></span><span></span><span></span></div><span>Moderator đang tổng kết...</span></div>';
-    const fullHistory = debateHistory.map(h=>`[${h.agent} - Vòng ${h.round}]\n${h.content}`).join('\n\n');
-    const modFinalPrompt = `Write an ACADEMIC SUMMARY of the following policy debate:\n${fullHistory}\nREQUIREMENTS:\n- Summarize Government position\n- Summarize Business position\n- Identify agreements and disagreements\n- Assess internal consistency\n- NO policy recommendation\n- Neutral academic tone\nLength: 200–300 words`;
-    const mfr = await callLLM(SM, modFinalPrompt);
-    document.getElementById('mtxt').textContent = mfr;
+/* ─── TIER 3 ─── */
+const ST3_MAIN=`Bạn là hệ thống tổng hợp chính sách. Chỉ trả về JSON thuần túy, không markdown, không backtick. Schema: {"policy_options":[{"name":"string","desc":"string","score":number}],"pros":["string"],"cons":["string"],"impacts":{"eco":[{"label":"string","value":"string","positive":true}],"env":[{"label":"string","value":"string","positive":true}],"soc":[{"label":"string","value":"string","positive":true}]},"evidence":[{"text":"string","source":"string"}],"recommendation":"string","rationale":"string","consensus_pct":number,"gov_pct":number,"ent_pct":number} Quy tắc: 3 policy_options, 5 pros, 5 cons, 3-4 items mỗi tab, 4-6 evidence.`;
+const ST3_GAPS=`Bạn là chuyên gia phân tích khoảng trống tri thức. Chỉ trả về JSON thuần túy. Schema: {"data_gaps":[{"title":"string","severity":"high|medium|low","description":"string","action":"string"}]} Xác định 4-6 khoảng trống.`;
+function parseJSON(raw){let s=raw.trim().replace(/^```json\s*/,'').replace(/^```\s*/,'').replace(/\s*```$/,'').trim();try{return JSON.parse(s);}catch(_){}let obj=0,arr=0,inStr=false,esc=false,last=0;for(let i=0;i<s.length;i++){const c=s[i];if(esc){esc=false;continue;}if(c==='\\'&&inStr){esc=true;continue;}if(c==='"'){inStr=!inStr;continue;}if(inStr)continue;if(c==='{'){obj++;last=i;}else if(c==='}'){obj--;last=i;}else if(c==='['){arr++;last=i;}else if(c===']'){arr--;last=i;}}s=s.slice(0,last+1);while(arr>0){s+=']';arr--;}while(obj>0){s+='}';obj--;}return JSON.parse(s);}
 
-    document.getElementById('prog').style.width = '100%';
-    document.getElementById('rlbl').textContent = `✓ Hoàn tất — ${nr} vòng · ${debateHistory.length} lượt`;
-    document.getElementById('t3-nav-btn').style.display = 'block';
-
-    /* Auto-generate Tier 3 */
-    generateTier3(debateHistory, q);
-
-  } catch (err) {
-    rmThink('gb'); rmThink('eb');
-    const eb = document.getElementById('err-box');
-    eb.style.display = 'block'; eb.textContent = `Lỗi: ${err.message}`;
-    document.getElementById('rlbl').textContent = 'Lỗi — thử lại';
-  } finally {
-    btn.disabled = false; btn.innerHTML = '▶ Chạy lại'; isD = false;
+async function generateTier3(history,topic){
+  document.getElementById('t3-empty').style.display='none';document.getElementById('t3-loading').style.display='flex';document.getElementById('t3-content').style.display='none';
+  const govV=history.filter(h=>h.a==='Government Agent').map((h,i)=>`V${i+1}: ${h.c}`).join('\n');
+  const entV=history.filter(h=>h.a==='Enterprise Agent').map((h,i)=>`V${i+1}: ${h.c}`).join('\n');
+  const expertV=history.find(h=>h.a==='Expert')?.c||'';
+  const base=`CHỦ ĐỀ: ${topic}\nGOV:\n${govV}\nENT:\n${entV}\nEXPERT:\n${expertV}`;
+  try{
+    document.getElementById('t3-load-msg').textContent='Call 1/2 — Tổng hợp chính sách...';
+    const raw1=await callLLM(ST3_MAIN,base+'\nChỉ trả về JSON.',2000);const d1=parseJSON(raw1);
+    document.getElementById('t3-load-msg').textContent='Call 2/2 — Xác định Data Gaps...';
+    const raw2=await callLLM(ST3_GAPS,base+'\nChỉ trả về JSON.',1500);const d2=parseJSON(raw2);
+    renderTier3({...d1,data_gaps:d2.data_gaps||[]});
+  }catch(err){
+    document.getElementById('t3-loading').style.display='none';document.getElementById('t3-empty').style.display='flex';
+    document.getElementById('t3-empty').innerHTML=`<div style="font-size:15px;color:var(--ent);text-align:center;padding:20px;">Lỗi Tier 3: ${err.message}<br><button class="btn btn-ghost" style="margin-top:12px;" onclick="go('t2')">← Quay lại Tier 2</button></div>`;
   }
 }
-
-function resetD() {
-  isD = false;
-  document.getElementById('err-box').style.display = 'none';
-  ['gb','eb'].forEach(id => { document.getElementById(id).innerHTML = ''; });
-  document.getElementById('cw').style.display = 'none';
-  document.getElementById('mw').style.display = 'none';
-  document.getElementById('t3-nav-btn').style.display = 'none';
-  document.getElementById('t3-empty').style.display = 'flex';
-  document.getElementById('t3-loading').style.display = 'none';
-  document.getElementById('t3-content').style.display = 'none';
-  document.getElementById('prog').style.width = '0%';
-  document.getElementById('rlbl').textContent = 'Chờ bắt đầu';
-  const b = document.getElementById('sbtn');
-  b.disabled = false; b.innerHTML = '▶ Bắt đầu';
+let _t3cache=null;
+function renderTier3(data){
+  _t3cache=data;
+  const polColors=['var(--green)','var(--gold)','var(--ent)'];
+  document.getElementById('t3-pol-table').innerHTML=(data.policy_options||[]).map((p,i)=>`<tr class="policy-row${i===0?' sel':''}" onclick="selPol(this)"><td class="pol-num" style="color:var(--line-hi);">${String(i+1).padStart(2,'0')}</td><td><div class="pol-name">${p.name}</div><div class="pol-desc">${p.desc}</div></td><td class="pol-score" style="color:${polColors[i]||'var(--dim)'};">${p.score}</td></tr>`).join('');
+  document.getElementById('t3-pol-badge').textContent=`${(data.policy_options||[]).length} kịch bản`;
+  document.getElementById('t3-pros').innerHTML=(data.pros||[]).map(p=>`<div class="pc-item"><div class="pc-dash" style="color:var(--green);">+</div>${p}</div>`).join('');
+  document.getElementById('t3-cons').innerHTML=(data.cons||[]).map(c=>`<div class="pc-item"><div class="pc-dash" style="color:var(--ent);">−</div>${c}</div>`).join('');
+  function renderImp(items,id){document.getElementById(id).innerHTML=(items||[]).map(item=>{const col=item.positive?'var(--green)':'var(--ent)';const raw=(item.value||'').replace(/,/g,'');const nm=raw.match(/[\d.]+/);const n=nm?parseFloat(nm[0]):20;let ww=raw.includes('%')?Math.min(95,Math.max(8,Math.abs(n))):Math.min(95,Math.max(8,Math.log10(n+1)*30));return`<div class="impact-row"><div class="impact-label">${item.label}</div><div class="impact-track"><div class="impact-fill" style="width:${ww}%;background:${col};"></div></div><div class="impact-val" style="color:${col};">${item.value}</div></div>`;}).join('');}
+  renderImp((data.impacts||{}).eco,'tab-eco');renderImp((data.impacts||{}).env,'tab-env');renderImp((data.impacts||{}).soc,'tab-soc');
+  const evList=data.evidence||[];
+  document.getElementById('t3-evidence').innerHTML=evList.map((e,i)=>`<div class="ev-item"><div class="ev-num">${String(i+1).padStart(2,'0')}</div><div><div class="ev-text">${e.text}</div><div class="ev-source">${e.source}</div></div></div>`).join('');
+  document.getElementById('t3-cit-badge').textContent=`${evList.length} citations`;
+  document.getElementById('t3-rec-title').textContent=data.recommendation||'';
+  document.getElementById('t3-rec-body').textContent=data.rationale||'';
+  const pct=data.consensus_pct||0;document.getElementById('t3-cons-pct').textContent=pct+'%';
+  document.getElementById('t3-ring').setAttribute('stroke-dashoffset',Math.round(402*(1-pct/100)));
+  document.getElementById('t3-agent-breakdown').innerHTML=`<div class="ab-row"><span style="color:var(--gov);font-size:15px;">Government Agent</span><span style="font-family:'DM Mono',monospace;font-size:14px;color:var(--gov);">${data.gov_pct||0}%</span></div><div class="ab-row"><span style="color:var(--ent);font-size:15px;">Enterprise Agent</span><span style="font-family:'DM Mono',monospace;font-size:14px;color:var(--ent);">${data.ent_pct||0}%</span></div>`;
+  document.getElementById('t3-badges').innerHTML=`<span class="badge badge-green">Live debate output</span><span class="badge badge-blue">${evList.length} citations</span><span class="badge" style="color:var(--council);border-color:rgba(200,146,42,0.3);">Expert synthesized</span>`;
+  const gapList=data.data_gaps||[];const sevMap={high:'gap-high',medium:'gap-med',low:'gap-low'};const sevLbl={high:'High Priority',medium:'Medium',low:'Low'};
+  document.getElementById('t3-gaps').innerHTML=gapList.map((g,i)=>`<div class="gap-item"><div class="gap-num">${String(i+1).padStart(2,'0')}</div><div style="flex:1;"><div class="gap-severity ${sevMap[g.severity]||'gap-med'}">${sevLbl[g.severity]||g.severity}</div><div class="gap-title">${g.title}</div><div class="gap-desc">${g.description}</div><div class="gap-action">→ Hành động: ${g.action}</div></div></div>`).join('');
+  document.getElementById('t3-gap-badge').textContent=`${gapList.length} gaps detected`;
+  document.getElementById('t3-loading').style.display='none';document.getElementById('t3-content').style.display='flex';
 }
 
-function stab(el, tab) {
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  el.classList.add('active');
-  ['eco','env','soc'].forEach(t => {
-    const x = document.getElementById('tab-' + t);
-    if (x) x.style.display = t === tab ? 'block' : 'none';
-  });
-}
-
-function selPol(row) {
-  document.querySelectorAll('.policy-row').forEach(r=>r.classList.remove('sel'));
-  row.classList.add('sel');
-}
-
-/* ══════════════════════════════════════════
-   TIER 3 GENERATION
-   ══════════════════════════════════════════ */
-/* ══ System prompts cho Tier 3 — tách 2 calls để tránh JSON bị cắt ══ */
-const ST3_MAIN = `Bạn là hệ thống tổng hợp chính sách. Chỉ trả về JSON thuần túy, không markdown, không backtick.
-Schema:
-{"policy_options":[{"name":"string","desc":"string","score":number}],"pros":["string"],"cons":["string"],"impacts":{"eco":[{"label":"string","value":"string","positive":true}],"env":[{"label":"string","value":"string","positive":true}],"soc":[{"label":"string","value":"string","positive":true}]},"evidence":[{"text":"string","source":"string"}],"recommendation":"string","rationale":"string","consensus_pct":number,"gov_pct":number,"ent_pct":number}
-Quy tắc: 3 policy_options từ nhẹ→mạnh, 5 pros, 5 cons, 3-4 items mỗi tab impact, 4-6 evidence trích [Nguồn:...], consensus_pct là % đồng thuận chung.`;
-
-const ST3_GAPS = `Bạn là chuyên gia phân tích khoảng trống tri thức. Chỉ trả về JSON thuần túy, không markdown, không backtick.
-Schema: {"data_gaps":[{"title":"string","severity":"high|medium|low","description":"string","action":"string"}]}
-Xác định 4-6 khoảng trống: số liệu thực tế, văn bản pháp lý, dữ liệu ngành mà các agent đề cập nhưng KB chưa có đủ bằng chứng.`;
-
-function parseJSON(raw) {
-  let s = raw.trim().replace(/^```json\s*/,'').replace(/^```\s*/,'').replace(/\s*```$/,'').trim();
-  try { return JSON.parse(s); } catch(_) {}
-  // repair: cân bằng { } [ ]
-  let obj=0, arr=0, inStr=false, esc=false;
-  let last = 0;
-  for (let i=0;i<s.length;i++){
-    const c=s[i];
-    if(esc){esc=false;continue;}
-    if(c==='\\' && inStr){esc=true;continue;}
-    if(c==='"'){inStr=!inStr;continue;}
-    if(inStr) continue;
-    if(c==='{'){obj++;last=i;}
-    else if(c==='}'){obj--;last=i;}
-    else if(c==='['){arr++;last=i;}
-    else if(c===']'){arr--;last=i;}
-  }
-  s = s.slice(0, last+1);
-  while(arr>0){s+=']';arr--;}
-  while(obj>0){s+='}';obj--;}
-  return JSON.parse(s);
-}
-
-async function generateTier3(debateHistory, topic) {
-  document.getElementById('t3-empty').style.display = 'none';
-  document.getElementById('t3-loading').style.display = 'flex';
-  document.getElementById('t3-content').style.display = 'none';
-
-  const govViews = debateHistory.filter(h=>h.agent==='Government Agent').map((h,i)=>`Vòng ${i+1}: ${h.content}`).join('\n');
-  const entViews = debateHistory.filter(h=>h.agent==='Enterprise Agent').map((h,i)=>`Vòng ${i+1}: ${h.content}`).join('\n');
-  const expertView = debateHistory.find(h=>h.agent==='Expert')?.content||'';
-
-  const baseInput = `CHỦ ĐỀ: ${topic}\nCHÍNH PHỦ:\n${govViews}\nDOANH NGHIỆP:\n${entViews}\nEXPERT:\n${expertView}`;
-
-  try {
-    /* Call 1 — main synthesis */
-    document.getElementById('t3-load-msg').textContent = 'Call 1/2 — Tổng hợp chính sách...';
-    const raw1 = await callLLM(ST3_MAIN, baseInput + '\nChỉ trả về JSON thuần túy.', 2000);
-    const data1 = parseJSON(raw1);
-
-    /* Call 2 — data gaps riêng */
-    document.getElementById('t3-load-msg').textContent = 'Call 2/2 — Xác định Data Gaps...';
-    const raw2 = await callLLM(ST3_GAPS, baseInput + '\nXác định data_gaps. Chỉ trả về JSON thuần túy.', 1500);
-    const data2 = parseJSON(raw2);
-
-    renderTier3({...data1, data_gaps: data2.data_gaps || []});
-  } catch (err) {
-    document.getElementById('t3-loading').style.display = 'none';
-    document.getElementById('t3-empty').style.display = 'flex';
-    document.getElementById('t3-empty').innerHTML = `<div style="font-size:13px;color:var(--ent);text-align:center;padding:20px;">Lỗi Tier 3: ${err.message}<br><small style="color:var(--muted);display:block;margin-top:6px;">Kiểm tra API key OpenAI trong network tab</small><button class="btn btn-ghost" style="margin-top:12px;" onclick="go('t2')">← Quay lại Tier 2</button></div>`;
-  }
-}
-
-function renderTier3(data) {
-  /* 01 Policy Options */
-  const polColors = ['var(--green)','var(--gold)','var(--ent)'];
-  document.getElementById('t3-pol-table').innerHTML = (data.policy_options||[]).map((p,i) => `
-    <tr class="policy-row${i===0?' sel':''}" onclick="selPol(this)">
-      <td class="pol-num" style="color:var(--line-hi);">${String(i+1).padStart(2,'0')}</td>
-      <td><div class="pol-name">${p.name}</div><div class="pol-desc">${p.desc}</div></td>
-      <td class="pol-score" style="color:${polColors[i]||'var(--dim)'};">${p.score}</td>
-    </tr>`).join('');
-  document.getElementById('t3-pol-badge').textContent = `${(data.policy_options||[]).length} kịch bản`;
-
-  /* 02 Pros / Cons */
-  document.getElementById('t3-pros').innerHTML = (data.pros||[]).map(p=>`<div class="pc-item"><div class="pc-dash" style="color:var(--green);">+</div>${p}</div>`).join('');
-  document.getElementById('t3-cons').innerHTML = (data.cons||[]).map(c=>`<div class="pc-item"><div class="pc-dash" style="color:var(--ent);">−</div>${c}</div>`).join('');
-
-  /* 03 Impact */
-  function renderImpacts(items, id) {
-    document.getElementById(id).innerHTML = (items||[]).map(item => {
-      const col = item.positive ? 'var(--green)' : 'var(--ent)';
-      const n = parseFloat((item.value||'').replace(/[^0-9.]/g,'')) || 20;
-      const ww = Math.min(95, Math.max(8, n * 2));
-      return `<div class="impact-row"><div class="impact-label">${item.label}</div><div class="impact-track"><div class="impact-fill" style="width:${ww}%;background:${col};height:1px;"></div></div><div class="impact-val" style="color:${col};">${item.value}</div></div>`;
-    }).join('');
-  }
-  renderImpacts((data.impacts||{}).eco, 'tab-eco');
-  renderImpacts((data.impacts||{}).env, 'tab-env');
-  renderImpacts((data.impacts||{}).soc, 'tab-soc');
-
-  /* 04 Evidence */
-  const evList = data.evidence || [];
-  document.getElementById('t3-evidence').innerHTML = evList.map((e,i) => `
-    <div class="ev-item"><div class="ev-num">${String(i+1).padStart(2,'0')}</div>
-    <div><div class="ev-text">${e.text}</div><div class="ev-source">${e.source}</div></div></div>`).join('');
-  document.getElementById('t3-cit-badge').textContent = `${evList.length} citations`;
-
-  /* 05 Decision Support */
-  document.getElementById('t3-rec-title').textContent = data.recommendation || '';
-  document.getElementById('t3-rec-body').textContent = data.rationale || '';
-  const pct = data.consensus_pct || 0;
-  document.getElementById('t3-cons-pct').textContent = pct + '%';
-  document.getElementById('t3-ring').setAttribute('stroke-dashoffset', Math.round(402 * (1 - pct / 100)));
-  document.getElementById('t3-agent-breakdown').innerHTML = `
-    <div class="ab-row"><span style="color:var(--gov);font-size:11px;">Government Agent</span><span style="font-family:'JetBrains Mono','Courier New',monospace;font-size:12px;color:var(--gov);">${data.gov_pct||0}%</span></div>
-    <div class="ab-row"><span style="color:var(--ent);font-size:11px;">Enterprise Agent</span><span style="font-family:'JetBrains Mono','Courier New',monospace;font-size:12px;color:var(--ent);">${data.ent_pct||0}%</span></div>`;
-  document.getElementById('t3-badges').innerHTML = `
-    <span class="badge badge-green">Live debate output</span>
-    <span class="badge badge-blue">${evList.length} citations</span>
-    <span class="badge" style="color:var(--council);border-color:rgba(139,111,196,0.3);">Expert synthesized</span>`;
-
-  /* 06 Data Gaps */
-  const gapList = data.data_gaps || [];
-  const severityMap = { high: 'gap-high', medium: 'gap-med', low: 'gap-low' };
-  const severityLabel = { high: 'High Priority', medium: 'Medium', low: 'Low' };
-  document.getElementById('t3-gaps').innerHTML = gapList.map((g, i) => `
-    <div class="gap-item">
-      <div class="gap-num">${String(i+1).padStart(2,'0')}</div>
-      <div style="flex:1;">
-        <div class="gap-severity ${severityMap[g.severity]||'gap-med'}">${severityLabel[g.severity]||g.severity}</div>
-        <div class="gap-title">${g.title}</div>
-        <div class="gap-desc">${g.description}</div>
-        <div class="gap-action">→ Hành động: ${g.action}</div>
-      </div>
-    </div>`).join('');
-  document.getElementById('t3-gap-badge').textContent = `${gapList.length} gaps detected`;
-
-  document.getElementById('t3-loading').style.display = 'none';
-  document.getElementById('t3-content').style.display = 'flex';
-}
-
-/* ── FIX: exportR() được khai báo đúng cách ── */
-function exportR() {
-  const recTitle = document.getElementById('t3-rec-title')?.textContent || '';
-  const recBody  = document.getElementById('t3-rec-body')?.textContent || '';
-  const consPct  = document.getElementById('t3-cons-pct')?.textContent || '—';
-  const gapItems = [...document.querySelectorAll('.gap-item')].map((el,i)=>{
-    const title = el.querySelector('.gap-title')?.textContent || '';
-    const sev   = el.querySelector('.gap-severity')?.textContent || '';
-    return `  [${i+1}] ${title} (${sev})`;
-  }).join('\n');
-
-  const content = [
-    'BÁO CÁO PHÂN TÍCH CHÍNH SÁCH THUẾ CARBON',
-    'MAD-Policy — Multi-Agent Debate System',
-    `Ngày: ${new Date().toLocaleString('vi-VN')}`,
-    '',
-    '═══ KẾT QUẢ BENCHMARK (n=30) ═══',
-    '- Word Count: 2,237.8 ± 92.8 (+356.3%)',
-    '- Citations: 12.2 ± 1.9 (+463.1%)',
-    '- Factuality: 8.40/10',
-    '- Diversity Score: 0.678 (Jaccard)',
-    '- Thời gian trung bình: 70.2s',
-    '',
-    '═══ KHUYẾN NGHỊ ═══',
-    recTitle,
-    recBody,
-    `Mức đồng thuận: ${consPct}`,
-    '',
-    '═══ KHOẢNG TRỐNG TÀI LIỆU (DATA GAPS) ═══',
-    gapItems || '(Chưa có dữ liệu — chạy debate trước)',
-    '',
-    '═══ GHI CHÚ ═══',
-    'Báo cáo được tổng hợp tự động từ kết quả tranh luận đa agent.',
-    'Mọi số liệu benchmark dựa trên thực nghiệm n=30 câu hỏi.',
-  ].join('\n');
-
-  const b = new Blob([content], {type: 'text/plain;charset=utf-8'});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(b);
-  a.download = `MAD_Policy_Report_${new Date().toISOString().slice(0,10)}.txt`;
-  a.click();
-  URL.revokeObjectURL(a.href);
-}
+/* ─── EXPORT ─── */
+function exportCSV(){const rows=[['Chỉ số','MAD-Policy','Baseline','Cải thiện','Cohen\'s d','Effect'],['Word Count','2,888.0 ± 80.2','490 ± ~54','+495.6%','24.487','Large'],['Citations','17.7 ± 1.9','2.2','+715%','7.573','Large'],['Factuality','8.70 / 10','~8.0 / 10','+0.70','—','Better'],['Coherence','8.0 (MAE=0.17)','~8.7 / 10','-0.73','—','Low Var'],['Diversity Score','0.675 (Jaccard)','N/A','—','—','Multi-Agent'],['Time (s)','170.0s','~50.7s','+235.5%','0.326','Negligible']];const csv=rows.map(r=>r.map(c=>`"${c}"`).join(',')).join('\n');const b=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`MAD_Policy_Benchmark_${new Date().toISOString().slice(0,10)}.csv`;a.click();URL.revokeObjectURL(a.href);}
+function copyJSON(){if(!_t3cache){alert('Chưa có dữ liệu Tier 3 — chạy debate trước.');return;}navigator.clipboard.writeText(JSON.stringify(_t3cache,null,2)).then(()=>{const btn=document.querySelector('[onclick="copyJSON()"]');if(btn){const o=btn.textContent;btn.textContent='✓ Đã sao chép!';btn.style.color='var(--green)';setTimeout(()=>{btn.textContent=o;btn.style.color='';},2000);}}).catch(()=>{const ta=document.createElement('textarea');ta.value=JSON.stringify(_t3cache,null,2);ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);});}
+function exportR(){const recT=document.getElementById('t3-rec-title')?.textContent||'';const recB=document.getElementById('t3-rec-body')?.textContent||'';const consPct=document.getElementById('t3-cons-pct')?.textContent||'—';const content=['BÁO CÁO PHÂN TÍCH CHÍNH SÁCH THUẾ CARBON','MAD-Policy — Multi-Agent Debate System',`Ngày: ${new Date().toLocaleString('vi-VN')}`,'','═══ KẾT QUẢ BENCHMARK (n=30) ═══','- Word Count: 2,888.0 ± 80.2 (+495.6%) · Cohen\'s d=24.487','- Citations: 17.7 ± 1.9 (+715%) · Cohen\'s d=7.573','- Factuality: 8.70/10 · Diversity: 0.675 · Time: 170.0s','','═══ KHUYẾN NGHỊ ═══',recT,recB,`Mức đồng thuận: ${consPct}`,'','═══ GHI CHÚ ═══','Nguồn: benchmark_results_vi.json · accuracy_report.json · n=30'].join('\n');const b=new Blob([content],{type:'text/plain;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`MAD_Policy_Report_${new Date().toISOString().slice(0,10)}.txt`;a.click();URL.revokeObjectURL(a.href);}
 </script>
 </body>
 </html>
