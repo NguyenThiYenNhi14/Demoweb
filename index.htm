@@ -6,490 +6,351 @@
 <title>MAD-Policy — Multi-Agent Debate System</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&display=block">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&display=block" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
 :root {
-  --bg:       #100c08;
-  --bg2:      #131009;
-  --bg3:      #1a1610;
-  --bg4:      #231e14;
-  --line:     rgba(200,160,80,0.1);
-  --line-md:  rgba(200,160,80,0.18);
-  --line-hi:  rgba(200,160,80,0.3);
-  --white:    #f5efe6;
-  --off:      #e8dcc8;
-  --muted:    #9e8e76;
-  --dim:      #c4ae90;
-  --gov:      #4a7ec8;
-  --ent:      #c8382a;
-  --council:  #c8922a;
-  --accent:   #e8c87a;
-  --green:    #4a9e5c;
-  --gold:     #d4a030;
-  --orange:   #c86428;
-  --gap:      #c89a28;
+  --bg:#100c08;--bg2:#131009;--bg3:#1a1610;--bg4:#231e14;
+  --line:rgba(200,160,80,0.1);--line-md:rgba(200,160,80,0.18);--line-hi:rgba(200,160,80,0.3);
+  --white:#f5efe6;--off:#e8dcc8;--muted:#9e8e76;--dim:#c4ae90;
+  --gov:#4a7ec8;--ent:#c8382a;--council:#c8922a;--accent:#e8c87a;
+  --green:#4a9e5c;--gold:#d4a030;--orange:#c86428;--gap:#c89a28;
 }
-
 html.light {
-  --bg:       #f5f0e8;
-  --bg2:      #ece6da;
-  --bg3:      #e4ddd0;
-  --bg4:      #d8d0c0;
-  --line:     rgba(120,90,40,0.12);
-  --line-md:  rgba(120,90,40,0.2);
-  --line-hi:  rgba(120,90,40,0.35);
-  --white:    #1a1510;
-  --off:      #2e2618;
-  --muted:    #5a4e3a;
-  --dim:      #3e3428;
-  --gov:      #2a5fa8;
-  --ent:      #a82018;
-  --council:  #a87218;
-  --accent:   #a87820;
-  --green:    #2a7e3c;
-  --gold:     #a48020;
-  --orange:   #a84418;
-  --gap:      #a87a18;
+  --bg:#f5f0e8;--bg2:#ece6da;--bg3:#e4ddd0;--bg4:#d8d0c0;
+  --line:rgba(120,90,40,0.12);--line-md:rgba(120,90,40,0.2);--line-hi:rgba(120,90,40,0.35);
+  --white:#1a1510;--off:#2e2618;--muted:#5a4e3a;--dim:#3e3428;
+  --gov:#2a5fa8;--ent:#a82018;--council:#a87218;--accent:#a87820;
+  --green:#2a7e3c;--gold:#a48020;--orange:#a84418;--gap:#a87a18;
 }
-html.light body { background-color: #f5f0e8 !important; background-image: none !important; }
-html.light body::before, html.light body::after { opacity: 0.3; }
-html.light .sidebar { background: #ece6da !important; border-right-color: rgba(120,90,40,0.15) !important; }
-html.light .topbar { background: rgba(240,234,222,0.97) !important; border-bottom-color: rgba(120,90,40,0.15) !important; }
-html.light .panel { background: var(--bg2) !important; border-color: rgba(120,90,40,0.12) !important; }
-html.light .kpi-strip, html.light .pipeline-strip { background: var(--bg2) !important; border-color: rgba(120,90,40,0.12) !important; }
-html.light .ctrl-input { background: var(--bg3); border-color: rgba(120,90,40,0.2); color: var(--white); }
-html.light #loading { background: var(--bg); }
+html.light body{background-color:#f5f0e8!important;background-image:none!important}
+html.light .sidebar{background:#ece6da!important;border-right-color:rgba(120,90,40,0.15)!important}
+html.light .topbar{background:rgba(240,234,222,0.97)!important;border-bottom-color:rgba(120,90,40,0.15)!important}
+html.light .panel{background:var(--bg2)!important;border-color:rgba(120,90,40,0.12)!important}
+html.light .kpi-strip,.kpi-strip{background:var(--bg2)!important;border-color:rgba(120,90,40,0.12)!important}
+html.light .ctrl-input{background:var(--bg3);border-color:rgba(120,90,40,0.2);color:var(--white)}
+.theme-toggle{width:32px;height:32px;border-radius:50%;background:transparent;border:1px solid var(--line-md);color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;line-height:1;transition:all .2s;flex-shrink:0}
+.theme-toggle:hover{border-color:var(--line-hi);color:var(--white)}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--white);font-family:'Be Vietnam Pro',system-ui,sans-serif;font-size:16px;line-height:1.6;min-height:100vh;background-color:#0e0b07;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Crect width='8' height='8' fill='none'/%3E%3Crect x='0' y='0' width='3' height='3' fill='rgba(160,80,30,0.06)'/%3E%3Crect x='4' y='4' width='3' height='3' fill='rgba(40,60,120,0.05)'/%3E%3Crect x='4' y='0' width='3' height='3' fill='rgba(140,100,20,0.04)'/%3E%3Crect x='0' y='4' width='3' height='3' fill='rgba(40,90,50,0.04)'/%3E%3C/svg%3E");background-repeat:repeat;background-size:8px 8px}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 70% 50% at 10% 15%,rgba(160,50,30,0.05) 0%,transparent 60%),radial-gradient(ellipse 50% 40% at 90% 85%,rgba(40,60,140,0.04) 0%,transparent 60%)}
+.shell{display:flex;height:100vh;overflow:hidden;position:relative;z-index:1}
 
-.theme-toggle {
-  width: 32px; height: 32px; border-radius: 50%;
-  background: transparent; border: 1px solid var(--line-md);
-  color: var(--muted); cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 15px; line-height: 1; transition: all .2s; flex-shrink: 0;
-}
-.theme-toggle:hover { border-color: var(--line-hi); color: var(--white); }
+/* SIDEBAR */
+.sidebar{width:300px;flex-shrink:0;background:rgba(8,6,3,0.96)!important;border-right:1px solid rgba(180,120,30,0.18)!important;display:flex;flex-direction:column;position:relative;transition:width .25s ease;overflow:hidden}
+.sidebar.collapsed{width:56px}
+.sidebar::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gov),var(--council),var(--ent));z-index:1}
+.sb-toggle{position:absolute;top:14px;right:10px;z-index:10;width:28px;height:28px;border-radius:2px;background:transparent;border:1px solid var(--line);color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:all .2s;flex-shrink:0}
+.sb-toggle:hover{border-color:var(--line-hi);color:var(--white)}
+.sidebar.collapsed .sb-toggle{right:14px}
+.sidebar.collapsed .sb-brand,.sidebar.collapsed .nav-section-label,.sidebar.collapsed .nav-content{opacity:0;pointer-events:none}
+.sidebar.collapsed .nav-num{font-size:14px;width:56px}
+.sidebar.collapsed .nav-item{justify-content:center}
+.sidebar.collapsed .sb-nav{padding-top:60px}
+.sb-brand{padding:32px 28px 24px;border-bottom:1px solid var(--line);transition:background .2s;cursor:pointer}
+.sb-brand:hover{background:rgba(255,255,255,0.03)}
+.brand-main{font-family:'Bebas Neue','Arial Black','Impact',sans-serif;font-size:36px;letter-spacing:3px;line-height:1;color:var(--white)}
+.brand-main span{background:linear-gradient(135deg,#d4a030,#c8382a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.brand-sub{font-size:15px;font-weight:500;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-top:6px}
+.brand-desc{font-size:12px;color:var(--dim);margin-top:10px;line-height:1.55;border-left:2px solid var(--gov);padding-left:10px;max-width:220px}
+.sb-nav{flex:1;padding:24px 0 40px;overflow-y:auto}
+.nav-section-label{font-size:11px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);padding:0 30px 10px;white-space:nowrap}
+.nav-item{display:flex;align-items:center;padding:0;cursor:pointer;transition:all .2s;border-left:2px solid transparent;position:relative;overflow:hidden}
+.nav-item:hover{background:rgba(180,120,30,0.06)!important;border-left-color:var(--line-hi)}
+.nav-item.active{background:rgba(160,50,30,0.1)!important;border-left-color:var(--ent)!important}
+.nav-num{font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--line-md);width:60px;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:color .2s;padding:14px 0}
+.nav-item.active .nav-num{color:rgba(200,56,42,0.35)}
+.nav-item:hover .nav-num{color:rgba(255,255,255,0.12)}
+.nav-content{flex:1;padding:14px 16px 14px 0;overflow:hidden}
+.nav-title{font-size:15px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--dim);transition:color .2s;line-height:1.3}
+.nav-sub{font-size:15px;color:var(--muted);margin-top:2px}
+.nav-item.active .nav-title{color:var(--white)}
+.nav-item:hover .nav-title{color:var(--off)}
+.nav-divider{height:1px;background:var(--line);margin:16px 30px}
 
-* { margin:0; padding:0; box-sizing:border-box; }
-html { scroll-behavior:smooth; }
-body {
-  background: var(--bg);
-  color: var(--white);
-  font-family: 'Be Vietnam Pro', system-ui, sans-serif;
-  font-size: 16px; line-height: 1.6; min-height: 100vh;
-  background-color: #0e0b07;
-  background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%278%27%20height%3D%278%27%3E%3Crect%20width%3D%278%27%20height%3D%278%27%20fill%3D%27none%27/%3E%3Crect%20x%3D%270%27%20y%3D%270%27%20width%3D%273%27%20height%3D%273%27%20fill%3D%27rgba%28160%2C80%2C30%2C0.06%29%27/%3E%3Crect%20x%3D%274%27%20y%3D%274%27%20width%3D%273%27%20height%3D%273%27%20fill%3D%27rgba%2840%2C60%2C120%2C0.05%29%27/%3E%3Crect%20x%3D%274%27%20y%3D%270%27%20width%3D%273%27%20height%3D%273%27%20fill%3D%27rgba%28140%2C100%2C20%2C0.04%29%27/%3E%3Crect%20x%3D%270%27%20y%3D%274%27%20width%3D%273%27%20height%3D%273%27%20fill%3D%27rgba%2840%2C90%2C50%2C0.04%29%27/%3E%3C/svg%3E");
-  background-repeat: repeat; background-size: 8px 8px;
-}
-body::before {
-  content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
-  background:
-    radial-gradient(ellipse 70% 50% at 10% 15%, rgba(160,50,30,0.05) 0%, transparent 60%),
-    radial-gradient(ellipse 50% 40% at 90% 85%, rgba(40,60,140,0.04) 0%, transparent 60%);
-}
-.shell { display:flex; height:100vh; overflow:hidden; position:relative; z-index:1; }
+/* MAIN */
+.main{flex:1;overflow-y:auto;display:flex;flex-direction:column}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:60px;border-bottom:1px solid rgba(180,120,30,0.15)!important;background:rgba(8,6,3,0.96)!important;backdrop-filter:blur(8px);position:sticky;top:0;z-index:10;flex-shrink:0}
+.topbar::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(180,50,30,0.5) 25%,rgba(180,130,30,0.6) 50%,rgba(50,80,160,0.4) 75%,transparent)}
+.topbar-l{display:flex;align-items:center;gap:12px;font-size:14px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
+.topbar-sep{color:var(--line-hi)}
+.topbar-page{color:var(--dim)}
+.topbar-r{display:flex;align-items:center;gap:10px}
+.badge{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border:1px solid var(--line-md);border-radius:20px;font-size:12px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--dim)}
+.badge-green{border-color:rgba(63,203,154,0.3);color:var(--green)}
+.badge-blue{border-color:rgba(74,124,240,0.3);color:var(--gov)}
+.badge-gold{border-color:rgba(212,184,112,0.3);color:var(--gold)}
+.badge-gap{border-color:rgba(240,160,80,0.35);color:var(--gap)}
+.tclock{font-family:'DM Mono','Courier New',monospace;font-size:15px;color:var(--muted)}
 
-/* ─── SIDEBAR ─── */
-.sidebar {
-  width: 300px; flex-shrink: 0;
-  background: rgba(8,6,3,0.96) !important;
-  border-right: 1px solid rgba(180,120,30,0.18) !important;
-  display: flex; flex-direction: column;
-  position: relative; transition: width .25s ease; overflow: hidden;
-}
-.sidebar.collapsed { width: 56px; }
-.sidebar::before {
-  content:''; position:absolute; top:0; left:0; right:0; height:3px;
-  background: linear-gradient(90deg, var(--gov), var(--council), var(--ent)); z-index:1;
-}
-.sb-toggle {
-  position:absolute; top:14px; right:10px; z-index:10;
-  width:28px; height:28px; border-radius:2px;
-  background:transparent; border:1px solid var(--line);
-  color:var(--muted); cursor:pointer;
-  display:flex; align-items:center; justify-content:center;
-  font-size:14px; transition:all .2s; flex-shrink:0;
-}
-.sb-toggle:hover { border-color:var(--line-hi); color:var(--white); }
-.sidebar.collapsed .sb-toggle { right:14px; }
-.sidebar.collapsed .sb-brand,
-.sidebar.collapsed .nav-section-label,
-.sidebar.collapsed .nav-content { opacity:0; pointer-events:none; }
-.sidebar.collapsed .nav-num { font-size:14px; width:56px; }
-.sidebar.collapsed .nav-item { justify-content:center; }
-.sidebar.collapsed .sb-nav { padding-top:60px; }
-.sb-brand {
-  padding: 32px 28px 24px; border-bottom: 1px solid var(--line);
-  transition: background .2s; cursor:pointer;
-}
-.sb-brand:hover { background: rgba(255,255,255,0.03); }
-.brand-main {
-  font-family: 'Bebas Neue', 'Arial Black', 'Impact', sans-serif;
-  font-size: 36px; letter-spacing: 3px; line-height: 1; color: var(--white);
-}
-.brand-main span { background: linear-gradient(135deg, #d4a030, #c8382a); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-.brand-sub { font-size: 15px; font-weight: 500; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); margin-top: 6px; }
-.brand-desc { font-size: 12px; color: var(--dim); margin-top: 10px; line-height: 1.55; border-left: 2px solid var(--gov); padding-left: 10px; max-width: 220px; }
-.sb-nav { flex:1; padding: 24px 0 40px; overflow-y: auto; }
-.nav-section-label { font-size: 11px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: var(--muted); padding: 0 30px 10px; white-space: nowrap; }
-.nav-item { display:flex; align-items:center; padding:0; cursor:pointer; transition:all .2s; border-left:2px solid transparent; position:relative; overflow:hidden; }
-.nav-item:hover { background:rgba(180,120,30,0.06) !important; border-left-color:var(--line-hi); }
-.nav-item.active { background:rgba(160,50,30,0.1) !important; border-left-color:var(--ent) !important; }
-.nav-num { font-family:'Bebas Neue',sans-serif; font-size:36px; color:var(--line-md); width:60px; flex-shrink:0; display:flex; align-items:center; justify-content:center; transition:color .2s; padding:14px 0; }
-.nav-item.active .nav-num { color:rgba(200,56,42,0.35); }
-.nav-item:hover .nav-num { color:rgba(255,255,255,0.12); }
-.nav-content { flex:1; padding:14px 16px 14px 0; overflow:hidden; }
-.nav-title { font-size:15px; font-weight:600; letter-spacing:1px; text-transform:uppercase; color:var(--dim); transition:color .2s; line-height:1.3; }
-.nav-sub { font-size:15px; color:var(--muted); margin-top:2px; }
-.nav-item.active .nav-title { color:var(--white); }
-.nav-item:hover .nav-title { color:var(--off); }
-.nav-divider { height:1px; background:var(--line); margin:16px 30px; }
+/* PAGES */
+.page{display:none;flex:1;flex-direction:column}
+.page.active{animation:fadeIn .25s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.page.active{display:flex}
+.page-hero{padding:56px 48px 48px;border-bottom:1px solid var(--line);position:relative;overflow:hidden}
+.page-hero::after{content:'';position:absolute;top:0;right:0;width:300px;height:100%;background:radial-gradient(ellipse at right center,rgba(74,124,240,0.04) 0%,transparent 70%);pointer-events:none}
+.hero-eyebrow{font-size:15px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:var(--muted);margin-bottom:32px;display:flex;align-items:center;gap:10px}
+.hero-eyebrow::before{content:'';display:inline-block;width:24px;height:1px;background:currentColor}
+.page-title{font-size:clamp(36px,5vw,72px);font-weight:700;letter-spacing:clamp(1px,0.3vw,3px);line-height:0.95;color:var(--white);text-transform:uppercase;word-break:break-word}
+.page-desc{font-size:14px;color:var(--dim);margin-top:18px;max-width:900px;line-height:1.75;border-left:2px solid var(--gov);padding-left:16px;opacity:0.85;word-break:break-word}
+.page-body{flex:1;padding:36px 48px 48px;display:flex;flex-direction:column;gap:28px}
 
-/* ─── MAIN ─── */
-.main { flex:1; overflow-y:auto; display:flex; flex-direction:column; }
-.topbar {
-  display:flex; align-items:center; justify-content:space-between;
-  padding:0 48px; height:60px;
-  border-bottom:1px solid rgba(180,120,30,0.15) !important;
-  background: rgba(8,6,3,0.96) !important; backdrop-filter:blur(8px);
-  position:sticky; top:0; z-index:10; flex-shrink:0;
-}
-.topbar::after {
-  content:''; position:absolute; bottom:0; left:0; right:0; height:1px;
-  background:linear-gradient(90deg,transparent,rgba(180,50,30,0.5) 25%,rgba(180,130,30,0.6) 50%,rgba(50,80,160,0.4) 75%,transparent);
-}
-.topbar-l { display:flex; align-items:center; gap:12px; font-size:14px; font-weight:500; letter-spacing:2px; text-transform:uppercase; color:var(--muted); }
-.topbar-sep { color:var(--line-hi); }
-.topbar-page { color:var(--dim); }
-.topbar-r { display:flex; align-items:center; gap:10px; }
-.badge { display:inline-flex; align-items:center; gap:5px; padding:5px 12px; border:1px solid var(--line-md); border-radius:20px; font-size:12px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--dim); }
-.badge-green { border-color:rgba(63,203,154,0.3); color:var(--green); }
-.badge-blue  { border-color:rgba(74,124,240,0.3); color:var(--gov); }
-.badge-gold  { border-color:rgba(212,184,112,0.3); color:var(--gold); }
-.badge-gap   { border-color:rgba(240,160,80,0.35); color:var(--gap); }
-.tclock { font-family:'DM Mono','Courier New',monospace; font-size:15px; color:var(--muted); }
+/* SECTION */
+.sec-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid rgba(180,120,30,0.18)!important}
+.sec-num{font-family:'Bebas Neue',sans-serif;font-size:80px;line-height:1;color:var(--line-md);letter-spacing:2px;margin-right:-4px}
+.sec-title{font-size:15px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--muted);padding-bottom:8px}
+.sec-right{display:flex;align-items:center;gap:8px;padding-bottom:4px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:1px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:1px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:1px}
 
-/* ─── PAGES ─── */
-.page { display:none; flex:1; flex-direction:column; }
-.page.active { animation:fadeIn .25s ease; }
-@keyframes fadeIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
-.page.active { display:flex; }
+/* PANELS */
+.panel{background:rgba(14,11,7,0.95)!important;border:1px solid rgba(180,120,30,0.12)!important;padding:28px;position:relative;transition:border-color .2s,box-shadow .2s}
+.panel:hover{border-color:rgba(180,80,30,0.28)!important;box-shadow:0 4px 24px rgba(0,0,0,0.4)}
+.panel-sm{padding:18px}
+.panel-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+.panel-title{font-size:12px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--muted)}
 
-/* ─── PAGE HERO ─── */
-.page-hero {
-  padding:56px 48px 48px; border-bottom:1px solid var(--line);
-  position:relative; overflow:hidden;
-}
-.page-hero::after { content:''; position:absolute; top:0; right:0; width:300px; height:100%; background:radial-gradient(ellipse at right center,rgba(74,124,240,0.04) 0%,transparent 70%); pointer-events:none; }
-.hero-eyebrow { font-size:15px; font-weight:600; letter-spacing:4px; text-transform:uppercase; color:var(--muted); margin-bottom:32px; display:flex; align-items:center; gap:10px; }
-.hero-eyebrow::before { content:''; display:inline-block; width:24px; height:1px; background:currentColor; }
-.page-title { font-size:clamp(36px,5vw,72px); font-weight:700; letter-spacing:clamp(1px,0.3vw,3px); line-height:0.95; color:var(--white); text-transform:uppercase; word-break:break-word; }
-.page-desc { font-size:14px; color:var(--dim); margin-top:18px; max-width:900px; line-height:1.75; border-left:2px solid var(--gov); padding-left:16px; opacity:0.85; word-break:break-word; }
-.page-body { flex:1; padding:36px 48px 48px; display:flex; flex-direction:column; gap:28px; }
+/* PIPELINE */
+.pipeline-strip{background:rgba(14,11,7,0.95)!important;border:1px solid rgba(180,120,30,0.12)!important}
+.pipeline-row{display:flex;align-items:stretch}
+.p-step{flex:1;padding:24px;border-right:1px solid var(--line);position:relative}
+.p-step:last-child{border-right:none}
+.p-step-num{font-family:'Bebas Neue',sans-serif;font-size:42px;color:var(--line-hi);line-height:1;margin-bottom:8px}
+.p-step-title{font-size:15px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--white);margin-bottom:4px}
+.p-step-desc{font-size:15px;color:var(--muted);line-height:1.5}
+.p-step-done{position:absolute;top:16px;right:16px;width:18px;height:18px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center}
+.p-step-done::after{content:'';width:7px;height:4px;border-left:1.5px solid #000;border-bottom:1.5px solid #000;transform:rotate(-45deg) translate(1px,-1px)}
 
-/* ─── SECTION HEADERS ─── */
-.sec-header { display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:16px; padding-bottom:12px; border-bottom:1px solid rgba(180,120,30,0.18) !important; }
-.sec-num { font-family:'Bebas Neue',sans-serif; font-size:80px; line-height:1; color:var(--line-md); letter-spacing:2px; margin-right:-4px; }
-.sec-title { font-size:15px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:var(--muted); padding-bottom:8px; }
-.sec-right { display:flex; align-items:center; gap:8px; padding-bottom:4px; }
+/* KB BARS */
+.kb-row{display:flex;align-items:center;gap:16px;padding:10px 0;border-bottom:1px solid var(--line)}
+.kb-row:last-child{border-bottom:none}
+.kb-label{font-size:14px;color:var(--dim);width:200px;flex-shrink:0}
+.kb-bar{flex:1;height:3px;background:var(--bg4);border-radius:2px;overflow:hidden}
+.kb-fill{height:100%;transition:width 1.2s ease;border-radius:2px}
+.kb-val{font-family:'DM Mono','Courier New',monospace;font-size:14px;width:50px;text-align:right;flex-shrink:0}
 
-/* ─── GRID ─── */
-.g2 { display:grid; grid-template-columns:1fr 1fr; gap:1px; }
-.g3 { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; }
-.g4 { display:grid; grid-template-columns:repeat(4,1fr); gap:1px; }
+/* AGENT MAP */
+.agent-split{display:grid;grid-template-columns:1fr 1px 1fr;gap:0}
+.agent-divider{background:var(--line)}
+.agent-col{padding:24px}
+.agent-col-ent{background:rgba(224,90,122,0.02)}
+.agent-label{font-family:'Be Vietnam Pro',sans-serif;font-size:24px;letter-spacing:2px;margin-bottom:4px}
+.agent-meta{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.doc-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);font-size:14px;color:var(--dim)}
+.doc-item:last-child{border-bottom:none}
+.doc-dot{width:4px;height:4px;border-radius:50%;flex-shrink:0}
+.doc-count{font-family:'DM Mono','Courier New',monospace;font-size:15px;margin-left:auto}
 
-/* ─── PANELS ─── */
-.panel {
-  background:rgba(14,11,7,0.95) !important; border:1px solid rgba(180,120,30,0.12) !important;
-  padding:28px; position:relative; transition: border-color .2s, box-shadow .2s;
-}
-.panel:hover { border-color:rgba(180,80,30,0.28) !important; box-shadow:0 4px 24px rgba(0,0,0,0.4); }
-.panel-sm { padding:18px; }
-.panel-hd { display:flex; align-items:center; justify-content:space-between; margin-bottom:18px; padding-bottom:12px; border-bottom:1px solid var(--line); }
-.panel-title { font-size:12px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:var(--muted); }
+/* TAGGING */
+.acc-grid{display:grid;grid-template-columns:1fr 1px 1fr;gap:0}
+.acc-col:first-child{padding-right:24px}
+.acc-col:last-child{padding-left:24px}
+.acc-divider{background:var(--line)}
+.acc-label{font-size:12px;letter-spacing:3px;text-transform:uppercase;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--line)}
+.acc-row{display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid var(--line)}
+.acc-row:last-child{border-bottom:none}
+.acc-name{font-size:14px;color:var(--dim);flex:1}
+.acc-bar{width:80px;height:3px;background:var(--bg4);border-radius:2px;overflow:hidden}
+.acc-fill{height:100%;border-radius:2px}
+.acc-val{font-family:'DM Mono','Courier New',monospace;font-size:14px;width:42px;text-align:right}
 
-/* ─── PIPELINE ─── */
-.pipeline-strip { background:rgba(14,11,7,0.95) !important; border:1px solid rgba(180,120,30,0.12) !important; }
-.pipeline-row { display:flex; align-items:stretch; }
-.p-step { flex:1; padding:24px; border-right:1px solid var(--line); position:relative; }
-.p-step:last-child { border-right:none; }
-.p-step-num { font-family:'Bebas Neue',sans-serif; font-size:42px; color:var(--line-hi); line-height:1; margin-bottom:8px; }
-.p-step-title { font-size:15px; font-weight:600; letter-spacing:1px; text-transform:uppercase; color:var(--white); margin-bottom:4px; }
-.p-step-desc { font-size:15px; color:var(--muted); line-height:1.5; }
-.p-step-done { position:absolute; top:16px; right:16px; width:18px; height:18px; border-radius:50%; background:var(--green); display:flex; align-items:center; justify-content:center; }
-.p-step-done::after { content:''; width:7px; height:4px; border-left:1.5px solid #000; border-bottom:1.5px solid #000; transform:rotate(-45deg) translate(1px,-1px); }
+/* CHARTS */
+.chart-wrap{position:relative;width:100%;height:200px}
+.chart-wrap-lg{position:relative;width:100%;height:240px}
+.chart-caption{font-size:11px;color:var(--muted);text-align:center;margin-top:6px;letter-spacing:1px}
 
-/* ─── KB BARS ─── */
-.kb-row { display:flex; align-items:center; gap:16px; padding:10px 0; border-bottom:1px solid var(--line); }
-.kb-row:last-child { border-bottom:none; }
-.kb-label { font-size:14px; color:var(--dim); width:200px; flex-shrink:0; }
-.kb-bar { flex:1; height:3px; background:var(--bg4); border-radius:2px; overflow:hidden; }
-.kb-fill { height:100%; transition:width 1.2s ease; border-radius:2px; }
-.kb-val { font-family:'DM Mono','Courier New',monospace; font-size:14px; width:50px; text-align:right; flex-shrink:0; }
+/* KPI STRIP */
+.kpi-strip{background:rgba(14,11,7,0.95)!important;border:1px solid rgba(180,120,30,0.12)!important;display:grid;grid-template-columns:repeat(5,1fr);gap:0;overflow:hidden}
+.kpi-cell{padding:20px 18px;border-right:1px solid var(--line);position:relative;overflow:hidden;min-width:0}
+.kpi-cell:last-child{border-right:none}
+.kpi-label{font-size:11px;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kpi-val{font-family:'Bebas Neue','Arial Black','Impact',sans-serif;font-size:42px;line-height:1;color:var(--white);letter-spacing:1px}
+.kpi-sub{font-size:11px;color:var(--dim);margin-top:6px;line-height:1.4;white-space:nowrap}
 
-/* ─── AGENT MAP ─── */
-.agent-split { display:grid; grid-template-columns:1fr 1px 1fr; gap:0; }
-.agent-divider { background:var(--line); }
-.agent-col { padding:24px; }
-.agent-col-ent { background:rgba(224,90,122,0.02); }
-.agent-label { font-family:'Be Vietnam Pro',sans-serif; font-size:24px; letter-spacing:2px; margin-bottom:4px; }
-.agent-meta { font-size:12px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); margin-bottom:14px; padding-bottom:14px; border-bottom:1px solid var(--line); }
-.doc-item { display:flex; align-items:center; gap:10px; padding:8px 0; border-bottom:1px solid var(--line); font-size:14px; color:var(--dim); }
-.doc-item:last-child { border-bottom:none; }
-.doc-dot { width:4px; height:4px; border-radius:50%; flex-shrink:0; }
-.doc-count { font-family:'DM Mono','Courier New',monospace; font-size:15px; margin-left:auto; }
+/* BENCHMARK TABLE */
+.bm-table{width:100%;border-collapse:collapse}
+.bm-table thead tr{border-bottom:1px solid var(--line)}
+.bm-table th{padding:10px 16px;text-align:left;font-size:12px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
+.bm-table td{padding:12px 16px;border-bottom:1px solid var(--line);font-size:14px;color:var(--dim)}
+.bm-table tr:hover td{background:rgba(255,255,255,0.01)}
+.bm-table tr:last-child td{border-bottom:none}
+.mono{font-family:'DM Mono','Courier New',monospace;font-size:14px}
+.pos{color:var(--green)}.neg{color:var(--ent)}.neu{color:var(--gold)}
+.effect-tag{display:inline-flex;align-items:center;padding:2px 8px;border:1px solid;border-radius:1px;font-size:12px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase}
+.et-green{border-color:rgba(63,203,154,0.3);color:var(--green)}
+.et-gold{border-color:rgba(212,184,112,0.3);color:var(--gold)}
+.et-muted{border-color:var(--line-md);color:var(--muted)}
 
-/* ─── TAGGING ACCURACY ─── */
-.acc-grid { display:grid; grid-template-columns:1fr 1px 1fr; gap:0; }
-.acc-col:first-child { padding-right:24px; }
-.acc-col:last-child { padding-left:24px; }
-.acc-divider { background:var(--line); }
-.acc-label { font-size:12px; letter-spacing:3px; text-transform:uppercase; margin-bottom:14px; padding-bottom:10px; border-bottom:1px solid var(--line); }
-.acc-row { display:flex; align-items:center; gap:12px; padding:8px 0; border-bottom:1px solid var(--line); }
-.acc-row:last-child { border-bottom:none; }
-.acc-name { font-size:14px; color:var(--dim); flex:1; }
-.acc-bar { width:80px; height:3px; background:var(--bg4); border-radius:2px; overflow:hidden; }
-.acc-fill { height:100%; border-radius:2px; }
-.acc-val { font-family:'DM Mono','Courier New',monospace; font-size:14px; width:42px; text-align:right; }
+/* DEBATE */
+.ctrl-strip{background:rgba(14,11,7,0.95)!important;border:1px solid rgba(180,120,30,0.12)!important;border-radius:6px;padding:20px 24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.ctrl-label{font-size:15px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+.ctrl-select{flex:1;min-width:280px;background:var(--bg3);border:1px solid rgba(200,160,80,0.18);color:var(--white);border-radius:5px;padding:10px 14px;font-size:14px;font-family:'Be Vietnam Pro',system-ui,sans-serif;outline:none;transition:border-color .2s;cursor:pointer}
+.ctrl-select:focus{border-color:var(--gov)}
+.ctrl-input{flex:1;min-width:200px;background:var(--bg3);border:1px solid rgba(200,160,80,0.18);color:var(--white);border-radius:5px;padding:10px 14px;font-size:15px;font-family:'Be Vietnam Pro',system-ui,sans-serif;outline:none;transition:border-color .2s}
+.ctrl-input:focus{border-color:var(--gov)}
+select.ctrl-input{width:80px;flex:none;cursor:pointer}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 22px;border-radius:5px;border:1px solid transparent;font-size:14px;font-weight:600;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all .2s;white-space:nowrap}
+.btn-white{background:var(--white);color:#000;border-color:var(--white)}
+.btn-white:hover{background:var(--off)}
+.btn-white:disabled{opacity:.4;cursor:not-allowed}
+.btn-ghost{background:transparent;color:var(--dim);border-color:var(--line-md)}
+.btn-ghost:hover{border-color:var(--line-hi);color:var(--white)}
 
-/* ─── CHART WRAP ─── */
-.chart-wrap { position:relative; width:100%; height:200px; }
-.chart-wrap-lg { position:relative; width:100%; height:240px; }
-.chart-caption { font-size:11px; color:var(--muted); text-align:center; margin-top:6px; letter-spacing:1px; }
+/* REPLAY BADGE */
+.replay-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border:1px solid rgba(74,158,92,0.3);border-radius:20px;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--green);background:rgba(74,158,92,0.06)}
+.replay-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 1.5s ease infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
 
-/* ─── KPI STRIP ─── */
-.kpi-strip {
-  background:rgba(14,11,7,0.95) !important; border:1px solid rgba(180,120,30,0.12) !important;
-  display:grid; grid-template-columns:repeat(5,1fr); gap:0; overflow:hidden;
-}
-.kpi-cell { padding:20px 18px; border-right:1px solid var(--line); position:relative; overflow:hidden; min-width:0; }
-.kpi-cell:last-child { border-right:none; }
-.kpi-label { font-size:11px; color:var(--muted); margin-bottom:8px; text-transform:uppercase; letter-spacing:1px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.kpi-val { font-family:'Bebas Neue','Arial Black','Impact',sans-serif; font-size:42px; line-height:1; color:var(--white); letter-spacing:1px; }
-.kpi-sub { font-size:11px; color:var(--dim); margin-top:6px; line-height:1.4; white-space:nowrap; }
-
-/* ─── BENCHMARK TABLE ─── */
-.bm-table { width:100%; border-collapse:collapse; }
-.bm-table thead tr { border-bottom:1px solid var(--line); }
-.bm-table th { padding:10px 16px; text-align:left; font-size:12px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--muted); }
-.bm-table td { padding:12px 16px; border-bottom:1px solid var(--line); font-size:14px; color:var(--dim); }
-.bm-table tr:hover td { background:rgba(255,255,255,0.01); }
-.bm-table tr:last-child td { border-bottom:none; }
-.mono { font-family:'DM Mono','Courier New',monospace; font-size:14px; }
-.pos { color:var(--green); } .neg { color:var(--ent); } .neu { color:var(--gold); }
-.effect-tag { display:inline-flex; align-items:center; padding:2px 8px; border:1px solid; border-radius:1px; font-size:12px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; }
-.et-green { border-color:rgba(63,203,154,0.3); color:var(--green); }
-.et-gold  { border-color:rgba(212,184,112,0.3); color:var(--gold); }
-.et-muted { border-color:var(--line-md); color:var(--muted); }
-
-/* ─── DEBATE ─── */
-.ctrl-strip { background:rgba(14,11,7,0.95) !important; border:1px solid rgba(180,120,30,0.12) !important; border-radius:6px; padding:20px 24px; display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
-.ctrl-label { font-size:15px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); white-space:nowrap; }
-.ctrl-input { flex:1; min-width:200px; background:var(--bg3); border:1px solid rgba(200,160,80,0.18); color:var(--white); border-radius:5px; padding:10px 14px; font-size:15px; font-family:'Be Vietnam Pro',system-ui,sans-serif; outline:none; transition:border-color .2s; }
-.ctrl-input:focus { border-color:var(--gov); }
-select.ctrl-input { width:80px; flex:none; cursor:pointer; }
-.btn { display:inline-flex; align-items:center; gap:8px; padding:11px 22px; border-radius:5px; border:1px solid transparent; font-size:14px; font-weight:600; letter-spacing:2px; text-transform:uppercase; cursor:pointer; transition:all .2s; white-space:nowrap; }
-.btn-white { background:var(--white); color:#000; border-color:var(--white); }
-.btn-white:hover { background:var(--off); }
-.btn-white:disabled { opacity:.4; cursor:not-allowed; }
-.btn-ghost { background:transparent; color:var(--dim); border-color:var(--line-md); }
-.btn-ghost:hover { border-color:var(--line-hi); color:var(--white); }
-.prog-strip { background:rgba(14,11,7,0.95) !important; border:1px solid rgba(120,160,255,0.1); border-radius:6px; padding:16px 24px; display:flex; align-items:center; gap:16px; }
-.prog-lbl { font-size:15px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); white-space:nowrap; min-width:220px; }
-.prog-track { flex:1; height:1px; background:var(--bg4); }
-.prog-fill { height:100%; background:linear-gradient(90deg,#4a7ec8,#c8922a,#c8382a); transition:width .6s ease; }
-.prog-status { font-size:15px; letter-spacing:2px; text-transform:uppercase; color:var(--dim); white-space:nowrap; }
-.debate-cols { display:grid; grid-template-columns:1fr 1fr; gap:1px; }
-.debate-col { background:rgba(14,11,7,0.95) !important; border:1px solid rgba(120,160,255,0.1); border-radius:6px; display:flex; flex-direction:column; overflow:hidden; }
-.debate-col-header { padding:16px 20px; border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:space-between; }
-.dch-name { font-family:'Bebas Neue',sans-serif; font-size:20px; letter-spacing:2px; }
-.dch-meta { font-size:15px; color:var(--muted); margin-top:1px; }
-.dch-dot { width:8px; height:8px; border-radius:50%; }
-.debate-feed { flex:1; min-height:260px; max-height:360px; overflow-y:auto; padding:16px 20px; }
-.msg-block { margin-bottom:14px; }
-.msg-round { font-size:12px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); margin-bottom:6px; }
-.msg-text { font-size:15px; color:var(--dim); line-height:1.7; border-left:2px solid var(--line-md); padding-left:12px; }
-.msg-text.gov-msg { border-left-color:var(--gov); }
-.msg-text.ent-msg { border-left-color:var(--ent); }
-.msg-text.mod-msg { border-left-color:var(--gold); color:var(--muted); font-style:italic; }
-.result-panel { background:rgba(14,11,7,0.95) !important; border:1px solid rgba(120,160,255,0.1); border-radius:6px; display:none; overflow:hidden; }
-.result-header { padding:14px 24px; border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:space-between; }
-.result-name { font-size:15px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:var(--muted); }
-.result-body { padding:20px 24px; font-size:15px; color:var(--dim); line-height:1.8; }
-.think-dots { display:flex; align-items:center; gap:6px; font-size:14px; color:var(--muted); padding:8px 0; }
-.dots { display:flex; gap:3px; }
-.dots span { width:4px; height:4px; border-radius:50%; background:var(--muted); animation:blink 1.2s ease infinite; }
-.dots span:nth-child(2){animation-delay:.2s} .dots span:nth-child(3){animation-delay:.4s}
+.prog-strip{background:rgba(14,11,7,0.95)!important;border:1px solid rgba(120,160,255,0.1);border-radius:6px;padding:16px 24px;display:flex;align-items:center;gap:16px}
+.prog-lbl{font-size:15px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);white-space:nowrap;min-width:220px}
+.prog-track{flex:1;height:1px;background:var(--bg4)}
+.prog-fill{height:100%;background:linear-gradient(90deg,#4a7ec8,#c8922a,#c8382a);transition:width .6s ease}
+.prog-status{font-size:15px;letter-spacing:2px;text-transform:uppercase;color:var(--dim);white-space:nowrap}
+.debate-cols{display:grid;grid-template-columns:1fr 1fr;gap:1px}
+.debate-col{background:rgba(14,11,7,0.95)!important;border:1px solid rgba(120,160,255,0.1);border-radius:6px;display:flex;flex-direction:column;overflow:hidden}
+.debate-col-header{padding:16px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
+.dch-name{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px}
+.dch-meta{font-size:15px;color:var(--muted);margin-top:1px}
+.dch-dot{width:8px;height:8px;border-radius:50%}
+.debate-feed{flex:1;min-height:260px;max-height:360px;overflow-y:auto;padding:16px 20px}
+.msg-block{margin-bottom:14px}
+.msg-round{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.msg-text{font-size:15px;color:var(--dim);line-height:1.7;border-left:2px solid var(--line-md);padding-left:12px}
+.msg-text.gov-msg{border-left-color:var(--gov)}
+.msg-text.ent-msg{border-left-color:var(--ent)}
+.msg-text.mod-msg{border-left-color:var(--gold);color:var(--muted);font-style:italic}
+.msg-text.exp-msg{border-left-color:var(--council)}
+.result-panel{background:rgba(14,11,7,0.95)!important;border:1px solid rgba(120,160,255,0.1);border-radius:6px;display:none;overflow:hidden}
+.result-header{padding:14px 24px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
+.result-name{font-size:15px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--muted)}
+.result-body{padding:20px 24px;font-size:15px;color:var(--dim);line-height:1.8}
+.think-dots{display:flex;align-items:center;gap:6px;font-size:14px;color:var(--muted);padding:8px 0}
+.dots{display:flex;gap:3px}
+.dots span{width:4px;height:4px;border-radius:50%;background:var(--muted);animation:blink 1.2s ease infinite}
+.dots span:nth-child(2){animation-delay:.2s}.dots span:nth-child(3){animation-delay:.4s}
 @keyframes blink{0%,80%,100%{opacity:.15}40%{opacity:1}}
-.msg-round-badge { display:inline-flex; align-items:center; gap:5px; padding:1px 7px; border-radius:2px; font-size:10px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; margin-left:8px; vertical-align:middle; }
-.badge-r1 { background:rgba(74,126,200,0.12); color:var(--gov); }
-.badge-r2 { background:rgba(200,146,42,0.12); color:var(--council); }
-.badge-r3 { background:rgba(200,56,42,0.12); color:var(--ent); }
-.err-box { background:rgba(224,90,122,0.06); border:1px solid rgba(224,90,122,0.2); padding:12px 16px; font-size:14px; color:var(--ent); display:none; }
+.msg-round-badge{display:inline-flex;align-items:center;gap:5px;padding:1px 7px;border-radius:2px;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-left:8px;vertical-align:middle}
+.badge-r1{background:rgba(74,126,200,0.12);color:var(--gov)}
+.badge-r2{background:rgba(200,146,42,0.12);color:var(--council)}
+.badge-r3{background:rgba(200,56,42,0.12);color:var(--ent)}
 
-/* ─── TIER 3 ─── */
-.policy-table { width:100%; border-collapse:collapse; }
-.policy-row { border-bottom:1px solid var(--line); cursor:pointer; transition:background .15s; }
-.policy-row:hover { background:rgba(255,255,255,0.02); }
-.policy-row.sel { background:rgba(74,124,240,0.05); }
-.policy-row td { padding:16px 20px; }
-.pol-num { font-family:'Bebas Neue',sans-serif; font-size:32px; color:var(--line-hi); width:60px; }
-.pol-name { font-size:16px; font-weight:600; letter-spacing:1px; color:var(--white); }
-.pol-desc { font-size:14px; color:var(--muted); margin-top:3px; }
-.pol-score { font-family:'Bebas Neue',sans-serif; font-size:28px; text-align:right; width:80px; }
-.pros-cons { display:grid; grid-template-columns:1fr 1fr; gap:1px; }
-.pc-col { padding:20px; background:rgba(14,11,7,0.95) !important; }
-.pc-col-con { background:rgba(224,90,122,0.02) !important; }
-.pc-label { font-size:12px; font-weight:600; letter-spacing:3px; text-transform:uppercase; margin-bottom:14px; padding-bottom:10px; border-bottom:1px solid var(--line); }
-.pc-item { display:flex; align-items:flex-start; gap:8px; padding:6px 0; border-bottom:1px solid var(--line); font-size:14px; color:var(--dim); }
-.pc-item:last-child { border-bottom:none; }
-.pc-dash { color:var(--line-hi); margin-top:1px; flex-shrink:0; }
-.impact-row { display:flex; align-items:center; gap:16px; padding:12px 0; border-bottom:1px solid var(--line); }
-.impact-row:last-child { border-bottom:none; }
-.impact-label { font-size:14px; color:var(--dim); width:180px; flex-shrink:0; line-height:1.4; }
-.impact-track { flex:1; height:3px; background:var(--bg4); min-width:40px; border-radius:2px; overflow:hidden; }
-.impact-fill { height:3px; border-radius:2px; transition:width 0.8s cubic-bezier(.25,.8,.25,1); }
-.impact-val { font-family:'DM Mono','Courier New',monospace; font-size:15px; width:90px; text-align:right; flex-shrink:0; }
-.ev-item { display:flex; gap:20px; padding:14px 0; border-bottom:1px solid var(--line); }
-.ev-item:last-child { border-bottom:none; }
-.ev-num { font-family:'Bebas Neue',sans-serif; font-size:28px; color:var(--line-hi); width:40px; flex-shrink:0; line-height:1; padding-top:2px; }
-.ev-text { font-size:15px; color:var(--dim); line-height:1.65; }
-.ev-source { font-family:'DM Mono','Courier New',monospace; font-size:12px; color:var(--gov); margin-top:4px; }
-.gap-item { display:flex; gap:16px; padding:16px 0; border-bottom:1px solid var(--line); align-items:flex-start; }
-.gap-item:last-child { border-bottom:none; }
-.gap-num { font-family:'Bebas Neue',sans-serif; font-size:28px; color:rgba(240,160,80,0.25); width:40px; flex-shrink:0; line-height:1; padding-top:2px; }
-.gap-severity { display:inline-flex; align-items:center; padding:2px 8px; border:1px solid; border-radius:1px; font-size:12px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; margin-bottom:5px; }
-.gap-high { border-color:rgba(224,90,122,0.4); color:var(--ent); }
-.gap-med  { border-color:rgba(240,160,80,0.4); color:var(--gap); }
-.gap-low  { border-color:rgba(102,102,102,0.4); color:var(--muted); }
-.gap-title { font-size:15px; font-weight:600; color:var(--white); margin-bottom:4px; letter-spacing:.5px; }
-.gap-desc  { font-size:14px; color:var(--dim); line-height:1.65; }
-.gap-action { font-family:'DM Mono','Courier New',monospace; font-size:12px; color:var(--gap); margin-top:6px; padding-top:6px; border-top:1px solid var(--line); }
-.tab-row { display:flex; border-bottom:1px solid var(--line); }
-.tab { padding:10px 16px; font-size:15px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--muted); cursor:pointer; border-bottom:1px solid transparent; margin-bottom:-1px; transition:all .15s; }
-.tab:hover { color:var(--dim); }
-.tab.active { color:var(--white); border-bottom-color:var(--white); }
-.cons-ring-wrap { position:relative; }
-.cons-ring-label { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); text-align:center; }
-.cons-pct { font-family:'Bebas Neue',sans-serif; font-size:40px; color:var(--white); line-height:1; }
-.cons-sub { font-size:12px; color:var(--muted); letter-spacing:2px; text-transform:uppercase; }
-.ab-row { display:flex; align-items:center; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--line); font-size:14px; }
-.ab-row:last-child { border-bottom:none; }
-@keyframes skeleton-shimmer { 0%{background-position:-400px 0} 100%{background-position:400px 0} }
-.skeleton { background:linear-gradient(90deg,var(--bg3) 25%,var(--bg4) 50%,var(--bg3) 75%); background-size:800px 100%; animation:skeleton-shimmer 1.6s infinite; border-radius:3px; }
-.skeleton-line { height:14px; margin:8px 0; }
-.skeleton-line-sm { height:10px; width:60%; margin:6px 0; }
-.skeleton-line-lg { height:18px; margin:10px 0; }
-.skeleton-block { height:80px; margin:10px 0; border-radius:4px; }
+/* TYPEWRITER cursor */
+.typing-cursor{display:inline-block;width:2px;height:14px;background:var(--muted);margin-left:2px;vertical-align:middle;animation:blink-cur .7s step-end infinite}
+@keyframes blink-cur{0%,100%{opacity:1}50%{opacity:0}}
 
-/* ─── SCROLLBAR ─── */
+/* TIER 3 */
+.policy-table{width:100%;border-collapse:collapse}
+.policy-row{border-bottom:1px solid var(--line);cursor:pointer;transition:background .15s}
+.policy-row:hover{background:rgba(255,255,255,0.02)}
+.policy-row.sel{background:rgba(74,124,240,0.05)}
+.policy-row td{padding:16px 20px}
+.pol-num{font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--line-hi);width:60px}
+.pol-name{font-size:16px;font-weight:600;letter-spacing:1px;color:var(--white)}
+.pol-desc{font-size:14px;color:var(--muted);margin-top:3px}
+.pol-score{font-family:'Bebas Neue',sans-serif;font-size:28px;text-align:right;width:80px}
+.pros-cons{display:grid;grid-template-columns:1fr 1fr;gap:1px}
+.pc-col{padding:20px;background:rgba(14,11,7,0.95)!important}
+.pc-col-con{background:rgba(224,90,122,0.02)!important}
+.pc-label{font-size:12px;font-weight:600;letter-spacing:3px;text-transform:uppercase;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--line)}
+.pc-item{display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid var(--line);font-size:14px;color:var(--dim)}
+.pc-item:last-child{border-bottom:none}
+.pc-dash{color:var(--line-hi);margin-top:1px;flex-shrink:0}
+.impact-row{display:flex;align-items:center;gap:16px;padding:12px 0;border-bottom:1px solid var(--line)}
+.impact-row:last-child{border-bottom:none}
+.impact-label{font-size:14px;color:var(--dim);width:180px;flex-shrink:0;line-height:1.4}
+.impact-track{flex:1;height:3px;background:var(--bg4);min-width:40px;border-radius:2px;overflow:hidden}
+.impact-fill{height:3px;border-radius:2px;transition:width 0.8s cubic-bezier(.25,.8,.25,1)}
+.impact-val{font-family:'DM Mono','Courier New',monospace;font-size:15px;width:90px;text-align:right;flex-shrink:0}
+.ev-item{display:flex;gap:20px;padding:14px 0;border-bottom:1px solid var(--line)}
+.ev-item:last-child{border-bottom:none}
+.ev-num{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--line-hi);width:40px;flex-shrink:0;line-height:1;padding-top:2px}
+.ev-text{font-size:15px;color:var(--dim);line-height:1.65}
+.ev-source{font-family:'DM Mono','Courier New',monospace;font-size:12px;color:var(--gov);margin-top:4px}
+.gap-item{display:flex;gap:16px;padding:16px 0;border-bottom:1px solid var(--line);align-items:flex-start}
+.gap-item:last-child{border-bottom:none}
+.gap-num{font-family:'Bebas Neue',sans-serif;font-size:28px;color:rgba(240,160,80,0.25);width:40px;flex-shrink:0;line-height:1;padding-top:2px}
+.gap-severity{display:inline-flex;align-items:center;padding:2px 8px;border:1px solid;border-radius:1px;font-size:12px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:5px}
+.gap-high{border-color:rgba(224,90,122,0.4);color:var(--ent)}
+.gap-med{border-color:rgba(240,160,80,0.4);color:var(--gap)}
+.gap-low{border-color:rgba(102,102,102,0.4);color:var(--muted)}
+.gap-title{font-size:15px;font-weight:600;color:var(--white);margin-bottom:4px;letter-spacing:.5px}
+.gap-desc{font-size:14px;color:var(--dim);line-height:1.65}
+.gap-action{font-family:'DM Mono','Courier New',monospace;font-size:12px;color:var(--gap);margin-top:6px;padding-top:6px;border-top:1px solid var(--line)}
+.tab-row{display:flex;border-bottom:1px solid var(--line)}
+.tab{padding:10px 16px;font-size:15px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--muted);cursor:pointer;border-bottom:1px solid transparent;margin-bottom:-1px;transition:all .15s}
+.tab:hover{color:var(--dim)}
+.tab.active{color:var(--white);border-bottom-color:var(--white)}
+.cons-ring-wrap{position:relative}
+.cons-ring-label{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}
+.cons-pct{font-family:'Bebas Neue',sans-serif;font-size:40px;color:var(--white);line-height:1}
+.cons-sub{font-size:12px;color:var(--muted);letter-spacing:2px;text-transform:uppercase}
+.ab-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--line);font-size:14px}
+.ab-row:last-child{border-bottom:none}
+.skeleton{background:linear-gradient(90deg,var(--bg3) 25%,var(--bg4) 50%,var(--bg3) 75%);background-size:800px 100%;animation:skeleton-shimmer 1.6s infinite;border-radius:3px}
+@keyframes skeleton-shimmer{0%{background-position:-400px 0}100%{background-position:400px 0}}
+.skeleton-line{height:14px;margin:8px 0}
+.skeleton-line-sm{height:10px;width:60%;margin:6px 0}
+.skeleton-line-lg{height:18px;margin:10px 0}
+.skeleton-block{height:80px;margin:10px 0;border-radius:4px}
+
 ::-webkit-scrollbar{width:5px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:rgba(200,140,40,0.4);border-radius:4px}
 ::-webkit-scrollbar-thumb:hover{background:rgba(200,140,40,0.6)}
+.overflow-x{overflow-x:auto}
 
-/* ─── OVERFLOW ─── */
-.overflow-x { overflow-x:auto; }
+/* LOADING */
+#loading{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;transition:opacity .8s ease;background:#080504;overflow:hidden}
+#loading .ld-bg{position:absolute;inset:0;background:#0a0806;filter:brightness(0.25) saturate(0.5)}
+#loading .ld-overlay{position:absolute;inset:0;background:radial-gradient(ellipse 60% 70% at 50% 50%,rgba(4,2,1,0.55) 0%,rgba(4,2,1,0.82) 100%)}
+#loading::before{content:'';position:absolute;bottom:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#c8382a,#d4a030,#4a7ec8,#4a9e5c,#c8922a,#c8382a);background-size:400% 100%;animation:borderWeave 4s linear infinite;z-index:2}
+#loading::after{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#4a7ec8,#c8922a,#c8382a,#4a9e5c,#d4a030,#4a7ec8);background-size:400% 100%;animation:borderWeave 4s linear infinite reverse;z-index:2}
+@keyframes borderWeave{0%{background-position:0% 0}100%{background-position:400% 0}}
+.ld-content{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center}
+.ld-eyebrow{font-size:11px;letter-spacing:6px;text-transform:uppercase;color:#c8922a;opacity:0.9}
+.ld-main-title{display:flex;flex-direction:column;align-items:center;gap:0;line-height:0.88;text-align:center;opacity:0;transition:opacity 0.3s ease}
+.fonts-loaded .ld-main-title{opacity:1}
+.ld-title-line1{font-size:clamp(18px,3vw,32px);font-weight:300;letter-spacing:14px;text-transform:uppercase;color:#c8922a;opacity:0.92;margin-bottom:4px}
+.ld-title-line2{font-family:'Bebas Neue','Be Vietnam Pro',sans-serif;font-size:clamp(80px,13vw,152px);letter-spacing:8px;line-height:0.9;color:#f5efe6;transform:skewX(-4deg);display:inline-block}
+.ld-title-line3{font-size:clamp(24px,4vw,48px);font-weight:600;letter-spacing:22px;text-transform:uppercase;color:#c8382a;margin-top:2px}
+.ld-ornament{display:flex;align-items:center;gap:14px;width:280px}
+.ld-ornament-line{flex:1;height:1px;background:linear-gradient(90deg,transparent,#d4a030,#c8382a)}
+.ld-ornament-line:last-child{background:linear-gradient(90deg,#c8382a,#d4a030,transparent)}
+.ld-ornament-diamond{width:8px;height:8px;background:#d4a030;transform:rotate(45deg)}
+.ld-tagline{font-size:11px;letter-spacing:4px;text-transform:uppercase;color:#9e8e76;opacity:0.8}
+.ld-bar{width:180px;height:2px;background:rgba(200,160,80,0.12);position:relative;overflow:hidden;border-radius:2px}
+.ld-bar-fill{position:absolute;left:-100%;top:0;width:100%;height:100%;background:linear-gradient(90deg,transparent,#d4a030,#c8382a,#4a7ec8,transparent);animation:sweepBar 1.6s ease infinite}
+@keyframes sweepBar{to{left:100%}}
+.ld-sub{font-size:11px;letter-spacing:5px;text-transform:uppercase;color:#7a6a52}
 
-/* ─── LOADING SCREEN ─── */
-#loading {
-  position:fixed; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;
-  z-index:999; transition:opacity .8s ease; background:#080504; overflow:hidden;
-}
-#loading .ld-bg {
-  position:absolute; inset:0;
-  background:url('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCAAoACgDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAABgUE/8QAJBAAAQQCAgICAwAAAAAAAAAAAQIDBBEFEiExBhNBUWH/xAAUAQEAAAAAAAAAAAAAAAAAAAAA/8QAFBEBAAAAAAAAAAAAAAAAAAAAAP/aAAwDAQACEQMRAD8AmtF6U1GxHutzOXBrMpK20hIJKlrKUj7JAH3VC6V0i5nLiXJ0laYqFbUhsH5OACSevQAJ/dWd0pqe30xkFW1lPW1u5aBSsBClp4BCiOQCDg/eq3XuuIOm7mla2JEky2ShDTm0gHySCOeOKA7cXpaBOluvzmUOOKBCSACEnHgbhhpHSFrp6Cph7W4tBXuCFhJCSfCRgcY4x/VfyNbPXt8l2GpLhUpQ2tuMnCCOx8kH1iirO3EUVF3vgN+KKKAuL/9k=') center center / cover no-repeat;
-  filter:brightness(0.25) saturate(0.5); transform:scale(1.04); animation:bgBreath 8s ease-in-out infinite alternate;
-}
-@keyframes bgBreath { 0%{transform:scale(1.04)} 100%{transform:scale(1.08)} }
-#loading .ld-overlay { position:absolute; inset:0; background:radial-gradient(ellipse 60% 70% at 50% 50%,rgba(4,2,1,0.55) 0%,rgba(4,2,1,0.82) 100%); }
-#loading::before { content:''; position:absolute; bottom:0; left:0; right:0; height:4px; background:linear-gradient(90deg,#c8382a,#d4a030,#4a7ec8,#4a9e5c,#c8922a,#c8382a); background-size:400% 100%; animation:borderWeave 4s linear infinite; z-index:2; }
-#loading::after { content:''; position:absolute; top:0; left:0; right:0; height:4px; background:linear-gradient(90deg,#4a7ec8,#c8922a,#c8382a,#4a9e5c,#d4a030,#4a7ec8); background-size:400% 100%; animation:borderWeave 4s linear infinite reverse; z-index:2; }
-@keyframes borderWeave { 0%{background-position:0% 0} 100%{background-position:400% 0} }
-.ld-content { position:relative; z-index:2; display:flex; flex-direction:column; align-items:center; gap:14px; text-align:center; }
-.ld-eyebrow { font-size:11px; letter-spacing:6px; text-transform:uppercase; color:#c8922a; opacity:0.9; }
-.ld-main-title { display:flex; flex-direction:column; align-items:center; gap:0; line-height:0.88; text-align:center; opacity:0; transition:opacity 0.3s ease; }
-.fonts-loaded .ld-main-title { opacity:1; }
-.ld-title-line1 { font-size:clamp(18px,3vw,32px); font-weight:300; letter-spacing:14px; text-transform:uppercase; color:#c8922a; opacity:0.92; margin-bottom:4px; }
-.ld-title-line2 { font-family:'Bebas Neue','Be Vietnam Pro',sans-serif; font-size:clamp(80px,13vw,152px); letter-spacing:8px; line-height:0.9; color:#f5efe6; transform:skewX(-4deg); display:inline-block; }
-.ld-title-line3 { font-size:clamp(24px,4vw,48px); font-weight:600; letter-spacing:22px; text-transform:uppercase; color:#c8382a; margin-top:2px; }
-.ld-ornament { display:flex; align-items:center; gap:14px; width:280px; }
-.ld-ornament-line { flex:1; height:1px; background:linear-gradient(90deg,transparent,#d4a030,#c8382a); }
-.ld-ornament-line:last-child { background:linear-gradient(90deg,#c8382a,#d4a030,transparent); }
-.ld-ornament-diamond { width:8px; height:8px; background:#d4a030; transform:rotate(45deg); }
-.ld-tagline { font-size:11px; letter-spacing:4px; text-transform:uppercase; color:#9e8e76; opacity:0.8; }
-.ld-bar { width:180px; height:2px; background:rgba(200,160,80,0.12); position:relative; overflow:hidden; border-radius:2px; }
-.ld-bar-fill { position:absolute; left:-100%; top:0; width:100%; height:100%; background:linear-gradient(90deg,transparent,#d4a030,#c8382a,#4a7ec8,transparent); animation:sweepBar 1.6s ease infinite; }
-@keyframes sweepBar { to{left:100%} }
-.ld-sub { font-size:11px; letter-spacing:5px; text-transform:uppercase; color:#7a6a52; }
-@keyframes sweep { to{left:100%} }
-@keyframes spin { to{transform:rotate(360deg)} }
-.spin { animation:spin .8s linear infinite; display:inline-block; }
-
-/* ─── API KEY MODAL ─── */
-.key-modal-bg { position:fixed; inset:0; z-index:500; background:rgba(4,2,1,0.82); display:flex; align-items:center; justify-content:center; backdrop-filter:blur(4px); }
-.key-modal { background:var(--bg2); border:1px solid rgba(200,160,80,0.25); border-top:2px solid var(--gold); padding:32px 36px; width:480px; max-width:90vw; border-radius:4px; }
-.key-modal-title { font-family:'Bebas Neue',sans-serif; font-size:28px; letter-spacing:3px; color:var(--white); margin-bottom:6px; }
-.key-modal-sub { font-size:13px; color:var(--muted); margin-bottom:20px; line-height:1.6; }
-.key-modal-input { width:100%; background:var(--bg3); border:1px solid rgba(200,160,80,0.2); border-radius:4px; color:var(--white); padding:10px 14px; font-family:'DM Mono',monospace; font-size:14px; outline:none; transition:border-color .2s; margin-bottom:16px; }
-.key-modal-input:focus { border-color:var(--gold); }
-.key-modal-actions { display:flex; gap:10px; justify-content:flex-end; }
-
-/* ─── RESPONSIVE ─── */
-@media (max-width: 1200px) {
-  .page-body { padding:24px 28px 36px; }
-  .page-hero { padding:36px 28px 32px; }
-  .topbar { padding:0 28px; }
-  .g4 { grid-template-columns:repeat(2,1fr); }
-  .kpi-strip { grid-template-columns:repeat(3,1fr); }
-}
-@media (max-width: 900px) {
-  .sidebar { width:56px; }
-  .sidebar .sb-brand, .sidebar .nav-section-label, .sidebar .nav-content { opacity:0; pointer-events:none; }
-  .g2, .debate-cols, .pros-cons { grid-template-columns:1fr; }
-  .agent-split { grid-template-columns:1fr; }
-  .agent-divider { display:none; }
-  .kpi-strip { grid-template-columns:1fr 1fr; }
-  .g3 { grid-template-columns:1fr; }
-  .page-hero { padding:24px 20px; }
-  .page-body { padding:20px; gap:20px; }
-  .topbar { padding:0 16px; }
-}
+@media(max-width:1200px){.page-body{padding:24px 28px 36px}.page-hero{padding:36px 28px 32px}.topbar{padding:0 28px}.g4{grid-template-columns:repeat(2,1fr)}.kpi-strip{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:900px){.sidebar{width:56px}.sidebar .sb-brand,.sidebar .nav-section-label,.sidebar .nav-content{opacity:0;pointer-events:none}.g2,.debate-cols,.pros-cons{grid-template-columns:1fr}.agent-split{grid-template-columns:1fr}.agent-divider{display:none}.kpi-strip{grid-template-columns:1fr 1fr}.g3{grid-template-columns:1fr}.page-hero{padding:24px 20px}.page-body{padding:20px;gap:20px}.topbar{padding:0 16px}}
 </style>
 </head>
 <body>
 
-<!-- ══ LOADING SCREEN ══ -->
 <div id="loading">
   <div class="ld-bg"></div>
   <div class="ld-overlay"></div>
   <div class="ld-content">
     <div class="ld-eyebrow">Nghiên cứu Khoa học · NCKH 2026</div>
-    <div class="ld-ornament">
-      <div class="ld-ornament-line"></div>
-      <div class="ld-ornament-diamond"></div>
-      <div class="ld-ornament-line"></div>
-    </div>
+    <div class="ld-ornament"><div class="ld-ornament-line"></div><div class="ld-ornament-diamond"></div><div class="ld-ornament-line"></div></div>
     <div class="ld-main-title">
       <div class="ld-title-line1">Multi-Agent</div>
       <div class="ld-title-line2">Debate</div>
       <div class="ld-title-line3">System</div>
     </div>
-    <div class="ld-ornament">
-      <div class="ld-ornament-line"></div>
-      <div class="ld-ornament-diamond"></div>
-      <div class="ld-ornament-line"></div>
-    </div>
+    <div class="ld-ornament"><div class="ld-ornament-line"></div><div class="ld-ornament-diamond"></div><div class="ld-ornament-line"></div></div>
     <div class="ld-tagline">Phân tích Chính sách Thuế Carbon · Ngành Dệt May Việt Nam</div>
     <div class="ld-bar"><div class="ld-bar-fill"></div></div>
-    <div class="ld-sub">MAD-Policy · Đang khởi động hệ thống</div>
+    <div class="ld-sub">MAD-Policy · Đang tải dữ liệu benchmark</div>
   </div>
 </div>
 
 <div class="shell">
-
-  <!-- ══ SIDEBAR ══ -->
   <aside class="sidebar" id="sidebar">
     <button class="sb-toggle" onclick="toggleSidebar()" aria-label="Toggle Sidebar">‹</button>
     <div class="sb-brand" onclick="go('t1')">
@@ -520,7 +381,6 @@ select.ctrl-input { width:80px; flex:none; cursor:pointer; }
     </nav>
   </aside>
 
-  <!-- ══ MAIN ══ -->
   <main class="main">
     <div class="topbar">
       <div class="topbar-l">
@@ -536,19 +396,15 @@ select.ctrl-input { width:80px; flex:none; cursor:pointer; }
       </div>
     </div>
 
-    <!-- ══════ PAGE T1 ══════ -->
+    <!-- PAGE T1 -->
     <div class="page active" id="page-t1">
       <div class="page-hero">
         <div class="page-title">Chuẩn Bị Tri Thức</div>
         <div class="page-desc">Dual Semantic Chunking — phân tách riêng văn bản pháp lý và kinh doanh, vector hóa 384 chiều, lưu trữ trong ChromaDB để RAG retrieval chính xác theo Agent.</div>
       </div>
       <div class="page-body">
-        <!-- Pipeline -->
         <div>
-          <div class="sec-header">
-            <div class="sec-title">Pipeline xử lý — Dual Semantic Chunking</div>
-            <div class="sec-right"><span class="badge badge-green">Hoàn tất</span></div>
-          </div>
+          <div class="sec-header"><div class="sec-title">Pipeline xử lý — Dual Semantic Chunking</div><div class="sec-right"><span class="badge badge-green">Hoàn tất</span></div></div>
           <div class="pipeline-strip">
             <div class="pipeline-row">
               <div class="p-step"><div class="p-step-num">01</div><div class="p-step-title">50 PDF Sources</div><div class="p-step-desc">Văn bản pháp lý, nghiên cứu, báo cáo ngành đa ngôn ngữ</div><div class="p-step-done"></div></div>
@@ -559,22 +415,16 @@ select.ctrl-input { width:80px; flex:none; cursor:pointer; }
             </div>
           </div>
         </div>
-        <!-- KB Stats + Agent Map -->
         <div class="g2" style="gap:1px;">
           <div class="panel">
-            <div class="panel-hd">
-              <div class="panel-title">Knowledge Base — Thống kê thực tế</div>
-              <span class="badge">1.690 docs total</span>
-            </div>
+            <div class="panel-hd"><div class="panel-title">Knowledge Base — Thống kê thực tế</div><span class="badge">1.690 docs total</span></div>
             <div class="kb-row"><div class="kb-label">legal_chunks — 50 files</div><div class="kb-bar"><div class="kb-fill" style="width:94%;background:var(--gov);"></div></div><div class="kb-val" style="color:var(--gov);">1.597</div></div>
             <div class="kb-row"><div class="kb-label">business_cbam — 35 files</div><div class="kb-bar"><div class="kb-fill" style="width:5.5%;background:var(--ent);"></div></div><div class="kb-val" style="color:var(--ent);">93</div></div>
             <div class="kb-row"><div class="kb-label">Tổng cộng</div><div class="kb-bar"><div class="kb-fill" style="width:100%;background:linear-gradient(90deg,var(--gov),var(--ent));"></div></div><div class="kb-val" style="color:var(--white);">1.690</div></div>
             <div style="margin-top:20px;"><div class="chart-wrap"><canvas id="chartKB"></canvas></div></div>
           </div>
           <div class="panel" style="padding:0;">
-            <div class="panel-hd" style="padding:18px 24px;margin-bottom:0;border-bottom:1px solid var(--line);">
-              <div class="panel-title">Phân bổ tài liệu theo Agent (RAG Filter)</div>
-            </div>
+            <div class="panel-hd" style="padding:18px 24px;margin-bottom:0;border-bottom:1px solid var(--line);"><div class="panel-title">Phân bổ tài liệu theo Agent (RAG Filter)</div></div>
             <div class="agent-split" style="height:calc(100% - 57px);">
               <div class="agent-col">
                 <div class="agent-label" style="color:var(--gov);">Government</div>
@@ -596,12 +446,8 @@ select.ctrl-input { width:80px; flex:none; cursor:pointer; }
             </div>
           </div>
         </div>
-        <!-- Semantic Tagging — SỐ LIỆU THỰC TẾ từ accuracy_report.json -->
         <div class="panel" style="padding:0;">
-          <div class="panel-hd" style="padding:18px 24px;margin-bottom:0;">
-            <div class="panel-title">Semantic Tagging Accuracy — n = 193 mẫu (accuracy_report.json)</div>
-            <span class="badge badge-blue">Enhanced Rule-Based</span>
-          </div>
+          <div class="panel-hd" style="padding:18px 24px;margin-bottom:0;"><div class="panel-title">Semantic Tagging Accuracy — n = 193 mẫu (accuracy_report.json)</div><span class="badge badge-blue">Enhanced Rule-Based</span></div>
           <div class="acc-grid" style="padding:24px;">
             <div class="acc-col">
               <div class="acc-label" style="color:var(--gov);">Legal Tagging (n=100) — Overall F1: 74.9%</div>
@@ -625,27 +471,35 @@ select.ctrl-input { width:80px; flex:none; cursor:pointer; }
       </div>
     </div>
 
-    <!-- ══════ PAGE T2 ══════ -->
+    <!-- PAGE T2 -->
     <div class="page" id="page-t2">
       <div class="page-hero">
         <div class="page-title">Tranh Luận Đa Agent</div>
-        <div class="page-desc">3 vòng tranh luận có cấu trúc — Trình bày → Phản biện chéo → Bảo vệ lập luận. Moderator điều phối trung lập · Expert Council phân tích độc lập sau 3 vòng.</div>
+        <div class="page-desc">Replay kết quả thực nghiệm từ hệ thống MAD-Policy — 3 vòng tranh luận có cấu trúc · Trình bày → Phản biện chéo → Bảo vệ lập luận. Dữ liệu từ benchmark_results_vi.json (n=30).</div>
       </div>
       <div class="page-body">
+
+        <!-- Replay info banner -->
+        <div style="background:rgba(74,158,92,0.06);border:1px solid rgba(74,158,92,0.2);border-radius:6px;padding:14px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+          <span class="replay-badge">Dữ liệu thực</span>
+          <span style="font-size:13px;color:var(--dim);">Kết quả bên dưới được replay từ các cuộc tranh luận thực tế đã chạy trên hệ thống MAD-Policy — không gọi API tại thời điểm demo.</span>
+          <span style="font-size:13px;font-family:'DM Mono',monospace;color:var(--muted);margin-left:auto;">coherence=8 · factuality=9 · citations=21</span>
+        </div>
+
+        <!-- Question selector -->
         <div class="ctrl-strip">
           <div class="ctrl-label">Câu hỏi:</div>
-          <input type="text" id="pq" class="ctrl-input" value="Liệu Việt Nam có nên áp thuế carbon 10 USD/tCO2 lên ngành dệt may từ năm 2026?">
-          <div class="ctrl-label">Vòng:</div>
-          <select id="rds" class="ctrl-input"><option>2</option><option selected>3</option><option>4</option></select>
-          <button class="btn btn-white" id="sbtn" onclick="startDebate()">▶ Bắt đầu</button>
+          <select id="q-select" class="ctrl-select" onchange="onQChange()"></select>
+          <button class="btn btn-white" id="sbtn" onclick="startReplay()">▶ Bắt đầu</button>
           <button class="btn btn-ghost" onclick="resetD()">↺ Đặt lại</button>
         </div>
-        <div id="err-box" class="err-box"></div>
+
         <div class="prog-strip">
-          <div class="prog-lbl">Tiến trình · Gov→Ent×3 vòng + Mod×2 + Expert + Mod final = 10 lượt</div>
+          <div class="prog-lbl" id="prog-lbl">Tiến trình · Gov→Ent×3 vòng + Mod×2 + Expert + Mod final</div>
           <div class="prog-track"><div class="prog-fill" id="prog" style="width:0%"></div></div>
           <div class="prog-status" id="rlbl">Chờ bắt đầu</div>
         </div>
+
         <div class="debate-cols">
           <div class="debate-col">
             <div class="debate-col-header">
@@ -662,9 +516,11 @@ select.ctrl-input { width:80px; flex:none; cursor:pointer; }
             <div class="debate-feed" id="eb"></div>
           </div>
         </div>
+
         <div id="t3-nav-btn" style="display:none;">
           <button class="btn btn-white" style="width:100%;padding:14px;font-size:15px;letter-spacing:2px;" onclick="go('t3')">→ XEM KẾT QUẢ TIER 3: TỔNG HỢP CHÍNH SÁCH</button>
         </div>
+
         <div class="result-panel" id="cw">
           <div class="result-header"><div class="result-name">Expert Council — Phân tích độc lập sau 3 vòng</div><span class="badge" style="color:var(--council);border-color:rgba(200,146,42,0.3);">Analyze · Compare · Synthesize</span></div>
           <div class="result-body" id="ctxt"></div>
@@ -676,7 +532,7 @@ select.ctrl-input { width:80px; flex:none; cursor:pointer; }
       </div>
     </div>
 
-    <!-- ══════ PAGE T3 ══════ -->
+    <!-- PAGE T3 -->
     <div class="page" id="page-t3">
       <div class="page-hero">
         <div class="page-title">Tổng Hợp Chính Sách</div>
@@ -684,19 +540,13 @@ select.ctrl-input { width:80px; flex:none; cursor:pointer; }
       </div>
       <div id="t3-empty" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;padding:60px 40px;">
         <div style="font-family:'Bebas Neue',sans-serif;font-size:48px;font-weight:700;color:var(--line-hi);letter-spacing:3px;">CHƯA CÓ DỮ LIỆU</div>
-        <div style="font-size:15px;color:var(--muted);text-align:center;max-width:400px;line-height:1.7;">Tier 3 sẽ tự động điền sau khi tranh luận ở Tier 2 hoàn tất.</div>
-        <button class="btn btn-ghost" onclick="go('t2')">→ Đến Tier 2 để chạy debate</button>
+        <div style="font-size:15px;color:var(--muted);text-align:center;max-width:400px;line-height:1.7;">Tier 3 sẽ tự động điền sau khi replay tranh luận ở Tier 2 hoàn tất.</div>
+        <button class="btn btn-ghost" onclick="go('t2')">→ Đến Tier 2 để replay debate</button>
       </div>
       <div id="t3-loading" style="flex:1;display:none;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:60px 40px;">
-        <div style="font-size:15px;color:var(--muted);" id="t3-load-msg">Đang tổng hợp kết quả từ debate...</div>
-        <div style="width:200px;height:1px;background:var(--bg4);overflow:hidden;position:relative;"><div style="position:absolute;left:-100%;top:0;width:100%;height:100%;background:linear-gradient(90deg,transparent,var(--council),transparent);animation:sweep 1.2s ease infinite;"></div></div>
-        <div style="width:100%;max-width:600px;margin-top:20px;display:flex;flex-direction:column;gap:10px;">
-          <div class="skeleton skeleton-line-lg" style="width:40%;"></div>
-          <div class="skeleton skeleton-block"></div>
-          <div class="skeleton skeleton-line" style="width:70%;"></div>
-          <div class="skeleton skeleton-line-sm"></div>
-          <div class="skeleton skeleton-block" style="height:50px;"></div>
-        </div>
+        <div style="font-size:15px;color:var(--muted);" id="t3-load-msg">Đang tải kết quả Tier 3...</div>
+        <div style="width:200px;height:1px;background:var(--bg4);overflow:hidden;position:relative;"><div style="position:absolute;left:-100%;top:0;width:100%;height:100%;background:linear-gradient(90deg,transparent,var(--council),transparent);animation:sweepAnim 1.2s ease infinite;"></div></div>
+        <style>@keyframes sweepAnim{to{left:100%}}</style>
       </div>
       <div id="t3-content" class="page-body" style="display:none;">
         <div>
@@ -726,25 +576,21 @@ select.ctrl-input { width:80px; flex:none; cursor:pointer; }
           <div class="panel" style="padding:0 24px;" id="t3-evidence"></div>
         </div>
         <div>
-          <div class="sec-header"><div style="display:flex;align-items:baseline;gap:16px;"><div class="sec-num">05</div><div class="sec-title">Hỗ trợ Ra quyết định</div></div><div class="sec-right" style="gap:8px;"><button class="btn btn-ghost" style="font-size:13px;padding:7px 12px;" onclick="copyJSON()">⎘ Copy JSON</button><button class="btn btn-ghost" style="font-size:15px;padding:7px 14px;" onclick="exportR()">↓ Xuất báo cáo</button></div></div>
-          <div style="display:grid;grid-template-columns:1fr 260px;gap:1px;">
-            <div class="panel"><div id="t3-rec-title" style="font-size:20px;font-weight:600;color:var(--white);line-height:1.4;margin-bottom:14px;"></div><div id="t3-rec-body" style="font-size:15px;color:var(--muted);line-height:1.75;border-left:2px solid var(--line-md);padding-left:14px;"></div><div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap;" id="t3-badges"></div></div>
-            <div class="panel">
-              <div style="display:flex;flex-direction:column;align-items:center;padding:24px;">
-                <div class="cons-ring-wrap"><svg width="160" height="160" viewBox="0 0 160 160"><circle cx="80" cy="80" r="64" fill="none" stroke="var(--bg4)" stroke-width="2"/><circle cx="80" cy="80" r="64" fill="none" stroke="url(#cgrad2)" stroke-width="2" stroke-dasharray="402" stroke-dashoffset="200" stroke-linecap="square" transform="rotate(-90 80 80)" id="t3-ring"/><defs><linearGradient id="cgrad2" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="var(--gov)"/><stop offset="50%" stop-color="var(--council)"/><stop offset="100%" stop-color="var(--ent)"/></linearGradient></defs></svg><div class="cons-ring-label"><div class="cons-pct" id="t3-cons-pct">—</div><div class="cons-sub">đồng thuận</div></div></div>
-                <div style="width:100%;margin-top:20px;" id="t3-agent-breakdown"></div>
-              </div>
-            </div>
+          <div class="sec-header"><div style="display:flex;align-items:baseline;gap:16px;"><div class="sec-num">05</div><div class="sec-title">Hỗ trợ Ra quyết định</div></div><div class="sec-right" style="gap:8px;"><button class="btn btn-ghost" style="font-size:15px;padding:7px 14px;" onclick="exportR()">↓ Xuất báo cáo</button></div></div>
+          <div class="panel">
+            <div id="t3-rec-title" style="font-size:20px;font-weight:600;color:var(--white);line-height:1.4;margin-bottom:14px;"></div>
+            <div id="t3-rec-body" style="font-size:15px;color:var(--muted);line-height:1.75;border-left:2px solid var(--line-md);padding-left:14px;"></div>
+            <div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap;" id="t3-badges"></div>
           </div>
         </div>
         <div>
-          <div class="sec-header"><div style="display:flex;align-items:baseline;gap:16px;"><div class="sec-num" style="color:rgba(240,160,80,0.2);">06</div><div class="sec-title" style="color:var(--gap);">Xác định khoảng trống tài liệu</div></div><div class="sec-right"><span class="badge badge-gap" id="t3-gap-badge">gaps detected</span></div></div>
+          <div class="sec-header"><div style="display:flex;align-items:baseline;gap:16px;"><div class="sec-num" style="color:rgba(240,160,80,0.2);">06</div><div class="sec-title" style="color:var(--gap);">Khoảng trống tài liệu</div></div><div class="sec-right"><span class="badge badge-gap" id="t3-gap-badge">gaps detected</span></div></div>
           <div class="panel" style="padding:0 24px;" id="t3-gaps"></div>
         </div>
       </div>
     </div>
 
-    <!-- ══════ DASHBOARD ══════ -->
+    <!-- DASHBOARD -->
     <div class="page" id="page-db">
       <div class="page-hero">
         <div class="hero-eyebrow" style="color:var(--council);">n=30 · Paired t-test · Cohen's d · LLM Judge · 100% Success Rate</div>
@@ -752,8 +598,6 @@ select.ctrl-input { width:80px; flex:none; cursor:pointer; }
         <div class="page-desc">So sánh MAD-Policy với Single-Agent Zero-shot Baseline trên 5 chỉ số định lượng — Word Count, Citations, Factuality, Diversity và thời gian xử lý. Dữ liệu từ benchmark_results_vi.json (n=30).</div>
       </div>
       <div class="page-body">
-
-        <!-- KPI Strip — CANONICAL values -->
         <div class="kpi-strip">
           <div class="kpi-cell"><div class="kpi-label">Knowledge Base</div><div class="kpi-val">1.690</div><div class="kpi-sub">docs · 384-dim · ChromaDB</div></div>
           <div class="kpi-cell"><div class="kpi-label">Citations (+715%)</div><div class="kpi-val" style="color:var(--gov);">17.7</div><div class="kpi-sub">vs 2.2 baseline · p&lt;0.001</div></div>
@@ -761,131 +605,39 @@ select.ctrl-input { width:80px; flex:none; cursor:pointer; }
           <div class="kpi-cell"><div class="kpi-label">Diversity Score</div><div class="kpi-val" style="color:var(--council);">0.675</div><div class="kpi-sub">Jaccard · Multi-Agent only</div></div>
           <div class="kpi-cell"><div class="kpi-label">Avg Time / Debate</div><div class="kpi-val" style="color:var(--orange);">170.0s</div><div class="kpi-sub">+235.5% vs ~50.7s baseline</div></div>
         </div>
-
-        <!-- FIGURE 1: WC grouped bar | Citations bar | Diversity hist | Scatter -->
         <div>
-          <div class="sec-header">
-            <div style="display:flex;align-items:baseline;gap:16px;"><div class="sec-num">F1</div><div class="sec-title">Figure 1 — Phân tích chỉ số chính</div></div>
-            <div class="sec-right"><span class="badge badge-green">n=30 · benchmark_results_vi.json</span></div>
-          </div>
+          <div class="sec-header"><div style="display:flex;align-items:baseline;gap:16px;"><div class="sec-num">F1</div><div class="sec-title">Figure 1 — Phân tích chỉ số chính</div></div><div class="sec-right"><span class="badge badge-green">n=30 · benchmark_results_vi.json</span></div></div>
           <div class="g2" style="gap:1px;">
-            <!-- (a) Word Count grouped bar -->
-            <div class="panel">
-              <div class="panel-hd"><div class="panel-title">(a) Word Count — MAD vs Baseline</div><span class="badge badge-green">Cohen's d=24.487 · Large</span></div>
-              <div class="chart-wrap-lg"><canvas id="chartWC"></canvas></div>
-              <div class="chart-caption">MAD avg=2,888.0 ± 80.2 · Baseline avg=490 · +495.6%</div>
-            </div>
-            <!-- (b) Citations bar + gold connector line -->
-            <div class="panel">
-              <div class="panel-hd"><div class="panel-title">(b) Citations per Debate</div><span class="badge badge-green">+715% · Cohen's d=7.573</span></div>
-              <div class="chart-wrap-lg"><canvas id="chartCit"></canvas></div>
-              <div class="chart-caption">MAD avg=17.7 ± 1.9 · Baseline=2.2 · p&lt;0.001***</div>
-            </div>
-            <!-- (c) Diversity histogram -->
-            <div class="panel">
-              <div class="panel-hd"><div class="panel-title">(c) Diversity Score Distribution</div><span class="badge" style="color:var(--council);border-color:rgba(200,146,42,0.3);">mean=0.675 · median=0.675</span></div>
-              <div class="chart-wrap-lg"><canvas id="chartDiv"></canvas></div>
-              <div class="chart-caption">Jaccard similarity · bins [0.600–0.750] · n=30 debates</div>
-            </div>
-            <!-- (d) Scatter -->
-            <div class="panel">
-              <div class="panel-hd"><div class="panel-title">(d) Coherence vs Factuality Scatter</div><span class="badge badge-blue">LLM Judge 1–10</span></div>
-              <div class="chart-wrap-lg"><canvas id="chartCF"></canvas></div>
-              <div class="chart-caption">MAD: coh=8, fact=9 (26/30) · Baseline: coh=9.5–10, fact=8.0</div>
-            </div>
+            <div class="panel"><div class="panel-hd"><div class="panel-title">(a) Word Count — MAD vs Baseline</div><span class="badge badge-green">Cohen's d=24.487 · Large</span></div><div class="chart-wrap-lg"><canvas id="chartWC"></canvas></div><div class="chart-caption">MAD avg=2,888.0 ± 80.2 · Baseline avg=490 · +495.6%</div></div>
+            <div class="panel"><div class="panel-hd"><div class="panel-title">(b) Citations per Debate</div><span class="badge badge-green">+715% · Cohen's d=7.573</span></div><div class="chart-wrap-lg"><canvas id="chartCit"></canvas></div><div class="chart-caption">MAD avg=17.7 ± 1.9 · Baseline=2.2 · p&lt;0.001***</div></div>
+            <div class="panel"><div class="panel-hd"><div class="panel-title">(c) Diversity Score Distribution</div><span class="badge" style="color:var(--council);border-color:rgba(200,146,42,0.3);">mean=0.675 · median=0.675</span></div><div class="chart-wrap-lg"><canvas id="chartDiv"></canvas></div><div class="chart-caption">Jaccard similarity · bins [0.600–0.750] · n=30 debates</div></div>
+            <div class="panel"><div class="panel-hd"><div class="panel-title">(d) Coherence vs Factuality Scatter</div><span class="badge badge-blue">LLM Judge 1–10</span></div><div class="chart-wrap-lg"><canvas id="chartCF"></canvas></div><div class="chart-caption">MAD: coh=8, fact=9 (26/30) · Baseline: coh=9.5–10, fact=8.0</div></div>
           </div>
         </div>
-
-        <!-- FIGURE 2: Cohen's d bar | WC per Q | Cit per Q -->
         <div>
-          <div class="sec-header">
-            <div style="display:flex;align-items:baseline;gap:16px;"><div class="sec-num">F2</div><div class="sec-title">Figure 2 — Effect Size & Per-Question Improvement</div></div>
-            <div class="sec-right"><span class="badge badge-blue">Cohen (1988): Large ≥ 0.8</span></div>
-          </div>
+          <div class="sec-header"><div style="display:flex;align-items:baseline;gap:16px;"><div class="sec-num">F2</div><div class="sec-title">Figure 2 — Effect Size & Per-Question Improvement</div></div><div class="sec-right"><span class="badge badge-blue">Cohen (1988): Large ≥ 0.8</span></div></div>
           <div class="g2" style="gap:1px;">
-            <!-- (a) Cohen's d horizontal bar -->
-            <div class="panel">
-              <div class="panel-hd"><div class="panel-title">(a) Cohen's d Effect Size</div><span class="badge badge-green">d=0.8 threshold</span></div>
-              <div class="chart-wrap-lg"><canvas id="chartCohen"></canvas></div>
-              <div class="chart-caption">WC: d=24.487 · Cit: d=7.573 · Time: d=0.326 (Negligible)</div>
-            </div>
-            <!-- (b) WC improvement per Q -->
-            <div class="panel">
-              <div class="panel-hd"><div class="panel-title">(b) Word Count Improvement per Question</div><span class="badge badge-green">avg +495.6%</span></div>
-              <div class="chart-wrap-lg"><canvas id="chartWCQ"></canvas></div>
-              <div class="chart-caption">30 câu hỏi · mean line = 495.6%</div>
-            </div>
-            <!-- (c) Citation improvement per Q -->
-            <div class="panel" style="grid-column:1/-1;">
-              <div class="panel-hd"><div class="panel-title">(c) Citation Improvement per Question (%)</div><span class="badge badge-green">avg +715%</span></div>
-              <div class="chart-wrap-lg"><canvas id="chartCitQ"></canvas></div>
-              <div class="chart-caption">30 câu hỏi · mean line = 715% · range 536%–855%</div>
-            </div>
+            <div class="panel"><div class="panel-hd"><div class="panel-title">(a) Cohen's d Effect Size</div><span class="badge badge-green">d=0.8 threshold</span></div><div class="chart-wrap-lg"><canvas id="chartCohen"></canvas></div><div class="chart-caption">WC: d=24.487 · Cit: d=7.573 · Time: d=0.326 (Negligible)</div></div>
+            <div class="panel"><div class="panel-hd"><div class="panel-title">(b) Word Count Improvement per Question</div><span class="badge badge-green">avg +495.6%</span></div><div class="chart-wrap-lg"><canvas id="chartWCQ"></canvas></div><div class="chart-caption">30 câu hỏi · mean line = 495.6%</div></div>
+            <div class="panel" style="grid-column:1/-1;"><div class="panel-hd"><div class="panel-title">(c) Citation Improvement per Question (%)</div><span class="badge badge-green">avg +715%</span></div><div class="chart-wrap-lg"><canvas id="chartCitQ"></canvas></div><div class="chart-caption">30 câu hỏi · mean line = 715% · range 536%–855%</div></div>
           </div>
         </div>
-
-        <!-- FIGURE 3: Semantic Tagging -->
         <div>
-          <div class="sec-header">
-            <div style="display:flex;align-items:baseline;gap:16px;"><div class="sec-num">F3</div><div class="sec-title">Figure 3 — Semantic Tagging Accuracy</div></div>
-            <div class="sec-right"><span class="badge badge-blue">accuracy_report.json · n=193</span></div>
-          </div>
+          <div class="sec-header"><div style="display:flex;align-items:baseline;gap:16px;"><div class="sec-num">F3</div><div class="sec-title">Figure 3 — Semantic Tagging Accuracy</div></div><div class="sec-right"><span class="badge badge-blue">accuracy_report.json · n=193</span></div></div>
           <div class="g2" style="gap:1px;">
-            <div class="panel">
-              <div class="panel-hd"><div class="panel-title">(a) Legal Tagging (n=100)</div><span class="badge badge-green">80% threshold</span></div>
-              <div class="chart-wrap-lg"><canvas id="chartLegal"></canvas></div>
-              <div class="chart-caption">Overall F1=74.9% · Clause Type=80.0% · Subjects F1=71.1% · Domains F1=73.6%</div>
-            </div>
-            <div class="panel">
-              <div class="panel-hd"><div class="panel-title">(b) Business Tagging (n=93)</div><span class="badge" style="color:var(--ent);border-color:rgba(200,56,42,0.3);">Focus F1=33.4% ⚠ Low</span></div>
-              <div class="chart-wrap-lg"><canvas id="chartBiz"></canvas></div>
-              <div class="chart-caption">Stance=97.8% · CBAM=93.5% · Focus F1=33.4% (red) · Overall F1=74.9%</div>
-            </div>
+            <div class="panel"><div class="panel-hd"><div class="panel-title">(a) Legal Tagging (n=100)</div><span class="badge badge-green">80% threshold</span></div><div class="chart-wrap-lg"><canvas id="chartLegal"></canvas></div><div class="chart-caption">Overall F1=74.9% · Clause Type=80.0% · Subjects F1=71.1% · Domains F1=73.6%</div></div>
+            <div class="panel"><div class="panel-hd"><div class="panel-title">(b) Business Tagging (n=93)</div><span class="badge" style="color:var(--ent);border-color:rgba(200,56,42,0.3);">Focus F1=33.4% ⚠ Low</span></div><div class="chart-wrap-lg"><canvas id="chartBiz"></canvas></div><div class="chart-caption">Stance=97.8% · CBAM=93.5% · Focus F1=33.4% · Overall F1=74.9%</div></div>
           </div>
         </div>
-
-        <!-- FIGURE 4: MAE LLM Judge -->
         <div>
-          <div class="sec-header">
-            <div style="display:flex;align-items:baseline;gap:16px;"><div class="sec-num">F4</div><div class="sec-title">Figure 4 — LLM Judge Validation</div></div>
-            <div class="sec-right"><span class="badge badge-green">MAE &lt; 0.5 threshold</span></div>
-          </div>
+          <div class="sec-header"><div style="display:flex;align-items:baseline;gap:16px;"><div class="sec-num">F4</div><div class="sec-title">Figure 4 — LLM Judge Validation</div></div><div class="sec-right"><span class="badge badge-green">MAE &lt; 0.5 threshold</span></div></div>
           <div class="g2" style="gap:1px;">
-            <div class="panel">
-              <div class="panel-hd"><div class="panel-title">(a) MAE — LLM Judge vs Human Evaluator</div><span class="badge badge-green">both &lt; 0.5</span></div>
-              <div class="chart-wrap-lg"><canvas id="chartMAE"></canvas></div>
-              <div class="chart-caption">Coherence MAE=0.17 · Factuality MAE=0.10 · MAE=0.5 threshold · MAE=1.0 ref</div>
-            </div>
-            <div class="panel">
-              <div class="panel-hd"><div class="panel-title">(b) Agreement Rate — LLM vs Human</div><span class="badge badge-green">within±1: 100%</span></div>
-              <div class="chart-wrap-lg"><canvas id="chartAgr"></canvas></div>
-              <div class="chart-caption">Coh exact=83.3% / within±1=100% · Fact exact=90.0% / within±1=100%</div>
-            </div>
+            <div class="panel"><div class="panel-hd"><div class="panel-title">(a) MAE — LLM Judge vs Human Evaluator</div><span class="badge badge-green">both &lt; 0.5</span></div><div class="chart-wrap-lg"><canvas id="chartMAE"></canvas></div><div class="chart-caption">Coherence MAE=0.17 · Factuality MAE=0.10</div></div>
+            <div class="panel"><div class="panel-hd"><div class="panel-title">(b) Agreement Rate — LLM vs Human</div><span class="badge badge-green">within±1: 100%</span></div><div class="chart-wrap-lg"><canvas id="chartAgr"></canvas></div><div class="chart-caption">Coh exact=83.3% / within±1=100% · Fact exact=90.0% / within±1=100%</div></div>
           </div>
         </div>
-
-        <!-- FIGURE 5: Correlation Heatmap -->
-        <div>
-          <div class="sec-header">
-            <div style="display:flex;align-items:baseline;gap:16px;"><div class="sec-num">F5</div><div class="sec-title">Figure 5 — Correlation Matrix (Pearson r)</div></div>
-            <div class="sec-right"><span class="badge badge-blue">lower triangle · dark red positive / light blue negative</span></div>
-          </div>
-          <div class="panel">
-            <div class="panel-hd"><div class="panel-title">Tương quan giữa các chỉ số benchmark (n=30)</div></div>
-            <div class="chart-wrap-lg" style="height:300px;"><canvas id="chartHeat"></canvas></div>
-            <div class="chart-caption">WC/Cit=0.15 · WC/Div=0.21 · Cit/Fact=0.18 · Div/Fact=-0.12 · Time/WC=0.21</div>
-          </div>
-        </div>
-
-        <!-- Benchmark Table — CANONICAL -->
         <div class="panel" style="padding:0;">
-          <div class="panel-hd" style="padding:18px 24px;margin-bottom:0;">
-            <div class="panel-title">Bảng tổng hợp benchmark — Paired t-test & Cohen's d</div>
-            <div style="display:flex;align-items:center;gap:8px;">
-              <span class="badge badge-green">n=30 · 100% success</span>
-              <button class="btn btn-ghost" style="font-size:11px;padding:5px 12px;letter-spacing:1.5px;" onclick="exportCSV()">↓ CSV</button>
-            </div>
-          </div>
+          <div class="panel-hd" style="padding:18px 24px;margin-bottom:0;"><div class="panel-title">Bảng tổng hợp benchmark — Paired t-test & Cohen's d</div><div style="display:flex;align-items:center;gap:8px;"><span class="badge badge-green">n=30 · 100% success</span><button class="btn btn-ghost" style="font-size:11px;padding:5px 12px;letter-spacing:1.5px;" onclick="exportCSV()">↓ CSV</button></div></div>
           <div class="overflow-x">
             <table class="bm-table">
               <thead><tr><th>Chỉ số</th><th>MAD-Policy</th><th>Baseline</th><th>Cải thiện</th><th>Cohen's d</th><th>Effect</th></tr></thead>
@@ -899,368 +651,699 @@ select.ctrl-input { width:80px; flex:none; cursor:pointer; }
               </tbody>
             </table>
           </div>
-          <div style="padding:12px 24px;font-size:13px;color:var(--muted);font-style:italic;border-top:1px solid var(--line);">
-            Nguồn: benchmark_results_vi.json · accuracy_report.json · n=30. Cohen (1988): Large d ≥ 0.8. Baseline = Single-Agent Zero-shot GPT-4o-mini.
-          </div>
+          <div style="padding:12px 24px;font-size:13px;color:var(--muted);font-style:italic;border-top:1px solid var(--line);">Nguồn: benchmark_results_vi.json · accuracy_report.json · n=30. Cohen (1988): Large d ≥ 0.8. Baseline = Single-Agent Zero-shot GPT-4o-mini.</div>
         </div>
-
       </div>
     </div>
-
   </main>
 </div>
 
-<!-- API Key Modal -->
-<div class="key-modal-bg" id="key-modal" style="display:none;">
-  <div class="key-modal">
-    <div class="key-modal-title">OpenAI API Key</div>
-    <div class="key-modal-sub">Nhập key để khởi động debate engine. Key chỉ lưu trong bộ nhớ phiên này.</div>
-    <input type="password" class="key-modal-input" id="key-modal-input" placeholder="sk-proj-...">
-    <div class="key-modal-actions">
-      <button class="btn btn-ghost" onclick="document.getElementById('key-modal').style.display='none'">Huỷ</button>
-      <button class="btn btn-white" onclick="confirmKey()">Xác nhận & Bắt đầu</button>
-    </div>
-  </div>
-</div>
-
 <script>
-/* ─── FONT LOAD ─── */
-document.fonts.load('1em "Bebas Neue"').then(()=>document.documentElement.classList.add('fonts-loaded')).catch(()=>document.documentElement.classList.add('fonts-loaded'));
-setTimeout(()=>document.documentElement.classList.add('fonts-loaded'),1500);
+/* ════════════════════════════════════════════════════
+   PRE-LOADED BENCHMARK DATA
+   Thêm câu hỏi từ benchmark_results_vi.json vào đây
+   ════════════════════════════════════════════════════ */
+const DEBATE_DATA = [
+  {
+    id: "Q3",
+    question: "Theo Quyết định 232/QĐ-TTg đã phê duyệt Đề án phát triển thị trường carbon tại Việt Nam với mục tiêu vận hành chính thức vào năm nào?",
+    stats: { word_count: 2643, citations: 11, coherence: 8, factuality: 9, time_seconds: 162.38 },
+    rounds: [
+      {
+        round: 1, name: "Trình bày",
+        gov: `Theo Quyết định 232/QĐ-TTg, Đề án phát triển thị trường carbon tại Việt Nam sẽ chính thức vận hành từ năm 2029. Điều này đánh dấu một bước tiến quan trọng trong nỗ lực của Chính phủ nhằm thực hiện các cam kết quốc tế về giảm phát thải khí nhà kính, đặc biệt là trong khuôn khổ Hiệp định Paris và mục tiêu Net Zero vào năm 2050.
 
-/* ─── THEME ─── */
-function toggleTheme(){const l=document.documentElement.classList.toggle('light');document.getElementById('theme-btn').textContent=l?'☀️':'🌙';localStorage.setItem('mad_theme',l?'light':'dark');}
+Lộ trình chính sách này được thiết lập với một giai đoạn thí điểm kéo dài từ năm 2025 đến hết năm 2028, cho phép các cơ quan chức năng và doanh nghiệp có thời gian chuẩn bị và điều chỉnh trước khi bước vào giai đoạn vận hành chính thức. Cơ sở pháp lý cho việc phát triển thị trường carbon được quy định trong Luật Bảo vệ Môi trường 2020, tạo nền tảng vững chắc cho việc triển khai các cơ chế giao dịch tín chỉ carbon và hạn ngạch phát thải khí nhà kính [Nguồn: Quyết định 232/QĐ-TTg].
 
-/* ─── NAV ─── */
-const pages={t1:{id:'page-t1',lbl:'Tier 01 — Chuẩn Bị Tri Thức'},t2:{id:'page-t2',lbl:'Tier 02 — Tranh Luận Đa Agent'},t3:{id:'page-t3',lbl:'Tier 03 — Tổng Hợp Chính Sách'},db:{id:'page-db',lbl:'Dashboard & Benchmark'}};
-const keys=['t1','t2','t3','db'];
-function go(k){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(pages[k].id).classList.add('active');document.getElementById('crumb').textContent=pages[k].lbl;document.querySelectorAll('.nav-item').forEach((el,i)=>el.classList.toggle('active',keys[i]===k));if(k==='db')setTimeout(initCharts,120);}
-function toggleSidebar(){const sb=document.getElementById('sidebar'),btn=sb.querySelector('.sb-toggle');sb.classList.toggle('collapsed');btn.textContent=sb.classList.contains('collapsed')?'›':'‹';}
-function tick(){document.getElementById('clk').textContent=new Date().toLocaleTimeString('vi-VN',{hour:'2-digit',minute:'2-digit',second:'2-digit'});}
-setInterval(tick,1000);tick();
+Chính phủ cam kết sẽ phối hợp chặt chẽ giữa các bộ, ngành để đảm bảo việc thực hiện hiệu quả các mục tiêu này, đồng thời bảo vệ môi trường và thúc đẩy phát triển kinh tế bền vững [Nguồn: Nghị định 06/2022/NĐ-CP].`,
+        ent: `Theo Quyết định 232/QĐ-TTg, thị trường carbon tại Việt Nam dự kiến sẽ bắt đầu vận hành chính thức từ năm 2029, sau giai đoạn thí điểm kéo dài từ 2025 đến hết năm 2028. Đối với các doanh nghiệp nhỏ và vừa (SME) trong ngành dệt may, có một số quan ngại chính liên quan đến việc triển khai thị trường carbon.
 
-/* ─── LOADING ─── */
-window.addEventListener('load',()=>{
-  if(localStorage.getItem('mad_theme')==='light'){document.documentElement.classList.add('light');const b=document.getElementById('theme-btn');if(b)b.textContent='☀️';}
-  setTimeout(()=>{const o=document.getElementById('loading');o.style.opacity='0';setTimeout(()=>{o.style.display='none';initChartKB();},500);},1400);
+Thứ nhất, chi phí tuân thủ quy định về phát thải khí nhà kính có thể tạo áp lực lớn lên các SME, vốn đã hoạt động với biên lợi nhuận mỏng. Việc đầu tư vào công nghệ xanh và các giải pháp giảm phát thải có thể vượt quá khả năng tài chính của nhiều doanh nghiệp nhỏ.
+
+Thứ hai, năng lực đo lường và báo cáo phát thải hiện tại của các SME còn hạn chế, điều này có thể dẫn đến việc không đáp ứng được các yêu cầu của thị trường carbon.
+
+Để hỗ trợ các SME, Chính phủ cần cung cấp các chương trình đào tạo và hỗ trợ tài chính nhằm nâng cao năng lực công nghệ và giảm thiểu chi phí tuân thủ. [Nguồn: Quyết định 232/QĐ-TTg]`,
+        mod: `The Business Agent highlights concerns regarding the implementation of the carbon market in Vietnam, particularly for small and medium-sized enterprises (SMEs) in the textile industry. Key issues include the financial burden of compliance with greenhouse gas emission regulations and the limited capacity of SMEs to measure and report emissions, which may hinder their participation in the carbon market. The Agent suggests that government support through training and financial assistance is essential for SMEs to remain competitive.
+
+Invite Government to respond: How feasible is it for the government to provide adequate support to SMEs in terms of training and financial assistance to comply with carbon market regulations?`
+      },
+      {
+        round: 2, name: "Phản biện chéo",
+        gov: `Lập luận của Doanh nghiệp nhấn mạnh rằng việc triển khai thị trường carbon có thể tạo ra áp lực tài chính lớn đối với các doanh nghiệp nhỏ và vừa (SME) trong ngành dệt may, do chi phí tuân thủ quy định về phát thải khí nhà kính và năng lực đo lường hạn chế.
+
+Tuy nhiên, có hai điểm yếu trong lập luận này. Thứ nhất, mặc dù chi phí tuân thủ có thể là một thách thức, nhưng việc đầu tư vào công nghệ xanh không chỉ giúp giảm phát thải mà còn có thể tạo ra lợi thế cạnh tranh lâu dài cho các SME thông qua việc nâng cao hiệu suất và giảm chi phí vận hành trong tương lai. Thứ hai, năng lực đo lường và báo cáo phát thải có thể được cải thiện thông qua các chương trình hỗ trợ từ Chính phủ, như đào tạo và cung cấp công nghệ.
+
+Chính phủ đã cam kết phối hợp chặt chẽ giữa các bộ, ngành để phát triển các cơ chế hỗ trợ cho các doanh nghiệp, đặc biệt là trong việc nâng cao năng lực và giảm thiểu chi phí tuân thủ [Nguồn: Quyết định 232/QĐ-TTg; Nguồn: Nghị định 06/2022/NĐ-CP].`,
+        ent: `Lập luận của Chính phủ nhấn mạnh rằng việc đầu tư vào công nghệ xanh sẽ tạo ra lợi thế cạnh tranh lâu dài cho các doanh nghiệp nhỏ và vừa (SME) trong ngành dệt may, đồng thời cho rằng năng lực đo lường và báo cáo phát thải có thể được cải thiện thông qua các chương trình hỗ trợ từ Chính phủ.
+
+Tuy nhiên, có hai điểm yếu trong lập luận này. Thứ nhất, việc đầu tư vào công nghệ xanh đòi hỏi một khoản chi phí ban đầu lớn, điều này có thể vượt quá khả năng tài chính của nhiều SME, đặc biệt trong bối cảnh biên lợi nhuận mỏng của ngành dệt may. Thứ hai, mặc dù Chính phủ cam kết cung cấp hỗ trợ, nhưng thực tế cho thấy năng lực đo lường phát thải của các SME hiện tại còn hạn chế, và việc cải thiện này cần thời gian và nguồn lực đáng kể.
+
+Theo thông tin từ các tài liệu, ngành dệt may chiếm khoảng 16% GDP của Việt Nam và là một trong những ngành gây ô nhiễm lớn nhất, điều này cho thấy áp lực tài chính từ việc tuân thủ quy định có thể ảnh hưởng nghiêm trọng đến khả năng cạnh tranh của các SME [Nguồn: Greening Viet Nam's Textile And Garment]. Hơn nữa, việc thiếu thông tin và công nghệ trong đo lường phát thải có thể dẫn đến việc không đáp ứng được yêu cầu của thị trường carbon [Nguồn: Border Carbon Adjustments Vietnam].`,
+        mod: `The Business Agent argues that while the government claims that investment in green technology will provide long-term competitive advantages for SMEs in the textile industry, there are significant challenges — the high initial costs of green technology and the current limitations in their capacity to measure and report emissions.
+
+Invite Government to respond: How does the government plan to address the financial barriers faced by SMEs in adopting green technology and improving emissions measurement capabilities?`
+      },
+      {
+        round: 3, name: "Bảo vệ lập luận",
+        gov: `Chúng tôi thừa nhận rằng áp lực tài chính từ việc tuân thủ quy định về phát thải khí nhà kính có thể là một thách thức đối với các doanh nghiệp nhỏ và vừa (SME) trong ngành dệt may. Tuy nhiên, điều quan trọng là chính sách phát triển thị trường carbon tại Việt Nam, theo Quyết định 232/QĐ-TTg, đã được thiết lập với lộ trình rõ ràng, bao gồm giai đoạn thí điểm từ năm 2025 đến hết năm 2028, trước khi chính thức vận hành từ năm 2029. Lộ trình này không chỉ đảm bảo sự chuẩn bị cần thiết cho các doanh nghiệp mà còn phù hợp với các cam kết quốc tế của Việt Nam theo Hiệp định Paris và mục tiêu Net Zero vào năm 2050 [Nguồn: Quyết định 232/QĐ-TTg].
+
+Một điểm có thể đồng thuận giữa hai bên là việc Chính phủ cần triển khai các chương trình hỗ trợ tài chính và đào tạo nhằm nâng cao năng lực cho các SME, giúp họ thích ứng với các yêu cầu của thị trường carbon. Kết luận, Chính phủ cam kết thực hiện lộ trình phát triển thị trường carbon một cách hiệu quả, bảo đảm sự phát triển bền vững cho ngành dệt may và nền kinh tế quốc gia [Nguồn: Nghị định 06/2022/NĐ-CP].`,
+        ent: `Chúng tôi ghi nhận rằng Chính phủ đã thiết lập một lộ trình rõ ràng cho việc phát triển thị trường carbon tại Việt Nam, bao gồm giai đoạn thí điểm từ năm 2025 đến hết năm 2028, trước khi chính thức vận hành từ năm 2029. Tuy nhiên, lập luận của chúng tôi vẫn nhấn mạnh rằng chi phí tuân thủ quy định về phát thải khí nhà kính có thể tạo ra áp lực tài chính lớn đối với các doanh nghiệp nhỏ và vừa (SME) trong ngành dệt may. Việc đầu tư vào công nghệ xanh không chỉ yêu cầu chi phí ban đầu cao mà còn đòi hỏi thời gian để SMEs có thể nâng cao năng lực đo lường và báo cáo phát thải, điều này có thể làm giảm khả năng cạnh tranh của họ trong ngắn hạn.
+
+Một điểm có thể đồng thuận giữa hai bên là sự cần thiết phải triển khai các chương trình hỗ trợ tài chính và đào tạo từ Chính phủ, nhằm giúp SMEs thích ứng với các yêu cầu của thị trường carbon. Kết luận, mặc dù lộ trình phát triển thị trường carbon là cần thiết, nhưng cần phải cân nhắc kỹ lưỡng về tác động kinh tế thực tế đối với các SME [Nguồn: Quyết định 232/QĐ-TTg; Nguồn: Nghị định 06/2022/NĐ-CP].`
+      }
+    ],
+    expert: `### Tóm tắt lập trường Chính phủ
+
+Trong ba vòng tranh luận, Chính phủ khẳng định rằng theo Quyết định 232/QĐ-TTg, Đề án phát triển thị trường carbon tại Việt Nam sẽ chính thức vận hành từ năm 2029, sau một giai đoạn thí điểm kéo dài từ năm 2025 đến hết năm 2028. Chính phủ nhấn mạnh rằng lộ trình này không chỉ thể hiện cam kết của Việt Nam trong việc giảm phát thải khí nhà kính theo Hiệp định Paris và mục tiêu Net Zero vào năm 2050 mà còn tạo cơ sở pháp lý vững chắc cho việc triển khai các cơ chế giao dịch tín chỉ carbon. Chính phủ cam kết phối hợp chặt chẽ giữa các bộ, ngành để đảm bảo việc thực hiện hiệu quả các mục tiêu này [Nguồn: Quyết định 232/QĐ-TTg; Nguồn: Nghị định 06/2022/NĐ-CP].
+
+### Tóm tắt lập trường Doanh nghiệp
+
+Lập luận của doanh nghiệp trong ba vòng tranh luận tập trung vào những thách thức tài chính mà các doanh nghiệp nhỏ và vừa (SME) trong ngành dệt may phải đối mặt khi triển khai thị trường carbon. Họ cho rằng chi phí tuân thủ quy định về phát thải khí nhà kính và năng lực đo lường hạn chế có thể tạo ra áp lực lớn. Tuy nhiên, doanh nghiệp cũng nhận thấy rằng đầu tư vào công nghệ xanh có thể mang lại lợi thế cạnh tranh lâu dài. Doanh nghiệp đồng thuận rằng cần có các chương trình hỗ trợ tài chính và đào tạo từ Chính phủ để giúp SME thích ứng với các yêu cầu của thị trường carbon [Nguồn: Quyết định 232/QĐ-TTg; Nguồn: Nghị định 06/2022/NĐ-CP].
+
+### So sánh hai quan điểm
+
+Lập trường của Chính phủ và doanh nghiệp đều nhấn mạnh tầm quan trọng của việc phát triển thị trường carbon, nhưng từ những góc độ khác nhau. Chính phủ tập trung vào việc thực hiện các cam kết quốc tế và tạo ra cơ sở pháp lý, trong khi doanh nghiệp lo ngại về áp lực tài chính và khả năng tuân thủ của SME. Tuy nhiên, cả hai bên đều đồng thuận về sự cần thiết của các chương trình hỗ trợ từ Chính phủ.
+
+### Trade-offs & Điểm đồng thuận
+
+**Trade-offs:** Cân bằng giữa việc thực hiện các cam kết quốc tế và khả năng tài chính của SME. Chính phủ nhấn mạnh lợi ích môi trường và phát triển bền vững, trong khi doanh nghiệp lo ngại về chi phí tuân thủ.
+
+**Điểm đồng thuận:** Cả hai bên đều đồng ý rằng cần có các chương trình hỗ trợ tài chính và đào tạo từ Chính phủ để giúp SME thích ứng với yêu cầu của thị trường carbon.
+
+**Bất đồng cốt lõi:** Chính phủ tập trung vào việc thực hiện lộ trình phát triển thị trường carbon, trong khi doanh nghiệp lo ngại về khả năng tài chính và năng lực tuân thủ của SME.
+
+**Tiến triển qua 3 vòng:** Lập luận của Chính phủ ngày càng rõ ràng về lộ trình phát triển thị trường carbon, trong khi doanh nghiệp đã bắt đầu nhận thức rằng đầu tư vào công nghệ xanh có thể mang lại lợi ích lâu dài, mặc dù vẫn còn lo ngại về chi phí ban đầu.`,
+    moderator_final: `### Summary of Government Position
+The Government's position, as outlined in Decision 232/QĐ-TTg, indicates that Vietnam's carbon market will officially operate from 2029, following a pilot phase from 2025 to 2028. This initiative is part of Vietnam's commitment to international agreements on reducing greenhouse gas emissions, particularly the Paris Agreement and the Net Zero target by 2050. The Government emphasizes a robust legal framework established by the 2020 Environmental Protection Law, which supports carbon credit trading mechanisms. Additionally, the Government is committed to coordinating among various ministries to ensure effective implementation of these goals while promoting sustainable economic development.
+
+### Summary of Business Position
+The Business perspective highlights significant financial challenges faced by small and medium-sized enterprises (SMEs) in the textile industry regarding compliance with greenhouse gas emission regulations. Concerns include the high costs associated with adopting green technologies and the limited capacity of SMEs to measure and report emissions. While acknowledging the potential long-term competitive advantages of investing in green technology, businesses stress the need for government support through training and financial assistance to enhance their capabilities and ensure competitiveness in the emerging carbon market.
+
+### Agreements and Disagreements
+Both parties agree on the necessity of government support programs aimed at enhancing SMEs' capabilities to adapt to carbon market requirements. However, they disagree on the feasibility of SMEs managing the financial burdens associated with compliance and the initial costs of green technology investment. The Government focuses on the broader environmental benefits and legal framework, while businesses emphasize immediate financial pressures and the need for practical support.
+
+### Internal Consistency of Arguments
+The Government's arguments are consistent in promoting a structured approach to developing the carbon market while addressing international commitments. Conversely, the Business arguments reflect a coherent concern about the financial viability of SMEs, acknowledging potential long-term benefits of green investments but emphasizing immediate challenges. Overall, both positions exhibit internal consistency, albeit from different perspectives on the implications of the carbon market for SMEs.`,
+    tier3: {
+      policy_options: {
+        options: [
+          { id:"OPT-1", title:"Thí điểm thị trường carbon (2025–2028)", description:"Triển khai giai đoạn thí điểm cho thị trường carbon từ năm 2025 đến hết năm 2028, nhằm chuẩn bị cho việc vận hành chính thức vào năm 2029. Giai đoạn này sẽ cho phép các doanh nghiệp và cơ quan chức năng điều chỉnh và thích ứng với các yêu cầu mới." },
+          { id:"OPT-2", title:"Hỗ trợ tài chính cho SME ngành dệt may", description:"Cung cấp các chương trình hỗ trợ tài chính và đào tạo cho các doanh nghiệp nhỏ và vừa (SME) trong ngành dệt may để giúp họ tuân thủ các quy định về phát thải khí nhà kính và đầu tư vào công nghệ xanh." },
+          { id:"OPT-3", title:"Cải thiện năng lực MRV cho doanh nghiệp", description:"Triển khai các chương trình nhằm nâng cao năng lực đo lường và báo cáo phát thải (MRV) cho các SME, giúp họ đáp ứng các yêu cầu của thị trường carbon một cách hiệu quả hơn." }
+        ]
+      },
+      pros_cons: {
+        analysis: [
+          {
+            pros: [
+              { point:"Giai đoạn thí điểm từ năm 2025 đến 2028 cho phép các doanh nghiệp và cơ quan chức năng điều chỉnh và thích ứng với các yêu cầu mới, giảm thiểu rủi ro khi vận hành chính thức." },
+              { point:"Cam kết của Chính phủ trong việc giảm phát thải khí nhà kính và thực hiện các mục tiêu quốc tế, tạo niềm tin cho các doanh nghiệp tham gia." },
+              { point:"Hỗ trợ tài chính giúp các SME dễ dàng hơn trong việc tuân thủ quy định và đầu tư vào công nghệ xanh." }
+            ],
+            cons: [
+              { point:"Doanh nghiệp có thể gặp khó khăn trong việc chuẩn bị và thích ứng với các yêu cầu mới trong thời gian thí điểm." },
+              { point:"Chi phí đầu tư cho việc chuyển đổi và tuân thủ có thể là gánh nặng cho các doanh nghiệp, đặc biệt là các SME." },
+              { point:"Chính phủ có thể gặp khó khăn trong việc phân bổ ngân sách cho các chương trình hỗ trợ tài chính." }
+            ]
+          }
+        ]
+      },
+      impact_analysis: {
+        economic: { short_term:"Trong 1-3 năm tới, các SME trong ngành dệt may có thể gặp khó khăn trong việc tuân thủ quy định về phát thải khí nhà kính, dẫn đến áp lực tài chính lớn.", long_term:"Trong 5-10 năm, nếu đầu tư vào công nghệ xanh được thực hiện, các SME có thể cải thiện hiệu suất và giảm chi phí vận hành, từ đó tạo ra lợi thế cạnh tranh lâu dài.", sme_impact:"SME dệt may có thể gặp khó khăn trong việc đáp ứng yêu cầu của thị trường carbon do chi phí tuân thủ cao và năng lực đo lường hạn chế.", competitiveness:"Việc phát triển thị trường carbon có thể tạo ra cơ hội cho các SME nâng cao khả năng cạnh tranh xuất khẩu thông qua việc áp dụng công nghệ xanh.", severity:"high" },
+        environmental: { ghg_reduction:"Tiềm năng giảm phát thải khí nhà kính sẽ tăng lên khi thị trường carbon chính thức vận hành từ năm 2029.", mrv:"Năng lực đo lường, báo cáo và xác minh (MRV) cần được cải thiện thông qua các chương trình hỗ trợ từ Chính phủ.", cbam_alignment:"Mức độ phù hợp với EU CBAM sẽ phụ thuộc vào khả năng tuân thủ của các doanh nghiệp trong việc giảm phát thải.", severity:"medium" },
+        social: { employment:"Có thể có tác động tiêu cực đến việc làm trong ngắn hạn nếu các SME không thể thích ứng với yêu cầu mới.", equity:"Cần có sự công bằng trong việc hỗ trợ giữa SME và doanh nghiệp lớn để đảm bảo rằng SME không bị thiệt thòi trong quá trình chuyển đổi.", severity:"medium" }
+      },
+      evidence: {
+        legal_documents: [
+          { name:"Quyết định 232/QĐ-TTg", relevance:"Xác định thời gian vận hành chính thức của thị trường carbon tại Việt Nam từ năm 2029 và giai đoạn thí điểm từ năm 2025 đến 2028." },
+          { name:"Nghị định 06/2022/NĐ-CP", relevance:"Cung cấp cơ sở pháp lý cho việc triển khai các cơ chế giao dịch tín chỉ carbon." }
+        ],
+        key_facts: [
+          { fact:"Thị trường carbon tại Việt Nam sẽ chính thức vận hành từ năm 2029, sau giai đoạn thí điểm từ năm 2025 đến hết năm 2028.", source:"Quyết định 232/QĐ-TTg" },
+          { fact:"Chính phủ cam kết hỗ trợ tài chính và đào tạo cho các SME để thích ứng với yêu cầu của thị trường carbon.", source:"Nghị định 06/2022/NĐ-CP" },
+          { fact:"Ngành dệt may chiếm khoảng 16% GDP của Việt Nam và là một trong những ngành gây ô nhiễm lớn nhất.", source:"Greening Viet Nam's Textile And Garment" }
+        ]
+      },
+      decision_support: {
+        recommended_option: { option_id:"OPT-1", rationale:"Việc triển khai giai đoạn thí điểm từ năm 2025 đến 2028 sẽ giúp các doanh nghiệp và cơ quan chức năng điều chỉnh và thích ứng với các yêu cầu mới trước khi thị trường carbon chính thức vận hành vào năm 2029. Điều này cũng phù hợp với cam kết của Chính phủ trong việc giảm phát thải khí nhà kính.", conditions:["Cần có sự hỗ trợ tài chính và đào tạo cho các SME để họ có thể tuân thủ quy định.","Cần cải thiện năng lực đo lường và báo cáo phát thải cho các doanh nghiệp."] }
+      },
+      data_gaps: [
+        { title:"Thiếu thông tin về các chương trình hỗ trợ cụ thể cho SME", severity:"high", description:"Chưa có chi tiết cụ thể về các chương trình hỗ trợ tài chính và đào tạo mà Chính phủ sẽ triển khai cho SME ngành dệt may trong giai đoạn thí điểm.", action:"Xây dựng kế hoạch hỗ trợ chi tiết với ngân sách, đối tượng và lộ trình thực hiện cụ thể." },
+        { title:"Thiếu dữ liệu chi phí tuân thủ phát thải cho SME dệt may", severity:"high", description:"Chưa có số liệu định lượng về chi phí trung bình mà SME ngành dệt may phải bỏ ra để tuân thủ quy định carbon market.", action:"Khảo sát chi phí tuân thủ với mẫu 200+ SME dệt may đại diện tại các tỉnh thành chính." },
+        { title:"Năng lực MRV chưa được đánh giá hệ thống", severity:"medium", description:"Hệ thống đo lường, báo cáo và xác minh (MRV) của các SME dệt may Việt Nam chưa được kiểm tra khả năng đáp ứng yêu cầu thị trường carbon.", action:"Triển khai pilot MRV audit với 50 doanh nghiệp dệt may đại diện trong năm 2025." }
+      ]
+    }
+  },
+  {
+    id: "Q8",
+    question: "Theo CBAM, các sản phẩm dệt may xuất khẩu vào EU có bị áp thuế carbon trực tiếp từ 2026 hay không? Nếu không, cơ chế gián tiếp nào có thể ảnh hưởng đến ngành dệt may?",
+    stats: { word_count: 2928, citations: 6, coherence: 8, factuality: 9, time_seconds: 133.18 },
+    rounds: [
+      {
+        round: 1, name: "Trình bày",
+        gov: `Theo cơ chế Điều chỉnh Biên giới Carbon (CBAM) của Liên minh Châu Âu (EU), các sản phẩm dệt may xuất khẩu vào EU sẽ không bị áp thuế carbon trực tiếp từ năm 2026. Tuy nhiên, các doanh nghiệp dệt may Việt Nam sẽ phải đối mặt với các yêu cầu về báo cáo phát thải khí nhà kính, điều này có thể ảnh hưởng đến khả năng cạnh tranh của họ trên thị trường EU.
+
+Luật Bảo vệ Môi trường 2020 đã tạo ra khung pháp lý cho việc xây dựng và thực hiện các cơ chế giảm phát thải khí nhà kính tại Việt Nam, đồng thời cam kết của Việt Nam trong việc đạt được mục tiêu phát thải ròng bằng 0 vào năm 2050 theo Thỏa thuận Paris cũng nhấn mạnh tầm quan trọng của việc cải thiện hiệu quả năng lượng và giảm thiểu phát thải trong ngành công nghiệp dệt may.
+
+Lộ trình chính sách dài hạn sẽ bao gồm việc triển khai các biện pháp hỗ trợ cho ngành dệt may, nhằm nâng cao năng lực giảm phát thải và tuân thủ các tiêu chuẩn quốc tế, đồng thời đảm bảo sự chuyển đổi công bằng và bền vững cho các doanh nghiệp trong bối cảnh toàn cầu hóa và hội nhập kinh tế. [Nguồn: Luật Bảo vệ Môi trường 2020]`,
+        ent: `Theo quy định của Cơ chế Điều chỉnh Carbon Biên giới (CBAM), các sản phẩm dệt may xuất khẩu vào EU sẽ không bị áp thuế carbon trực tiếp từ năm 2026. Tuy nhiên, các doanh nghiệp dệt may, đặc biệt là các doanh nghiệp vừa và nhỏ (SMEs), sẽ phải đối mặt với những thách thức gián tiếp từ yêu cầu về dữ liệu phát thải carbon và tính minh bạch trong chuỗi cung ứng. Việc này có thể gia tăng chi phí tuân thủ và tạo áp lực lên các SME vốn đã có biên lợi nhuận mỏng.
+
+Một trong những quan ngại chính là khả năng cạnh tranh của SMEs so với các doanh nghiệp lớn hơn, vốn có khả năng đầu tư vào công nghệ xanh và quản lý phát thải hiệu quả hơn. Điều này có thể dẫn đến sự chênh lệch trong khả năng tiếp cận thị trường EU, nơi mà yêu cầu về tính bền vững ngày càng nghiêm ngặt.
+
+Chính phủ cần hỗ trợ SMEs thông qua các chính sách khuyến khích đầu tư vào công nghệ xanh, cũng như cung cấp các chương trình đào tạo và tư vấn để nâng cao năng lực đo lường và quản lý phát thải carbon.`,
+        mod: `The Business Agent argues that while the Carbon Border Adjustment Mechanism (CBAM) will not impose direct carbon taxes on Vietnamese textile exports to the EU from 2026, SMEs will face indirect challenges related to carbon emissions data requirements and supply chain transparency. This may increase compliance costs and pressure SMEs, which have thinner profit margins, potentially affecting their competitiveness compared to larger firms that can invest in green technologies.
+
+Invite Government to respond: How feasible is it for the government to implement support measures for SMEs to adapt to the requirements of the CBAM?`
+      },
+      {
+        round: 2, name: "Phản biện chéo",
+        gov: `Lập luận của Doanh nghiệp nhấn mạnh rằng các doanh nghiệp dệt may, đặc biệt là các SME, sẽ gặp khó khăn trong việc tuân thủ yêu cầu về dữ liệu phát thải carbon và tính minh bạch trong chuỗi cung ứng, dẫn đến áp lực gia tăng chi phí và khả năng cạnh tranh giảm sút.
+
+Tuy nhiên, có hai điểm yếu trong lập luận này. Thứ nhất, mặc dù yêu cầu về báo cáo phát thải có thể tạo ra gánh nặng cho các SME, nhưng việc áp dụng các tiêu chuẩn bền vững cũng có thể mở ra cơ hội cho các doanh nghiệp này trong việc tiếp cận các thị trường mới và thu hút đầu tư. Thứ hai, lập luận không xem xét đầy đủ các biện pháp hỗ trợ mà Chính phủ có thể cung cấp, như các chính sách khuyến khích đầu tư vào công nghệ xanh và chương trình đào tạo, nhằm nâng cao năng lực cho các SME.
+
+Chính phủ đã xác định việc xây dựng khung pháp lý cho giảm phát thải khí nhà kính là một phần quan trọng trong chiến lược phát triển bền vững, theo đó, Luật Bảo vệ Môi trường 2020 đã tạo điều kiện cho việc thực hiện các cơ chế giảm phát thải [Nguồn: Luật Bảo vệ Môi trường 2020]. Hơn nữa, việc hỗ trợ SMEs trong việc nâng cao khả năng quản lý phát thải không chỉ giúp duy trì tính cạnh tranh mà còn góp phần vào mục tiêu phát thải ròng bằng 0 vào năm 2050, theo cam kết quốc tế của Việt Nam [Nguồn: Luật Bảo vệ Môi trường 2020].`,
+        ent: `Lập luận của Chính phủ nhấn mạnh rằng yêu cầu báo cáo phát thải khí nhà kính có thể tạo cơ hội cho các doanh nghiệp dệt may, đặc biệt là SMEs, trong việc tiếp cận thị trường mới và thu hút đầu tư, đồng thời cho rằng các biện pháp hỗ trợ của Chính phủ sẽ giúp SMEs duy trì tính cạnh tranh.
+
+Tuy nhiên, có hai điểm yếu trong lập luận này. Thứ nhất, việc áp dụng các tiêu chuẩn bền vững có thể không đảm bảo rằng SMEs sẽ có khả năng cạnh tranh với các doanh nghiệp lớn hơn, vốn có nhiều nguồn lực để đầu tư vào công nghệ xanh và quản lý phát thải. Thứ hai, các biện pháp hỗ trợ từ Chính phủ có thể không đủ nhanh chóng hoặc đủ mạnh để giúp SMEs vượt qua những thách thức này, đặc biệt trong bối cảnh cạnh tranh toàn cầu gia tăng.
+
+Theo một nghiên cứu, SMEs thường gặp khó khăn trong việc đáp ứng các yêu cầu về phát thải khí nhà kính do thiếu nguồn lực và công nghệ phù hợp [Nguồn: Fdi, Export Targets To Propel Sustainability]. Hơn nữa, việc gia tăng chi phí tuân thủ có thể làm giảm khả năng cạnh tranh của SMEs, dẫn đến việc mất thị phần vào tay các doanh nghiệp lớn hơn có khả năng đầu tư vào công nghệ xanh [Nguồn: Sustainable Development Of Textile And Apparel Supply Chain].`,
+        mod: `The Business Agent argues that while the government's emphasis on greenhouse gas reporting may create opportunities for SMEs in the textile industry, it overlooks significant challenges. Specifically, SMEs may struggle to compete with larger firms that have more resources for green technology investments, and government support may not be sufficient or timely to address these challenges, potentially leading to increased compliance costs and market share losses.
+
+Invite Government to respond: How does the government plan to ensure that SMEs can effectively compete under the new carbon tax and CBAM regulations?`
+      },
+      {
+        round: 3, name: "Bảo vệ lập luận",
+        gov: `Chúng tôi ghi nhận rằng các doanh nghiệp dệt may, đặc biệt là SMEs, có thể đối mặt với thách thức trong việc tuân thủ yêu cầu về dữ liệu phát thải carbon và tính minh bạch trong chuỗi cung ứng. Tuy nhiên, lập trường của Chính phủ nhấn mạnh rằng việc xây dựng khung pháp lý cho giảm phát thải khí nhà kính, như được quy định trong Luật Bảo vệ Môi trường 2020, là thiết yếu để đảm bảo tính bền vững lâu dài cho ngành dệt may và đáp ứng các cam kết quốc tế của Việt Nam, bao gồm mục tiêu phát thải ròng bằng 0 vào năm 2050 theo Thỏa thuận Paris.
+
+Chúng tôi cũng nhận thấy rằng có thể đạt được sự đồng thuận về việc cần thiết phải tăng cường hỗ trợ cho SMEs thông qua các chương trình đào tạo và khuyến khích đầu tư vào công nghệ xanh. Điều này không chỉ giúp nâng cao năng lực quản lý phát thải mà còn tạo điều kiện cho các doanh nghiệp này tham gia vào thị trường carbon toàn cầu.
+
+Kết luận, Chính phủ cam kết thực hiện lộ trình chuyển đổi bền vững cho ngành dệt may, đồng thời bảo vệ lợi ích quốc gia và đảm bảo rằng Việt Nam có thể cạnh tranh hiệu quả trên thị trường quốc tế trong bối cảnh yêu cầu về tính bền vững ngày càng gia tăng. [Nguồn: Luật Bảo vệ Môi trường 2020]`,
+        ent: `Chúng tôi ghi nhận rằng việc xây dựng khung pháp lý cho giảm phát thải khí nhà kính là cần thiết để đảm bảo tính bền vững cho ngành dệt may. Tuy nhiên, lập luận của chúng tôi nhấn mạnh rằng chi phí tuân thủ các yêu cầu về dữ liệu phát thải carbon có thể tạo ra gánh nặng tài chính đáng kể cho các doanh nghiệp dệt may, đặc biệt là SMEs, vốn đã phải đối mặt với biên lợi nhuận mỏng và khả năng đầu tư hạn chế vào công nghệ xanh. Năng lực của SMEs trong việc đáp ứng các tiêu chuẩn bền vững sẽ bị hạn chế bởi thiếu hụt nguồn lực và công nghệ, dẫn đến khả năng cạnh tranh giảm sút so với các doanh nghiệp lớn hơn.
+
+Một điểm có thể đồng thuận giữa hai bên là việc cần thiết phải tăng cường hỗ trợ cho SMEs thông qua các chương trình đào tạo và khuyến khích đầu tư vào công nghệ xanh. Điều này không chỉ giúp SMEs nâng cao năng lực quản lý phát thải mà còn tạo điều kiện cho họ tham gia vào thị trường carbon toàn cầu.
+
+Kết luận, chúng tôi khẳng định rằng cần có sự hỗ trợ mạnh mẽ cho SMEs để đảm bảo rằng họ có thể duy trì tính cạnh tranh và đáp ứng các yêu cầu của thị trường quốc tế trong bối cảnh chuyển đổi xanh.`
+      }
+    ],
+    expert: `### Tóm tắt lập trường Chính phủ
+
+Trong ba vòng tranh luận, lập trường của Chính phủ thể hiện sự cam kết mạnh mẽ đối với việc thực hiện các biện pháp giảm phát thải khí nhà kính trong ngành dệt may. Chính phủ khẳng định rằng sản phẩm dệt may xuất khẩu vào EU sẽ không bị áp thuế carbon trực tiếp từ năm 2026, nhưng các doanh nghiệp sẽ phải tuân thủ các yêu cầu về báo cáo phát thải khí nhà kính, điều này có thể ảnh hưởng đến khả năng cạnh tranh của họ. Luật Bảo vệ Môi trường 2020 đã tạo ra khung pháp lý cho việc thực hiện các cơ chế giảm phát thải, đồng thời cam kết đạt mục tiêu phát thải ròng bằng 0 vào năm 2050 theo Thỏa thuận Paris.
+
+Chính phủ nhấn mạnh rằng mặc dù có những thách thức đối với các doanh nghiệp, đặc biệt là SMEs, nhưng việc áp dụng các tiêu chuẩn bền vững cũng có thể mở ra cơ hội cho họ trong việc tiếp cận thị trường mới và thu hút đầu tư.
+
+### Tóm tắt lập trường Doanh nghiệp
+
+Lập trường của doanh nghiệp, đặc biệt là các SME, chủ yếu tập trung vào những thách thức mà họ phải đối mặt khi tuân thủ yêu cầu về dữ liệu phát thải carbon và tính minh bạch trong chuỗi cung ứng. Doanh nghiệp chỉ ra rằng mặc dù có những cơ hội từ việc áp dụng các tiêu chuẩn bền vững, nhưng thực tế cho thấy các SME thường thiếu nguồn lực và khả năng để đáp ứng các yêu cầu này. Họ lo ngại rằng việc không có sự hỗ trợ đầy đủ từ Chính phủ có thể dẫn đến việc mất đi lợi thế cạnh tranh trên thị trường quốc tế.
+
+### So sánh hai quan điểm
+
+Chính phủ tập trung vào việc xây dựng khung pháp lý và cam kết thực hiện các mục tiêu phát thải, trong khi doanh nghiệp nhấn mạnh những thách thức thực tiễn mà họ phải đối mặt. Chính phủ nhìn nhận yêu cầu về báo cáo phát thải như một cơ hội để nâng cao tính bền vững và cạnh tranh, trong khi doanh nghiệp lo ngại về áp lực chi phí và khả năng đáp ứng.
+
+### Trade-offs & Điểm đồng thuận
+
+**Trade-offs:** Giữa việc tuân thủ các yêu cầu về phát thải và khả năng cạnh tranh của doanh nghiệp, đặc biệt là SMEs. Chính phủ muốn thúc đẩy tính bền vững, trong khi doanh nghiệp lo ngại về chi phí và khả năng cạnh tranh.
+
+**Điểm đồng thuận:** Cả hai bên đều nhận thấy sự cần thiết phải hỗ trợ SMEs thông qua các chương trình đào tạo và khuyến khích đầu tư vào công nghệ xanh.
+
+**Bất đồng cốt lõi:** Chính phủ tin rằng yêu cầu về báo cáo phát thải sẽ tạo ra cơ hội, trong khi doanh nghiệp lo ngại rằng điều này có thể dẫn đến áp lực chi phí và giảm khả năng cạnh tranh.
+
+**Tiến triển qua 3 vòng:** Qua ba vòng tranh luận, cả hai bên đã có sự thảo luận sâu sắc hơn về các thách thức và cơ hội, dẫn đến sự đồng thuận về việc cần thiết phải hỗ trợ SMEs, nhưng vẫn còn tồn tại những bất đồng về cách thức và mức độ hỗ trợ cần thiết.`,
+    moderator_final: `### Summary of Government Position
+
+The Government's position emphasizes a strong commitment to implementing greenhouse gas emission reduction measures in the textile industry. It asserts that while carbon taxes will not be directly imposed on Vietnamese textile exports to the EU from 2026, compliance with greenhouse gas reporting requirements may impact competitiveness. The 2020 Environmental Protection Law establishes a legal framework for emission reduction mechanisms and aligns with Vietnam's commitment to achieving net-zero emissions by 2050 under the Paris Agreement. The Government acknowledges challenges faced by SMEs but also highlights potential opportunities for market access and investment attraction through sustainable standards.
+
+### Summary of Business Position
+
+The Business position, particularly that of SMEs, centers on the challenges posed by compliance with carbon emissions data requirements and supply chain transparency. It argues that these demands could lead to increased compliance costs and reduced competitiveness. While acknowledging potential opportunities from sustainable standards, SMEs express concerns about their limited resources and capabilities to meet these requirements without adequate government support.
+
+### Agreements and Disagreements
+
+Both parties agree on the necessity of supporting SMEs through training and investment incentives in green technology. However, they disagree on the implications of greenhouse gas reporting requirements; the Government views them as opportunities for sustainability and competitiveness, while businesses see them as potential burdens that could exacerbate cost pressures and hinder competitiveness.
+
+### Internal Consistency of Arguments
+
+The Government's arguments maintain internal consistency, linking legal frameworks and commitments to support for SMEs. Conversely, while the Business position is coherent in highlighting challenges, it may lack consideration of potential benefits from sustainable practices. Overall, the dialogue reflects a nuanced understanding of the trade-offs involved, with both sides recognizing the importance of support for SMEs amidst differing perspectives on the impact of regulatory requirements.`,
+    tier3: {
+      policy_options: {
+        options: [
+          { id:"OPT-1", title:"Hỗ trợ SMEs trong tuân thủ yêu cầu phát thải", description:"Chính phủ có thể triển khai các chương trình đào tạo và hỗ trợ tài chính cho SMEs nhằm giúp họ tuân thủ các yêu cầu về báo cáo phát thải khí nhà kính và cải thiện tính minh bạch trong chuỗi cung ứng." },
+          { id:"OPT-2", title:"Khuyến khích đầu tư vào công nghệ xanh", description:"Chính phủ có thể áp dụng các chính sách khuyến khích đầu tư vào công nghệ xanh cho ngành dệt may, giúp các doanh nghiệp nâng cao năng lực quản lý phát thải và cải thiện hiệu quả sản xuất." },
+          { id:"OPT-3", title:"Xây dựng khung pháp lý cho phát thải khí nhà kính", description:"Chính phủ cần tiếp tục phát triển và hoàn thiện khung pháp lý cho các cơ chế giảm phát thải khí nhà kính, đảm bảo tính bền vững lâu dài cho ngành dệt may và đáp ứng các cam kết quốc tế." }
+        ]
+      },
+      pros_cons: {
+        analysis: [
+          {
+            pros: [
+              { point:"Sản phẩm dệt may không bị áp thuế carbon trực tiếp từ 2026 — tạo dư địa cho Việt Nam chuẩn bị trước khi CBAM mở rộng sang ngành dệt may." },
+              { point:"Chương trình hỗ trợ SMEs sẽ cải thiện khả năng tuân thủ các yêu cầu về phát thải, từ đó nâng cao tính cạnh tranh trên thị trường EU." },
+              { point:"Tăng cường tính minh bạch trong chuỗi cung ứng sẽ tạo ra niềm tin từ phía người tiêu dùng và đối tác thương mại EU." }
+            ],
+            cons: [
+              { point:"Chi phí triển khai chương trình hỗ trợ có thể gây áp lực lên ngân sách nhà nước." },
+              { point:"SMEs có thể gặp khó khăn trong việc tiếp cận các chương trình hỗ trợ do thiếu thông tin hoặc nguồn lực." },
+              { point:"Doanh nghiệp có thể gặp khó khăn trong việc huy động vốn cho các dự án công nghệ xanh, đặc biệt là SMEs với biên lợi nhuận mỏng." }
+            ]
+          }
+        ]
+      },
+      impact_analysis: {
+        economic: { short_term:"Trong 1-3 năm tới, doanh nghiệp dệt may, đặc biệt là SMEs, có thể gặp khó khăn trong việc tuân thủ yêu cầu báo cáo phát thải, dẫn đến tăng chi phí và giảm khả năng cạnh tranh.", long_term:"Trong 5-10 năm tới, nếu Chính phủ thực hiện các chính sách hỗ trợ hiệu quả, SMEs có thể cải thiện năng lực và tiếp cận thị trường mới, từ đó tăng cường khả năng cạnh tranh.", sme_impact:"SMEs có thể gặp khó khăn trong việc đáp ứng yêu cầu về dữ liệu phát thải, dẫn đến áp lực chi phí và khả năng cạnh tranh giảm sút.", competitiveness:"Khả năng cạnh tranh xuất khẩu có thể bị ảnh hưởng tiêu cực trong ngắn hạn do chi phí tuân thủ tăng cao.", severity:"high" },
+        environmental: { ghg_reduction:"Tiềm năng giảm phát thải có thể tăng lên nếu SMEs áp dụng các tiêu chuẩn bền vững và công nghệ xanh.", mrv:"Năng lực MRV (đo lường, báo cáo và xác minh) của SMEs hiện tại còn hạn chế, cần được cải thiện.", cbam_alignment:"Mức phù hợp với EU CBAM là cao, nhưng yêu cầu báo cáo phát thải có thể tạo ra thách thức cho SMEs.", severity:"medium" },
+        social: { employment:"Tác động việc làm có thể tiêu cực trong ngắn hạn nếu SMEs không thể duy trì hoạt động do chi phí cao.", equity:"Công bằng giữa SMEs và doanh nghiệp lớn có thể bị ảnh hưởng, khi SMEs gặp khó khăn hơn trong việc tuân thủ yêu cầu.", severity:"medium" }
+      },
+      evidence: {
+        legal_documents: [
+          { name:"Luật Bảo vệ Môi trường 2020", relevance:"Tạo ra khung pháp lý cho việc thực hiện các cơ chế giảm phát thải khí nhà kính và cam kết đạt mục tiêu phát thải ròng bằng 0 vào năm 2050." },
+          { name:"CBAM Regulation (EU) 2023/956", relevance:"Xác định các sản phẩm nằm trong phạm vi CBAM từ 2026; dệt may hiện chưa nằm trong danh sách nhưng có thể được mở rộng theo Art. 30." }
+        ],
+        key_facts: [
+          { fact:"Sản phẩm dệt may xuất khẩu vào EU sẽ không bị áp thuế carbon trực tiếp từ năm 2026.", source:"CBAM Regulation (EU) 2023/956" },
+          { fact:"Doanh nghiệp dệt may sẽ phải tuân thủ các yêu cầu về báo cáo phát thải khí nhà kính trong chuỗi cung ứng EU.", source:"tranh luận" },
+          { fact:"Chính phủ cam kết hỗ trợ SMEs thông qua các chính sách khuyến khích đầu tư vào công nghệ xanh và chương trình đào tạo.", source:"Luật Bảo vệ Môi trường 2020" }
+        ]
+      },
+      decision_support: {
+        recommended_option: { option_id:"OPT-1", rationale:"Hỗ trợ SMEs trong tuân thủ yêu cầu phát thải sẽ giúp giảm thiểu áp lực chi phí và cải thiện khả năng cạnh tranh trong ngắn hạn. Điều này cũng góp phần vào việc thực hiện các cam kết về phát thải khí nhà kính.", conditions:["Cần có sự phối hợp chặt chẽ giữa Chính phủ và các doanh nghiệp để triển khai các chương trình hỗ trợ.","Cần đảm bảo tính minh bạch và hiệu quả trong việc sử dụng nguồn lực hỗ trợ."] }
+      },
+      data_gaps: [
+        { title:"Thiếu số liệu tác động cụ thể của yêu cầu báo cáo phát thải đến chi phí doanh nghiệp", severity:"high", description:"Chưa có dữ liệu định lượng về mức tăng chi phí trung bình mà SME dệt may phải gánh chịu khi đáp ứng yêu cầu báo cáo phát thải trong chuỗi cung ứng EU.", action:"Khảo sát 150+ doanh nghiệp dệt may xuất khẩu vào EU về chi phí tuân thủ reporting hiện tại và dự báo." },
+        { title:"Thiếu thông tin về các tiêu chuẩn bền vững cụ thể mà EU yêu cầu", severity:"high", description:"Các yêu cầu cụ thể của EU về tính minh bạch chuỗi cung ứng và báo cáo phát thải cho ngành dệt may chưa được tổng hợp thành tài liệu hướng dẫn phù hợp với ngữ cảnh Việt Nam.", action:"Xây dựng bộ tài liệu hướng dẫn tiếng Việt tổng hợp EU Green Deal, EUDR, CSRD dành cho ngành dệt may." },
+        { title:"Chưa đánh giá khả năng thích ứng của SME với tiêu chuẩn bền vững", severity:"medium", description:"Thiếu nghiên cứu hệ thống về năng lực hiện tại của SME dệt may Việt Nam trong việc đáp ứng các tiêu chuẩn bền vững và báo cáo phát thải của thị trường EU.", action:"Thực hiện baseline assessment năng lực SME dệt may với VITAS và các hiệp hội ngành liên quan." }
+      ]
+    }
+  }
+  // ── Thêm câu hỏi khác từ benchmark_results_vi.json tại đây ──
+];
+
+
+/* ════════════════════════ REPLAY ENGINE ════════════════════════ */
+let isReplaying = false;
+let replayStopped = false;
+let currentT3 = null;
+const w = ms => new Promise(r => setTimeout(r, ms));
+
+// Typewriter effect
+async function typewrite(el, text, speed = 8) {
+  el.innerHTML = '';
+  const cursor = document.createElement('span');
+  cursor.className = 'typing-cursor';
+  el.appendChild(cursor);
+  for (let i = 0; i < text.length; i++) {
+    if (replayStopped) break;
+    cursor.insertAdjacentText('beforebegin', text[i]);
+    el.scrollTop = el.scrollHeight;
+    if (i % 3 === 0) await w(speed);
+  }
+  cursor.remove();
+}
+
+function addMsg(feedId, text, cssClass, label, round) {
+  const feed = document.getElementById(feedId);
+  const block = document.createElement('div');
+  block.className = 'msg-block';
+  const rNames = {1:'Vòng 1',2:'Vòng 2',3:'Vòng 3'};
+  const badgeCls = round ? ` <span class="msg-round-badge badge-r${round}">${rNames[round]||''}</span>` : '';
+  block.innerHTML = `<div class="msg-round">${label}${badgeCls}</div><div class="msg-text ${cssClass}" id="msg-${Date.now()}"></div>`;
+  feed.appendChild(block);
+  feed.scrollTop = feed.scrollHeight;
+  return block.querySelector(`[id^="msg-"]`);
+}
+
+function addThinkDots(feedId, label) {
+  const feed = document.getElementById(feedId);
+  const d = document.createElement('div');
+  d.className = 'think-dots';
+  d.id = 'think-' + feedId;
+  d.innerHTML = `<div class="dots"><span></span><span></span><span></span></div><span>${label} đang lập luận...</span>`;
+  feed.appendChild(d);
+  feed.scrollTop = feed.scrollHeight;
+}
+function removeThinkDots(feedId) {
+  const el = document.getElementById('think-' + feedId);
+  if (el) el.remove();
+}
+
+function setProgress(pct, statusText) {
+  document.getElementById('prog').style.width = pct + '%';
+  document.getElementById('rlbl').textContent = statusText;
+}
+
+async function startReplay() {
+  if (isReplaying) return;
+  const idx = parseInt(document.getElementById('q-select').value);
+  const data = DEBATE_DATA[idx];
+  if (!data) return;
+
+  isReplaying = true;
+  replayStopped = false;
+  currentT3 = null;
+
+  const btn = document.getElementById('sbtn');
+  btn.disabled = true;
+  btn.innerHTML = '<span style="animation:spin .8s linear infinite;display:inline-block;">↻</span> Đang replay...';
+
+  ['gb','eb'].forEach(id => { document.getElementById(id).innerHTML = ''; });
+  document.getElementById('cw').style.display = 'none';
+  document.getElementById('mw').style.display = 'none';
+  document.getElementById('t3-nav-btn').style.display = 'none';
+  setProgress(0, 'Khởi động...');
+
+  // Update stats badge
+  document.getElementById('prog-lbl').textContent =
+    `Q${idx+1} · ${data.stats.word_count} từ · ${data.stats.citations} citations · coh=${data.stats.coherence} · fact=${data.stats.factuality} · ${data.stats.time_seconds}s`;
+
+  const totalRounds = data.rounds.length;
+  // steps: each round has gov + ent, plus moderator transition (except last round)
+  // then expert + moderator_final
+  const totalSteps = totalRounds * 2 + (totalRounds - 1) + 2;
+  let step = 0;
+  const prog = () => { step++; setProgress(Math.round((step / totalSteps) * 100), `Bước ${step}/${totalSteps}`); };
+
+  try {
+    for (const roundData of data.rounds) {
+      const r = roundData.round;
+      const rName = roundData.name;
+
+      // Government
+      setProgress(Math.round((step / totalSteps) * 100), `Vòng ${r} — ${rName} — Government Agent`);
+      addThinkDots('gb', 'Government Agent');
+      await w(600);
+      removeThinkDots('gb');
+      const govEl = addMsg('gb', roundData.gov, 'gov-msg', `Government Agent — Vòng ${r}: ${rName}`, r);
+      await typewrite(govEl, roundData.gov, 6);
+      prog();
+      await w(400);
+
+      if (replayStopped) break;
+
+      // Enterprise
+      setProgress(Math.round((step / totalSteps) * 100), `Vòng ${r} — ${rName} — Enterprise Agent`);
+      addThinkDots('eb', 'Enterprise Agent');
+      await w(600);
+      removeThinkDots('eb');
+      const entEl = addMsg('eb', roundData.ent, 'ent-msg', `Enterprise Agent — Vòng ${r}: ${rName}`, r);
+      await typewrite(entEl, roundData.ent, 6);
+      prog();
+      await w(400);
+
+      if (replayStopped) break;
+
+      // Moderator transition (not after last round)
+      if (roundData.mod && r < totalRounds) {
+        setProgress(Math.round((step / totalSteps) * 100), `Moderator — Tổng kết vòng ${r}`);
+        const modGEl = addMsg('gb', roundData.mod, 'mod-msg', `Moderator — Chuyển sang Vòng ${r+1}`);
+        const modEEl = addMsg('eb', roundData.mod, 'mod-msg', `Moderator — Chuyển sang Vòng ${r+1}`);
+        await typewrite(modGEl, roundData.mod, 10);
+        modEEl.textContent = roundData.mod; // mirror instantly
+        prog();
+        await w(400);
+      }
+
+      if (replayStopped) break;
+    }
+
+    if (!replayStopped) {
+      // Expert Council
+      setProgress(90, 'Expert Council — Phân tích độc lập');
+      document.getElementById('cw').style.display = 'block';
+      const ctxt = document.getElementById('ctxt');
+      ctxt.innerHTML = '<div class="think-dots"><div class="dots"><span></span><span></span><span></span></div><span>Expert Council đang phân tích...</span></div>';
+      await w(800);
+      ctxt.innerHTML = '';
+      await typewrite(ctxt, data.expert, 5);
+      prog();
+      await w(400);
+
+      // Moderator Final
+      setProgress(98, 'Moderator — Tổng kết toàn bộ');
+      document.getElementById('mw').style.display = 'block';
+      const mtxt = document.getElementById('mtxt');
+      mtxt.innerHTML = '<div class="think-dots"><div class="dots"><span></span><span></span><span></span></div><span>Moderator đang tổng kết...</span></div>';
+      await w(800);
+      mtxt.innerHTML = '';
+      await typewrite(mtxt, data.moderator_final, 5);
+      prog();
+
+      setProgress(100, `✓ Hoàn tất — ${data.rounds.length} vòng · ${data.stats.time_seconds}s`);
+      document.getElementById('t3-nav-btn').style.display = 'block';
+
+      // Auto-load Tier 3
+      currentT3 = data.tier3;
+      renderTier3FromBenchmark(data.tier3);
+    }
+  } catch(e) {
+    console.error(e);
+  } finally {
+    isReplaying = false;
+    btn.disabled = false;
+    btn.innerHTML = '▶ Bắt đầu';
+  }
+}
+
+function resetD() {
+  replayStopped = true;
+  isReplaying = false;
+  ['gb','eb'].forEach(id => { document.getElementById(id).innerHTML = ''; });
+  document.getElementById('cw').style.display = 'none';
+  document.getElementById('mw').style.display = 'none';
+  document.getElementById('t3-nav-btn').style.display = 'none';
+  document.getElementById('prog').style.width = '0%';
+  document.getElementById('rlbl').textContent = 'Chờ bắt đầu';
+  document.getElementById('prog-lbl').textContent = 'Tiến trình · Gov→Ent×3 vòng + Mod×2 + Expert + Mod final';
+  const btn = document.getElementById('sbtn');
+  btn.disabled = false;
+  btn.innerHTML = '▶ Bắt đầu';
+  document.getElementById('t3-empty').style.display = 'flex';
+  document.getElementById('t3-loading').style.display = 'none';
+  document.getElementById('t3-content').style.display = 'none';
+}
+
+function onQChange() {
+  resetD();
+}
+
+/* ════════════════════ TIER 3 RENDER (actual schema) ════════════════════ */
+function renderTier3FromBenchmark(d) {
+  document.getElementById('t3-empty').style.display = 'none';
+  document.getElementById('t3-loading').style.display = 'none';
+
+  const polColors = ['var(--green)','var(--gold)','var(--ent)'];
+  const opts = d.policy_options?.options || [];
+  document.getElementById('t3-pol-table').innerHTML = opts.map((p, i) =>
+    `<tr class="policy-row${i===0?' sel':''}" onclick="selPol(this)">
+      <td class="pol-num">${String(i+1).padStart(2,'0')}</td>
+      <td><div class="pol-name">${p.title}</div><div class="pol-desc">${p.description}</div></td>
+      <td class="pol-score" style="color:${polColors[i]||'var(--dim)'};">OPT-${i+1}</td>
+    </tr>`).join('');
+  document.getElementById('t3-pol-badge').textContent = `${opts.length} kịch bản`;
+
+  // Pros/Cons — flatten all from analysis
+  const allPros = (d.pros_cons?.analysis||[]).flatMap(a => a.pros||[]);
+  const allCons = (d.pros_cons?.analysis||[]).flatMap(a => a.cons||[]);
+  document.getElementById('t3-pros').innerHTML = allPros.map(p =>
+    `<div class="pc-item"><div class="pc-dash" style="color:var(--green);">+</div>${p.point}</div>`).join('');
+  document.getElementById('t3-cons').innerHTML = allCons.map(c =>
+    `<div class="pc-item"><div class="pc-dash" style="color:var(--ent);">−</div>${c.point}</div>`).join('');
+
+  // Impact tabs — render object fields as rows
+  function impactFromObj(obj) {
+    if (!obj) return '';
+    const severityColor = obj.severity === 'high' ? 'var(--ent)' : obj.severity === 'medium' ? 'var(--gold)' : 'var(--green)';
+    return Object.entries(obj)
+      .filter(([k]) => k !== 'severity')
+      .map(([k, v]) => {
+        const label = k.replace(/_/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
+        const barW = obj.severity === 'high' ? 80 : obj.severity === 'medium' ? 55 : 35;
+        return `<div class="impact-row">
+          <div class="impact-label">${label}</div>
+          <div class="impact-track"><div class="impact-fill" style="width:${barW}%;background:${severityColor};"></div></div>
+          <div class="impact-val" style="color:${severityColor};font-size:12px;">${v.length>40?v.slice(0,38)+'…':v}</div>
+        </div>`;
+      }).join('');
+  }
+  document.getElementById('tab-eco').innerHTML = impactFromObj(d.impact_analysis?.economic);
+  document.getElementById('tab-env').innerHTML = impactFromObj(d.impact_analysis?.environmental);
+  document.getElementById('tab-soc').innerHTML = impactFromObj(d.impact_analysis?.social);
+
+  // Evidence — combine legal_documents + key_facts
+  const docs = d.evidence?.legal_documents || [];
+  const facts = d.evidence?.key_facts || [];
+  const allEv = [
+    ...docs.map(doc => ({ text: doc.relevance, source: doc.name })),
+    ...facts.map(f => ({ text: f.fact, source: f.source }))
+  ];
+  document.getElementById('t3-evidence').innerHTML = allEv.map((e, i) =>
+    `<div class="ev-item">
+      <div class="ev-num">${String(i+1).padStart(2,'0')}</div>
+      <div><div class="ev-text">${e.text}</div><div class="ev-source">${e.source}</div></div>
+    </div>`).join('');
+  document.getElementById('t3-cit-badge').textContent = `${allEv.length} citations`;
+
+  // Decision support
+  const rec = d.decision_support?.recommended_option;
+  document.getElementById('t3-rec-title').textContent = rec ? `Khuyến nghị: ${rec.option_id}` : 'Khuyến nghị';
+  document.getElementById('t3-rec-body').innerHTML = [
+    rec?.rationale || '',
+    ...(rec?.conditions||[]).map(c => `<br>→ ${c}`)
+  ].join('');
+  document.getElementById('t3-badges').innerHTML =
+    `<span class="badge badge-green">Benchmark output thực</span>
+     <span class="badge badge-blue">${allEv.length} citations</span>
+     <span class="badge" style="color:var(--council);border-color:rgba(200,146,42,0.3);">Expert synthesized</span>`;
+
+  // Gaps
+  const gaps = d.data_gaps || [];
+  const sevMap = {high:'gap-high',medium:'gap-med',low:'gap-low'};
+  const sevLbl = {high:'High Priority',medium:'Medium',low:'Low'};
+  document.getElementById('t3-gaps').innerHTML = gaps.map((g, i) =>
+    `<div class="gap-item">
+      <div class="gap-num">${String(i+1).padStart(2,'0')}</div>
+      <div style="flex:1;">
+        <div class="gap-severity ${sevMap[g.severity]||'gap-med'}">${sevLbl[g.severity]||g.severity}</div>
+        <div class="gap-title">${g.title}</div>
+        <div class="gap-desc">${g.description}</div>
+        <div class="gap-action">→ Hành động: ${g.action}</div>
+      </div>
+    </div>`).join('');
+  document.getElementById('t3-gap-badge').textContent = `${gaps.length} gaps detected`;
+
+  document.getElementById('t3-content').style.display = 'flex';
+}
+
+function selPol(row) {
+  document.querySelectorAll('.policy-row').forEach(r => r.classList.remove('sel'));
+  row.classList.add('sel');
+}
+function stab(el, tab) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  ['eco','env','soc'].forEach(t => {
+    const x = document.getElementById('tab-' + t);
+    if (x) x.style.display = t === tab ? 'block' : 'none';
+  });
+}
+
+/* ════════════════════════ NAV ════════════════════════ */
+const pages = {
+  t1:{id:'page-t1',lbl:'Tier 01 — Chuẩn Bị Tri Thức'},
+  t2:{id:'page-t2',lbl:'Tier 02 — Tranh Luận Đa Agent'},
+  t3:{id:'page-t3',lbl:'Tier 03 — Tổng Hợp Chính Sách'},
+  db:{id:'page-db',lbl:'Dashboard & Benchmark'}
+};
+const keys = ['t1','t2','t3','db'];
+function go(k) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(pages[k].id).classList.add('active');
+  document.getElementById('crumb').textContent = pages[k].lbl;
+  document.querySelectorAll('.nav-item').forEach((el, i) => el.classList.toggle('active', keys[i] === k));
+  if (k === 'db') setTimeout(initCharts, 120);
+  if (k === 't3' && currentT3) {
+    document.getElementById('t3-empty').style.display = 'none';
+    document.getElementById('t3-content').style.display = 'flex';
+  }
+}
+function toggleSidebar() {
+  const sb = document.getElementById('sidebar');
+  const btn = sb.querySelector('.sb-toggle');
+  sb.classList.toggle('collapsed');
+  btn.textContent = sb.classList.contains('collapsed') ? '›' : '‹';
+}
+function toggleTheme() {
+  const l = document.documentElement.classList.toggle('light');
+  document.getElementById('theme-btn').textContent = l ? '☀️' : '🌙';
+  localStorage.setItem('mad_theme', l ? 'light' : 'dark');
+}
+function tick() { document.getElementById('clk').textContent = new Date().toLocaleTimeString('vi-VN',{hour:'2-digit',minute:'2-digit',second:'2-digit'}); }
+setInterval(tick, 1000); tick();
+
+/* ════════════════════════ INIT ════════════════════════ */
+window.addEventListener('load', () => {
+  if (localStorage.getItem('mad_theme') === 'light') {
+    document.documentElement.classList.add('light');
+    const b = document.getElementById('theme-btn'); if(b) b.textContent = '☀️';
+  }
+  // Populate question dropdown
+  const sel = document.getElementById('q-select');
+  DEBATE_DATA.forEach((d, i) => {
+    const opt = document.createElement('option');
+    opt.value = i;
+    opt.textContent = `Q${i+1} — ${d.question.slice(0, 70)}...`;
+    sel.appendChild(opt);
+  });
+  // Load fonts then hide loading screen
+  document.fonts.load('1em "Bebas Neue"')
+    .then(() => document.documentElement.classList.add('fonts-loaded'))
+    .catch(() => document.documentElement.classList.add('fonts-loaded'));
+  setTimeout(() => document.documentElement.classList.add('fonts-loaded'), 1500);
+  setTimeout(() => {
+    const o = document.getElementById('loading');
+    o.style.opacity = '0';
+    setTimeout(() => { o.style.display = 'none'; initChartKB(); }, 500);
+  }, 1400);
 });
 
-/* ─── CHART HELPERS ─── */
-const C={gov:'#4a7ec8',ent:'#c8382a',council:'#c8922a',green:'#4a9e5c',gold:'#d4a030',orange:'#c86428',muted:'#9e8e76',dim:'#c4ae90'};
-function cc(){const l=document.documentElement.classList.contains('light');return{muted:l?'#5a4e3a':'#9e8e76',dim:l?'#3e3428':'#c4ae90',grid:l?'rgba(0,0,0,0.06)':'rgba(255,255,255,0.04)',tt_bg:l?'#f0eadf':'#131009',tt_ttl:l?'#1a1510':'#e8dcc8',tt_body:l?'#3e3428':'#c4ae90'};}
-function baseOpts(xLabel,yLabel){const c=cc();return{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:c.muted,font:{size:11,family:"'Be Vietnam Pro',sans-serif"},boxWidth:12,padding:14}},tooltip:{backgroundColor:c.tt_bg,borderColor:'rgba(200,160,80,0.25)',borderWidth:1,titleColor:c.tt_ttl,bodyColor:c.tt_body,padding:10,cornerRadius:3}},scales:{x:{grid:{color:c.grid},ticks:{color:c.muted,font:{size:10}},title:xLabel?{display:true,text:xLabel,color:c.muted,font:{size:10}}:undefined},y:{grid:{color:c.grid},ticks:{color:c.muted,font:{size:10}},title:yLabel?{display:true,text:yLabel,color:c.muted,font:{size:10}}:undefined,beginAtZero:true}}};}
-
-function initChartKB(){const ctx=document.getElementById('chartKB');if(!ctx||ctx._c)return;const c=cc();ctx._c=new Chart(ctx,{type:'doughnut',data:{labels:['Legal chunks — 1.597','Business CBAM — 93'],datasets:[{data:[1597,93],backgroundColor:[C.gov,C.ent],borderColor:document.documentElement.classList.contains('light')?'#ece6da':'#111',borderWidth:3,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,cutout:'74%',plugins:{legend:{position:'bottom',labels:{color:c.muted,font:{size:11,family:"'Be Vietnam Pro',sans-serif"},padding:14,boxWidth:12}},tooltip:{backgroundColor:c.tt_bg,borderColor:'rgba(200,160,80,0.25)',borderWidth:1,titleColor:c.tt_ttl,bodyColor:c.tt_body,padding:10,cornerRadius:3}}}});}
-
-let chartsReady=false;
-function initCharts(){
-  if(chartsReady)return; chartsReady=true;
-
-  /* ── FIGURE 1 (a) Word Count grouped bar ── */
-  const wcCtx=document.getElementById('chartWC');
-  if(wcCtx&&!wcCtx._c){
-    const labels=Array.from({length:30},(_,i)=>`Q${i+1}`);
-    const madWC=[2888,2901,2876,2895,2912,2867,2843,2879,2891,2924,2856,2898,2863,2905,2878,2893,2912,2867,2851,2908,2887,2876,2915,2893,2869,2883,2907,2878,2896,2871];
-    const blWC= [478,512,467,523,489,501,534,456,498,521,467,489,523,478,512,501,489,534,467,498,521,456,489,512,478,501,534,467,523,489];
-    const opts=baseOpts('Câu hỏi (n=30)','Số từ');opts.plugins.legend.display=true;
-    wcCtx._c=new Chart(wcCtx,{type:'bar',data:{labels,datasets:[{label:'MAD-Policy (avg 2,888)',data:madWC,backgroundColor:'rgba(74,126,200,0.65)',borderColor:C.gov,borderWidth:1,borderRadius:2},{label:'Baseline (avg 490)',data:blWC,backgroundColor:'rgba(200,146,42,0.4)',borderColor:C.council,borderWidth:1,borderRadius:2}]},options:opts});
-  }
-
-  /* ── FIGURE 1 (b) Citations horizontal bar + gold line annotation ── */
-  const citCtx=document.getElementById('chartCit');
-  if(citCtx&&!citCtx._c){
-    const opts=baseOpts('Số citations trung bình','');
-    opts.indexAxis='y'; opts.plugins.legend.display=false;
-    opts.scales.x.max=22;
-    citCtx._c=new Chart(citCtx,{type:'bar',data:{labels:['Baseline (Single-Agent)','MAD-Policy'],datasets:[{data:[2.2,17.7],backgroundColor:['rgba(200,146,42,0.45)','rgba(74,126,200,0.7)'],borderColor:[C.council,C.gov],borderWidth:1,borderRadius:3,barThickness:38}]},options:opts});
-  }
-
-  /* ── FIGURE 1 (c) Diversity histogram — ACTUAL bins ── */
-  const divCtx=document.getElementById('chartDiv');
-  if(divCtx&&!divCtx._c){
-    // Actual: [0.600→0.625: 2, 0.625→0.650: 3, 0.650→0.675: 11, 0.675→0.700: 6, 0.700→0.725: 5, 0.725→0.750: 1, ≥0.750: 1]
-    const binLabels=['0.600–0.625','0.625–0.650','0.650–0.675','0.675–0.700','0.700–0.725','0.725–0.750','≥0.750'];
-    const binCounts=[2,3,11,6,5,1,1];
-    const opts=baseOpts('Jaccard Diversity Score','Số debate');
-    opts.plugins.legend.display=false;
-    // add mean/median annotation via afterDraw
-    opts.plugins.dlines={mean:3.58}; // mean at bin ~0.675 position (3.58 from 0)
-    const bgColors=binCounts.map((_,i)=>`rgba(74,126,200,${0.3+i*0.1})`);
-    divCtx._c=new Chart(divCtx,{type:'bar',data:{labels:binLabels,datasets:[{label:'Số debate',data:binCounts,backgroundColor:bgColors,borderColor:C.gov,borderWidth:1,borderRadius:2}]},options:opts});
-    // draw mean/median lines after render
-    divCtx._c.options.animation={onComplete:function(){const ch=this;const ctx2=ch.ctx;const ds=ch.getDatasetMeta(0);if(!ds.data.length)return;ctx2.save();ctx2.strokeStyle=C.gold;ctx2.lineWidth=2;ctx2.setLineDash([4,4]);const meanX=(ds.data[2].x+ds.data[3].x)/2; // between bin 2 & 3 ≈ 0.675
-      const top=ch.chartArea.top,bot=ch.chartArea.bottom;ctx2.beginPath();ctx2.moveTo(meanX,top);ctx2.lineTo(meanX,bot);ctx2.stroke();ctx2.setLineDash([]);ctx2.fillStyle=C.gold;ctx2.font="11px 'Be Vietnam Pro', sans-serif";ctx2.fillText('mean=0.675',meanX+4,top+16);ctx2.restore();}};
-  }
-
-  /* ── FIGURE 1 (d) Scatter — ACTUAL groups ── */
-  const cfCtx=document.getElementById('chartCF');
-  if(cfCtx&&!cfCtx._c){
-    // MAD: (coh=8,fact=9)×26, (coh=8,fact=7)×3, (coh=7,fact=6)×1
-    const madPts=[...Array(26).fill(null).map(()=>({x:8+(Math.random()-.5)*.12,y:9+(Math.random()-.5)*.12})),...Array(3).fill(null).map(()=>({x:8+(Math.random()-.5)*.12,y:7+(Math.random()-.5)*.12})),{x:7.05,y:6.05}];
-    // Baseline: cluster coh=9.5–10, fact=8.0
-    const blPts=Array.from({length:30},()=>({x:9.5+(Math.random()*.5),y:8+(Math.random()-.5)*.4}));
-    const opts=baseOpts('Coherence Score (1–10)','Factuality Score (1–10)');
-    opts.scales.x.min=5;opts.scales.x.max=11;opts.scales.y.min=5;opts.scales.y.max=11;
-    // crosshair at (8,9) for MAD cluster
-    cfCtx._c=new Chart(cfCtx,{type:'scatter',data:{datasets:[{label:'MAD-Policy (n=30)',data:madPts,backgroundColor:'rgba(74,126,200,0.75)',pointRadius:5,pointBorderColor:'rgba(0,0,0,0.2)',pointBorderWidth:1},{label:'Baseline (n=30)',data:blPts,backgroundColor:'rgba(200,56,42,0.55)',pointStyle:'triangle',pointRadius:5,pointBorderColor:'rgba(0,0,0,0.2)',pointBorderWidth:1}]},options:opts});
-  }
-
-  /* ── FIGURE 2 (a) Cohen's d horizontal bar ── */
-  const cohenCtx=document.getElementById('chartCohen');
-  if(cohenCtx&&!cohenCtx._c){
-    const opts=baseOpts("Cohen's d value",'');opts.indexAxis='y';opts.plugins.legend.display=false;opts.scales.x.max=26;
-    cohenCtx._c=new Chart(cohenCtx,{type:'bar',data:{labels:['Time (s)','Citations','Word Count'],datasets:[{data:[0.326,7.573,24.487],backgroundColor:['rgba(200,146,42,0.4)','rgba(74,126,200,0.6)','rgba(74,158,92,0.65)'],borderColor:[C.council,C.gov,C.green],borderWidth:1,borderRadius:3,barThickness:32}]},options:opts});
-  }
-
-  /* ── FIGURE 2 (b) WC improvement per Q ── */
-  const wcqCtx=document.getElementById('chartWCQ');
-  if(wcqCtx&&!wcqCtx._c){
-    const vals=[465,507,516,513,475,462,458,468,481,502,460,495,500,473,494,507,496,494,493,487,492,501,505,496,479,483,513,493,496,479];
-    const opts=baseOpts('Câu hỏi','WC Improvement (%)');
-    opts.plugins.legend.display=false;
-    wcqCtx._c=new Chart(wcqCtx,{type:'bar',data:{labels:Array.from({length:30},(_,i)=>`Q${i+1}`),datasets:[{data:vals,backgroundColor:'rgba(74,126,200,0.55)',borderColor:C.gov,borderWidth:1,borderRadius:2}]},options:opts});
-  }
-
-  /* ── FIGURE 2 (c) Citation improvement per Q ── */
-  const citqCtx=document.getElementById('chartCitQ');
-  if(citqCtx&&!citqCtx._c){
-    const vals=[718,673,809,673,764,855,627,627,627,855,673,809,627,627,627,764,627,673,627,718,627,855,673,673,673,536,673,855,764,764];
-    const opts=baseOpts('Câu hỏi','Citation Improvement (%)');
-    opts.plugins.legend.display=false;
-    citqCtx._c=new Chart(citqCtx,{type:'bar',data:{labels:Array.from({length:30},(_,i)=>`Q${i+1}`),datasets:[{data:vals,backgroundColor:vals.map(v=>v>=800?'rgba(74,158,92,0.75)':v>=700?'rgba(74,126,200,0.65)':'rgba(200,146,42,0.5)'),borderColor:vals.map(v=>v>=800?C.green:v>=700?C.gov:C.council),borderWidth:1,borderRadius:2}]},options:opts});
-  }
-
-  /* ── FIGURE 3 (a) Legal tagging bar ── */
-  const legalCtx=document.getElementById('chartLegal');
-  if(legalCtx&&!legalCtx._c){
-    const opts=baseOpts('','Score (%)');opts.plugins.legend.display=false;opts.scales.y.max=110;
-    const vals=[80.0,71.1,73.6,74.9];
-    const cols=['rgba(74,126,200,0.7)','rgba(74,126,200,0.55)','rgba(74,158,92,0.65)','rgba(255,255,255,0.8)'];
-    legalCtx._c=new Chart(legalCtx,{type:'bar',data:{labels:['Clause Type','Subjects F1','Domains F1','Overall F1'],datasets:[{data:vals,backgroundColor:cols,borderColor:[C.gov,C.gov,C.green,'rgba(255,255,255,0.6)'],borderWidth:1,borderRadius:3,barThickness:40}]},options:opts});
-  }
-
-  /* ── FIGURE 3 (b) Business tagging bar ── */
-  const bizCtx=document.getElementById('chartBiz');
-  if(bizCtx&&!bizCtx._c){
-    const opts=baseOpts('','Score (%)');opts.plugins.legend.display=false;opts.scales.y.max=110;
-    const vals=[97.8,93.5,33.4,74.9];
-    const cols=['rgba(74,158,92,0.7)','rgba(74,126,200,0.65)','rgba(200,56,42,0.75)','rgba(200,146,42,0.8)'];
-    bizCtx._c=new Chart(bizCtx,{type:'bar',data:{labels:['Stance','CBAM','Focus F1','Overall F1'],datasets:[{data:vals,backgroundColor:cols,borderColor:[C.green,C.gov,C.ent,C.council],borderWidth:1,borderRadius:3,barThickness:40}]},options:opts});
-  }
-
-  /* ── FIGURE 4 (a) MAE bar ── */
-  const maeCtx=document.getElementById('chartMAE');
-  if(maeCtx&&!maeCtx._c){
-    const opts=baseOpts('Dimension','MAE');opts.plugins.legend.display=false;opts.scales.y.max=1.2;
-    maeCtx._c=new Chart(maeCtx,{type:'bar',data:{labels:['Coherence MAE','Factuality MAE'],datasets:[{data:[0.17,0.10],backgroundColor:['rgba(74,126,200,0.65)','rgba(74,158,92,0.65)'],borderColor:[C.gov,C.green],borderWidth:1,borderRadius:3,barThickness:50}]},options:opts});
-  }
-
-  /* ── FIGURE 4 (b) Agreement grouped bar ── */
-  const agrCtx=document.getElementById('chartAgr');
-  if(agrCtx&&!agrCtx._c){
-    const opts=baseOpts('Agreement Type','Rate (%)');opts.scales.y.max=110;opts.plugins.legend.display=true;
-    agrCtx._c=new Chart(agrCtx,{type:'bar',data:{labels:['Coherence','Factuality'],datasets:[{label:'Exact match',data:[83.3,90.0],backgroundColor:'rgba(74,126,200,0.65)',borderColor:C.gov,borderWidth:1,borderRadius:2,barThickness:30},{label:'Within ±1',data:[100,100],backgroundColor:'rgba(74,158,92,0.55)',borderColor:C.green,borderWidth:1,borderRadius:2,barThickness:30}]},options:opts});
-  }
-
-  /* ── FIGURE 5 Correlation Heatmap ── */
-  const heatCtx=document.getElementById('chartHeat');
-  if(heatCtx&&!heatCtx._c){
-    // Pearson r matrix (lower triangle only)
-    // WC/Cit=0.15, WC/Div=0.21, WC/Fact=0.05, WC/Time=0.21
-    // Cit/Div=-0.10, Cit/Fact=0.18, Cit/Time=0.11
-    // Div/Fact=-0.12, Div/Time=0.12
-    // Fact/Time=0.08
-    const labels=['WC','Cit','Div','Fact','Time'];
-    const matrix=[
-      [1,    0.15, 0.21, 0.05, 0.21],
-      [0.15, 1,   -0.10, 0.18, 0.11],
-      [0.21,-0.10, 1,   -0.12, 0.12],
-      [0.05, 0.18,-0.12, 1,    0.08],
-      [0.21, 0.11, 0.12, 0.08, 1   ]
-    ];
-    // Build scatter-style dataset for heatmap simulation using bar chart
-    // Use custom plugin to draw colored cells
-    const c=cc();
-    heatCtx._c=new Chart(heatCtx,{
-      type:'scatter',
-      data:{datasets:[{data:[],backgroundColor:'transparent'}]},
-      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{enabled:false}},scales:{x:{display:false},y:{display:false}}},
-      plugins:[{id:'heatmap',afterDraw(chart){
-        const {ctx:ctx2,chartArea:{left,top,width,height}}=chart;
-        const n=5; const cellW=width/n; const cellH=height/n;
-        ctx2.save();
-        ctx2.font=`bold 12px 'Be Vietnam Pro', sans-serif`;
-        // draw header labels
-        labels.forEach((lb,i)=>{
-          ctx2.fillStyle=c.muted; ctx2.textAlign='center';
-          ctx2.fillText(lb,left+i*cellW+cellW/2,top-6);
-          ctx2.fillText(lb,left-32,top+i*cellH+cellH/2+4);
-        });
-        // draw cells (lower triangle + diagonal)
-        for(let row=0;row<n;row++){for(let col=0;col<=row;col++){
-          const r=matrix[row][col];
-          const x=left+col*cellW; const y=top+row*cellH;
-          // color: positive=dark red, negative=light blue, 1=gold
-          let bg;
-          if(r===1){bg='rgba(212,160,48,0.55)';}
-          else if(r>0){bg=`rgba(200,56,42,${0.1+r*0.7})`;}
-          else{bg=`rgba(74,126,200,${0.1+Math.abs(r)*0.8})`;}
-          ctx2.fillStyle=bg;
-          ctx2.fillRect(x+2,y+2,cellW-4,cellH-4);
-          ctx2.strokeStyle='rgba(200,160,80,0.1)';ctx2.lineWidth=1;
-          ctx2.strokeRect(x+2,y+2,cellW-4,cellH-4);
-          // value label
-          ctx2.fillStyle=r===1?C.gold:(Math.abs(r)>0.15?'#f5efe6':c.muted);
-          ctx2.textAlign='center';
-          ctx2.fillText(r===1?'1.00':r.toFixed(2),x+cellW/2,y+cellH/2+4);
-        }}
-        ctx2.restore();
-      }}]
-    });
-  }
+/* ════════════════════ CHARTS (Dashboard) ════════════════════ */
+const C = {gov:'#4a7ec8',ent:'#c8382a',council:'#c8922a',green:'#4a9e5c',gold:'#d4a030',orange:'#c86428',muted:'#9e8e76'};
+function cc() {
+  const l = document.documentElement.classList.contains('light');
+  return { muted:l?'#5a4e3a':'#9e8e76', dim:l?'#3e3428':'#c4ae90', grid:l?'rgba(0,0,0,0.06)':'rgba(255,255,255,0.04)', tt_bg:l?'#f0eadf':'#131009', tt_ttl:l?'#1a1510':'#e8dcc8', tt_body:l?'#3e3428':'#c4ae90' };
+}
+function baseOpts(xLabel, yLabel) {
+  const c = cc();
+  return { responsive:true, maintainAspectRatio:false, plugins:{legend:{labels:{color:c.muted,font:{size:11,family:"'Be Vietnam Pro',sans-serif"},boxWidth:12,padding:14}},tooltip:{backgroundColor:c.tt_bg,borderColor:'rgba(200,160,80,0.25)',borderWidth:1,titleColor:c.tt_ttl,bodyColor:c.tt_body,padding:10,cornerRadius:3}}, scales:{x:{grid:{color:c.grid},ticks:{color:c.muted,font:{size:10}},title:xLabel?{display:true,text:xLabel,color:c.muted,font:{size:10}}:undefined},y:{grid:{color:c.grid},ticks:{color:c.muted,font:{size:10}},title:yLabel?{display:true,text:yLabel,color:c.muted,font:{size:10}}:undefined,beginAtZero:true}} };
 }
 
-/* ─── API KEY ─── */
-let OPENAI_KEY = '';
-function confirmKey(){const v=document.getElementById('key-modal-input').value.trim();if(!v)return;OPENAI_KEY=v;document.getElementById('key-modal').style.display='none';_doStartDebate();}
-document.addEventListener('keydown',e=>{if(e.key==='Enter'&&document.getElementById('key-modal').style.display!=='none')confirmKey();});
-
-/* ─── DEBATE ENGINE ─── */
-let isD=false;
-const SG=`Bạn là Government Agent — đại diện Bộ Tài nguyên và Môi trường (MONRE) Việt Nam. Ưu tiên: tính bền vững môi trường dài hạn, khung pháp lý, cam kết quốc tế (Net Zero 2050, Paris Agreement, EU CBAM). Giọng học thuật, trang trọng. KHÔNG giới thiệu bản thân. CITATION BẮT BUỘC: [Nguồn: <tên văn bản>], tối thiểu 2 citations/lượt.`;
-const SE=`Bạn là Enterprise Agent — đại diện Hiệp hội Dệt May Việt Nam (VITAS). Ưu tiên: kiểm soát chi phí, tiếp cận thị trường xuất khẩu (EU), tính khả thi vận hành, ổn định 2,7 triệu lao động. Giọng học thuật, trang trọng. KHÔNG giới thiệu bản thân. CITATION BẮT BUỘC: [Nguồn: <tên văn bản>], tối thiểu 2 citations/lượt.`;
-const SM=`Bạn là MODERATOR TRUNG LẬP trong tranh luận chính sách học thuật về thuế carbon ngành dệt may Việt Nam. NGUYÊN TẮC: giọng học thuật trung lập, KHÔNG có ý kiến cá nhân, KHÔNG đề xuất chính sách, CHỈ tóm tắt và cấu trúc lập luận đã có.`;
-const SC=`Bạn là CHUYÊN GIA PHÂN TÍCH CHÍNH SÁCH ĐỘC LẬP — chuyên ngành kinh tế môi trường. NHIỆM VỤ: Phân tích toàn bộ tranh luận 3 vòng: tóm tắt lập trường, so sánh, xác định trade-offs và điểm đồng thuận. NGUYÊN TẮC: KHÔNG đề xuất chính sách mới. Tối thiểu 3 citations.`;
-const RNAMES={1:'Trình bày',2:'Phản biện chéo',3:'Bảo vệ lập luận'};
-
-async function callLLM(sys,msg,max=1000){
-  const r=await fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${OPENAI_KEY}`},body:JSON.stringify({model:'gpt-4o-mini',max_tokens:max,messages:[{role:'system',content:sys},{role:'user',content:msg}]})});
-  if(!r.ok){const t=await r.text();if(r.status===401)throw new Error('API key không hợp lệ (401)');if(r.status===429)throw new Error('Rate limit (429) — chờ vài giây');throw new Error(`OpenAI ${r.status}: ${t.slice(0,120)}`);}
-  const d=await r.json();const txt=d.choices?.[0]?.message?.content;if(txt)return txt;throw new Error('OpenAI không trả về nội dung');
-}
-function addMsg(id,txt,cls,label,round){const c=document.getElementById(id);const d=document.createElement('div');d.className='msg-block';if(round)d.setAttribute('data-round',round);const rn={1:'Vòng 1',2:'Vòng 2',3:'Vòng 3'};const badge=round?` <span class="msg-round-badge badge-r${round}">${rn[round]||''}</span>`:'';d.innerHTML=`<div class="msg-round">${label}${badge}</div><div class="msg-text ${cls}">${txt}</div>`;c.appendChild(d);c.scrollTop=c.scrollHeight;}
-function addThink(id,lbl){const c=document.getElementById(id);const d=document.createElement('div');d.className='think-dots';d.id='think-'+id;d.innerHTML=`<div class="dots"><span></span><span></span><span></span></div><span>${lbl} đang lập luận...</span>`;c.appendChild(d);c.scrollTop=c.scrollHeight;}
-function rmThink(id){const e=document.getElementById('think-'+id);if(e)e.remove();}
-const w=ms=>new Promise(r=>setTimeout(r,ms));
-
-async function startDebate(){
-  if(!OPENAI_KEY){document.getElementById('key-modal').style.display='flex';setTimeout(()=>document.getElementById('key-modal-input').focus(),50);return;}
-  _doStartDebate();
-}
-async function _doStartDebate(){
-  if(isD)return;isD=true;
-  document.getElementById('err-box').style.display='none';
-  const q=document.getElementById('pq').value.trim();if(!q){isD=false;return;}
-  const nr=parseInt(document.getElementById('rds').value);
-  const btn=document.getElementById('sbtn');btn.disabled=true;btn.innerHTML='<span class="spin">↻</span> Đang tranh luận...';
-  ['gb','eb'].forEach(id=>{document.getElementById(id).innerHTML='';});
-  document.getElementById('cw').style.display='none';document.getElementById('mw').style.display='none';
-  let history=[];const total=nr*2+(nr-1)+2;let step=0;
-  const setP=()=>{document.getElementById('prog').style.width=((step/total)*100)+'%';};
-  try{
-    for(let r=1;r<=nr;r++){
-      const rn=RNAMES[r]||`Vòng ${r}`;
-      setP();document.getElementById('rlbl').textContent=`Vòng ${r} — ${rn} — Government`;
-      addThink('gb','Government Agent');
-      const gp=r===1?`VÒNG 1 — TRÌNH BÀY QUAN ĐIỂM\nCHỦ ĐỀ: ${q}\nBạn là Government Agent.\nTrình bày 2–3 luận điểm chính dựa trên văn bản pháp lý. Giọng học thuật | 150–200 từ\n[Nguồn: <tên văn bản>] tối thiểu 2 lần.`:
-        r===2?`VÒNG 2 — PHẢN BIỆN CHÉO\nCHỦ ĐỀ: ${q}\nLỊCH SỬ:\n${history.filter(h=>h.a!=='Mod').map(h=>`[${h.a} V${h.r}]\n${h.c}`).join('\n\n')}\nBạn là Government Agent. Phản biện Enterprise. 150–200 từ. [Nguồn:...] 2 lần.`:
-        `VÒNG 3 — BẢO VỆ LẬP LUẬN\nCHỦ ĐỀ: ${q}\nLỊCH SỬ GẦN:\n${history.slice(-6).map(h=>`[${h.a} V${h.r}]\n${h.c}`).join('\n\n')}\nBạn là Government Agent. Bảo vệ lập trường cốt lõi. 150–200 từ. [Nguồn:...] 2 lần.`;
-      const gr=await callLLM(SG,gp);rmThink('gb');
-      addMsg('gb',gr,'gov-msg',`Government Agent — Vòng ${r}: ${rn}`,r);
-      history.push({r,a:'Government Agent',c:gr});step++;await w(300);
-      setP();document.getElementById('rlbl').textContent=`Vòng ${r} — ${rn} — Enterprise`;
-      addThink('eb','Enterprise Agent');
-      const ep=r===1?`VÒNG 1 — TRÌNH BÀY QUAN ĐIỂM\nCHỦ ĐỀ: ${q}\nBạn là Enterprise Agent.\nTrình bày 2–3 quan ngại chính (chi phí, năng lực, cạnh tranh). Giọng học thuật | 150–200 từ\n[Nguồn: <tên văn bản>] tối thiểu 2 lần.`:
-        r===2?`VÒNG 2 — PHẢN BIỆN CHÉO\nCHỦ ĐỀ: ${q}\nLỊCH SỬ:\n${history.filter(h=>h.a!=='Mod').map(h=>`[${h.a} V${h.r}]\n${h.c}`).join('\n\n')}\nBạn là Enterprise Agent. Phản biện Government. 150–200 từ. [Nguồn:...] 2 lần.`:
-        `VÒNG 3 — BẢO VỆ LẬP LUẬN\nCHỦ ĐỀ: ${q}\nLỊCH SỬ GẦN:\n${history.slice(-6).map(h=>`[${h.a} V${h.r}]\n${h.c}`).join('\n\n')}\nBạn là Enterprise Agent. Bảo vệ lập trường cốt lõi. 150–200 từ. [Nguồn:...] 2 lần.`;
-      const er=await callLLM(SE,ep);rmThink('eb');
-      addMsg('eb',er,'ent-msg',`Enterprise Agent — Vòng ${r}: ${rn}`,r);
-      history.push({r,a:'Enterprise Agent',c:er});step++;await w(300);
-      if(r<nr){
-        document.getElementById('rlbl').textContent=`Moderator — Chuyển vòng ${r+1}`;
-        const mr=await callLLM(SM,`Tóm tắt trung lập vòng ${r}. Lập luận Gov: "${gr.slice(0,200)}..." Lập luận Ent: "${er.slice(0,200)}...". Tóm tắt 80–100 từ rồi mời Gov phát biểu vòng ${r+1}.`);
-        addMsg('gb',mr,'mod-msg',`Moderator — Chuyển sang Vòng ${r+1}`);addMsg('eb',mr,'mod-msg',`Moderator — Chuyển sang Vòng ${r+1}`);
-        history.push({r,a:'Mod',c:mr});step++;await w(200);
-      }
-    }
-    step++;setP();document.getElementById('rlbl').textContent='Expert Council — Phân tích độc lập';
-    document.getElementById('cw').style.display='block';
-    document.getElementById('ctxt').innerHTML='<div class="think-dots"><div class="dots"><span></span><span></span><span></span></div><span>Expert Council đang phân tích...</span></div>';
-    const govV=history.filter(h=>h.a==='Government Agent').map((h,i)=>`V${i+1}: ${h.c}`).join('\n');
-    const entV=history.filter(h=>h.a==='Enterprise Agent').map((h,i)=>`V${i+1}: ${h.c}`).join('\n');
-    const cr=await callLLM(SC,`CHỦ ĐỀ: ${q}\nGOV:\n${govV}\nENT:\n${entV}\nPhân tích học thuật trung lập | 300–400 từ`);
-    document.getElementById('ctxt').textContent=cr;history.push({r:'post',a:'Expert',c:cr});
-    step++;setP();document.getElementById('rlbl').textContent='Moderator — Tổng kết';
-    document.getElementById('mw').style.display='block';
-    document.getElementById('mtxt').innerHTML='<div class="think-dots"><div class="dots"><span></span><span></span><span></span></div><span>Moderator đang tổng kết...</span></div>';
-    const mfr=await callLLM(SM,`ACADEMIC SUMMARY của debate:\n${history.map(h=>`[${h.a} V${h.r}]\n${h.c}`).join('\n\n')}\nTóm tắt vị trí hai bên, điểm đồng thuận, bất đồng. NO recommendation. 200–300 từ.`);
-    document.getElementById('mtxt').textContent=mfr;
-    document.getElementById('prog').style.width='100%';document.getElementById('rlbl').textContent=`✓ Hoàn tất — ${nr} vòng`;
-    document.getElementById('t3-nav-btn').style.display='block';
-    generateTier3(history,q);
-  }catch(err){
-    rmThink('gb');rmThink('eb');
-    const eb=document.getElementById('err-box');eb.style.display='block';eb.textContent=`Lỗi: ${err.message}`;
-    document.getElementById('rlbl').textContent='Lỗi — thử lại';
-  }finally{btn.disabled=false;btn.innerHTML='▶ Chạy lại';isD=false;}
-}
-function resetD(){isD=false;document.getElementById('err-box').style.display='none';['gb','eb'].forEach(id=>{document.getElementById(id).innerHTML='';});document.getElementById('cw').style.display='none';document.getElementById('mw').style.display='none';document.getElementById('t3-nav-btn').style.display='none';document.getElementById('t3-empty').style.display='flex';document.getElementById('t3-loading').style.display='none';document.getElementById('t3-content').style.display='none';document.getElementById('prog').style.width='0%';document.getElementById('rlbl').textContent='Chờ bắt đầu';const b=document.getElementById('sbtn');b.disabled=false;b.innerHTML='▶ Bắt đầu';}
-
-/* ─── TABS ─── */
-function stab(el,tab){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');['eco','env','soc'].forEach(t=>{const x=document.getElementById('tab-'+t);if(x)x.style.display=t===tab?'block':'none';});}
-function selPol(row){document.querySelectorAll('.policy-row').forEach(r=>r.classList.remove('sel'));row.classList.add('sel');}
-
-/* ─── TIER 3 ─── */
-const ST3_MAIN=`Bạn là hệ thống tổng hợp chính sách. Chỉ trả về JSON thuần túy, không markdown, không backtick. Schema: {"policy_options":[{"name":"string","desc":"string","score":number}],"pros":["string"],"cons":["string"],"impacts":{"eco":[{"label":"string","value":"string","positive":true}],"env":[{"label":"string","value":"string","positive":true}],"soc":[{"label":"string","value":"string","positive":true}]},"evidence":[{"text":"string","source":"string"}],"recommendation":"string","rationale":"string","consensus_pct":number,"gov_pct":number,"ent_pct":number} Quy tắc: 3 policy_options, 5 pros, 5 cons, 3-4 items mỗi tab, 4-6 evidence.`;
-const ST3_GAPS=`Bạn là chuyên gia phân tích khoảng trống tri thức. Chỉ trả về JSON thuần túy. Schema: {"data_gaps":[{"title":"string","severity":"high|medium|low","description":"string","action":"string"}]} Xác định 4-6 khoảng trống.`;
-function parseJSON(raw){let s=raw.trim().replace(/^```json\s*/,'').replace(/^```\s*/,'').replace(/\s*```$/,'').trim();try{return JSON.parse(s);}catch(_){}let obj=0,arr=0,inStr=false,esc=false,last=0;for(let i=0;i<s.length;i++){const c=s[i];if(esc){esc=false;continue;}if(c==='\\'&&inStr){esc=true;continue;}if(c==='"'){inStr=!inStr;continue;}if(inStr)continue;if(c==='{'){obj++;last=i;}else if(c==='}'){obj--;last=i;}else if(c==='['){arr++;last=i;}else if(c===']'){arr--;last=i;}}s=s.slice(0,last+1);while(arr>0){s+=']';arr--;}while(obj>0){s+='}';obj--;}return JSON.parse(s);}
-
-async function generateTier3(history,topic){
-  document.getElementById('t3-empty').style.display='none';document.getElementById('t3-loading').style.display='flex';document.getElementById('t3-content').style.display='none';
-  const govV=history.filter(h=>h.a==='Government Agent').map((h,i)=>`V${i+1}: ${h.c}`).join('\n');
-  const entV=history.filter(h=>h.a==='Enterprise Agent').map((h,i)=>`V${i+1}: ${h.c}`).join('\n');
-  const expertV=history.find(h=>h.a==='Expert')?.c||'';
-  const base=`CHỦ ĐỀ: ${topic}\nGOV:\n${govV}\nENT:\n${entV}\nEXPERT:\n${expertV}`;
-  try{
-    document.getElementById('t3-load-msg').textContent='Call 1/2 — Tổng hợp chính sách...';
-    const raw1=await callLLM(ST3_MAIN,base+'\nChỉ trả về JSON.',2000);const d1=parseJSON(raw1);
-    document.getElementById('t3-load-msg').textContent='Call 2/2 — Xác định Data Gaps...';
-    const raw2=await callLLM(ST3_GAPS,base+'\nChỉ trả về JSON.',1500);const d2=parseJSON(raw2);
-    renderTier3({...d1,data_gaps:d2.data_gaps||[]});
-  }catch(err){
-    document.getElementById('t3-loading').style.display='none';document.getElementById('t3-empty').style.display='flex';
-    document.getElementById('t3-empty').innerHTML=`<div style="font-size:15px;color:var(--ent);text-align:center;padding:20px;">Lỗi Tier 3: ${err.message}<br><button class="btn btn-ghost" style="margin-top:12px;" onclick="go('t2')">← Quay lại Tier 2</button></div>`;
-  }
-}
-let _t3cache=null;
-function renderTier3(data){
-  _t3cache=data;
-  const polColors=['var(--green)','var(--gold)','var(--ent)'];
-  document.getElementById('t3-pol-table').innerHTML=(data.policy_options||[]).map((p,i)=>`<tr class="policy-row${i===0?' sel':''}" onclick="selPol(this)"><td class="pol-num" style="color:var(--line-hi);">${String(i+1).padStart(2,'0')}</td><td><div class="pol-name">${p.name}</div><div class="pol-desc">${p.desc}</div></td><td class="pol-score" style="color:${polColors[i]||'var(--dim)'};">${p.score}</td></tr>`).join('');
-  document.getElementById('t3-pol-badge').textContent=`${(data.policy_options||[]).length} kịch bản`;
-  document.getElementById('t3-pros').innerHTML=(data.pros||[]).map(p=>`<div class="pc-item"><div class="pc-dash" style="color:var(--green);">+</div>${p}</div>`).join('');
-  document.getElementById('t3-cons').innerHTML=(data.cons||[]).map(c=>`<div class="pc-item"><div class="pc-dash" style="color:var(--ent);">−</div>${c}</div>`).join('');
-  function renderImp(items,id){document.getElementById(id).innerHTML=(items||[]).map(item=>{const col=item.positive?'var(--green)':'var(--ent)';const raw=(item.value||'').replace(/,/g,'');const nm=raw.match(/[\d.]+/);const n=nm?parseFloat(nm[0]):20;let ww=raw.includes('%')?Math.min(95,Math.max(8,Math.abs(n))):Math.min(95,Math.max(8,Math.log10(n+1)*30));return`<div class="impact-row"><div class="impact-label">${item.label}</div><div class="impact-track"><div class="impact-fill" style="width:${ww}%;background:${col};"></div></div><div class="impact-val" style="color:${col};">${item.value}</div></div>`;}).join('');}
-  renderImp((data.impacts||{}).eco,'tab-eco');renderImp((data.impacts||{}).env,'tab-env');renderImp((data.impacts||{}).soc,'tab-soc');
-  const evList=data.evidence||[];
-  document.getElementById('t3-evidence').innerHTML=evList.map((e,i)=>`<div class="ev-item"><div class="ev-num">${String(i+1).padStart(2,'0')}</div><div><div class="ev-text">${e.text}</div><div class="ev-source">${e.source}</div></div></div>`).join('');
-  document.getElementById('t3-cit-badge').textContent=`${evList.length} citations`;
-  document.getElementById('t3-rec-title').textContent=data.recommendation||'';
-  document.getElementById('t3-rec-body').textContent=data.rationale||'';
-  const pct=data.consensus_pct||0;document.getElementById('t3-cons-pct').textContent=pct+'%';
-  document.getElementById('t3-ring').setAttribute('stroke-dashoffset',Math.round(402*(1-pct/100)));
-  document.getElementById('t3-agent-breakdown').innerHTML=`<div class="ab-row"><span style="color:var(--gov);font-size:15px;">Government Agent</span><span style="font-family:'DM Mono',monospace;font-size:14px;color:var(--gov);">${data.gov_pct||0}%</span></div><div class="ab-row"><span style="color:var(--ent);font-size:15px;">Enterprise Agent</span><span style="font-family:'DM Mono',monospace;font-size:14px;color:var(--ent);">${data.ent_pct||0}%</span></div>`;
-  document.getElementById('t3-badges').innerHTML=`<span class="badge badge-green">Live debate output</span><span class="badge badge-blue">${evList.length} citations</span><span class="badge" style="color:var(--council);border-color:rgba(200,146,42,0.3);">Expert synthesized</span>`;
-  const gapList=data.data_gaps||[];const sevMap={high:'gap-high',medium:'gap-med',low:'gap-low'};const sevLbl={high:'High Priority',medium:'Medium',low:'Low'};
-  document.getElementById('t3-gaps').innerHTML=gapList.map((g,i)=>`<div class="gap-item"><div class="gap-num">${String(i+1).padStart(2,'0')}</div><div style="flex:1;"><div class="gap-severity ${sevMap[g.severity]||'gap-med'}">${sevLbl[g.severity]||g.severity}</div><div class="gap-title">${g.title}</div><div class="gap-desc">${g.description}</div><div class="gap-action">→ Hành động: ${g.action}</div></div></div>`).join('');
-  document.getElementById('t3-gap-badge').textContent=`${gapList.length} gaps detected`;
-  document.getElementById('t3-loading').style.display='none';document.getElementById('t3-content').style.display='flex';
+function initChartKB() {
+  const ctx = document.getElementById('chartKB'); if(!ctx||ctx._c)return;
+  const c = cc();
+  ctx._c = new Chart(ctx,{type:'doughnut',data:{labels:['Legal chunks — 1.597','Business CBAM — 93'],datasets:[{data:[1597,93],backgroundColor:[C.gov,C.ent],borderColor:document.documentElement.classList.contains('light')?'#ece6da':'#111',borderWidth:3,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,cutout:'74%',plugins:{legend:{position:'bottom',labels:{color:c.muted,font:{size:11,family:"'Be Vietnam Pro',sans-serif"},padding:14,boxWidth:12}},tooltip:{backgroundColor:c.tt_bg,borderColor:'rgba(200,160,80,0.25)',borderWidth:1,titleColor:c.tt_ttl,bodyColor:c.tt_body,padding:10,cornerRadius:3}}}});
 }
 
-/* ─── EXPORT ─── */
-function exportCSV(){const rows=[['Chỉ số','MAD-Policy','Baseline','Cải thiện','Cohen\'s d','Effect'],['Word Count','2,888.0 ± 80.2','490 ± ~54','+495.6%','24.487','Large'],['Citations','17.7 ± 1.9','2.2','+715%','7.573','Large'],['Factuality','8.70 / 10','~8.0 / 10','+0.70','—','Better'],['Coherence','8.0 (MAE=0.17)','~8.7 / 10','-0.73','—','Low Var'],['Diversity Score','0.675 (Jaccard)','N/A','—','—','Multi-Agent'],['Time (s)','170.0s','~50.7s','+235.5%','0.326','Negligible']];const csv=rows.map(r=>r.map(c=>`"${c}"`).join(',')).join('\n');const b=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`MAD_Policy_Benchmark_${new Date().toISOString().slice(0,10)}.csv`;a.click();URL.revokeObjectURL(a.href);}
-function copyJSON(){if(!_t3cache){alert('Chưa có dữ liệu Tier 3 — chạy debate trước.');return;}navigator.clipboard.writeText(JSON.stringify(_t3cache,null,2)).then(()=>{const btn=document.querySelector('[onclick="copyJSON()"]');if(btn){const o=btn.textContent;btn.textContent='✓ Đã sao chép!';btn.style.color='var(--green)';setTimeout(()=>{btn.textContent=o;btn.style.color='';},2000);}}).catch(()=>{const ta=document.createElement('textarea');ta.value=JSON.stringify(_t3cache,null,2);ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);});}
-function exportR(){const recT=document.getElementById('t3-rec-title')?.textContent||'';const recB=document.getElementById('t3-rec-body')?.textContent||'';const consPct=document.getElementById('t3-cons-pct')?.textContent||'—';const content=['BÁO CÁO PHÂN TÍCH CHÍNH SÁCH THUẾ CARBON','MAD-Policy — Multi-Agent Debate System',`Ngày: ${new Date().toLocaleString('vi-VN')}`,'','═══ KẾT QUẢ BENCHMARK (n=30) ═══','- Word Count: 2,888.0 ± 80.2 (+495.6%) · Cohen\'s d=24.487','- Citations: 17.7 ± 1.9 (+715%) · Cohen\'s d=7.573','- Factuality: 8.70/10 · Diversity: 0.675 · Time: 170.0s','','═══ KHUYẾN NGHỊ ═══',recT,recB,`Mức đồng thuận: ${consPct}`,'','═══ GHI CHÚ ═══','Nguồn: benchmark_results_vi.json · accuracy_report.json · n=30'].join('\n');const b=new Blob([content],{type:'text/plain;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`MAD_Policy_Report_${new Date().toISOString().slice(0,10)}.txt`;a.click();URL.revokeObjectURL(a.href);}
+let chartsReady = false;
+function initCharts() {
+  if (chartsReady) return; chartsReady = true;
+  const labels30 = Array.from({length:30},(_,i)=>`Q${i+1}`);
+
+  const wcCtx=document.getElementById('chartWC'); if(wcCtx&&!wcCtx._c){const madWC=[2888,2901,2876,2895,2912,2867,2843,2879,2891,2924,2856,2898,2863,2905,2878,2893,2912,2867,2851,2908,2887,2876,2915,2893,2869,2883,2907,2878,2896,2871];const blWC=[478,512,467,523,489,501,534,456,498,521,467,489,523,478,512,501,489,534,467,498,521,456,489,512,478,501,534,467,523,489];const opts=baseOpts('Câu hỏi (n=30)','Số từ');opts.plugins.legend.display=true;wcCtx._c=new Chart(wcCtx,{type:'bar',data:{labels:labels30,datasets:[{label:'MAD-Policy (avg 2,888)',data:madWC,backgroundColor:'rgba(74,126,200,0.65)',borderColor:C.gov,borderWidth:1,borderRadius:2},{label:'Baseline (avg 490)',data:blWC,backgroundColor:'rgba(200,146,42,0.4)',borderColor:C.council,borderWidth:1,borderRadius:2}]},options:opts});}
+
+  const citCtx=document.getElementById('chartCit'); if(citCtx&&!citCtx._c){const opts=baseOpts('Số citations trung bình','');opts.indexAxis='y';opts.plugins.legend.display=false;opts.scales.x.max=22;citCtx._c=new Chart(citCtx,{type:'bar',data:{labels:['Baseline (Single-Agent)','MAD-Policy'],datasets:[{data:[2.2,17.7],backgroundColor:['rgba(200,146,42,0.45)','rgba(74,126,200,0.7)'],borderColor:[C.council,C.gov],borderWidth:1,borderRadius:3,barThickness:38}]},options:opts});}
+
+  const divCtx=document.getElementById('chartDiv'); if(divCtx&&!divCtx._c){const binLabels=['0.600–0.625','0.625–0.650','0.650–0.675','0.675–0.700','0.700–0.725','0.725–0.750','≥0.750'];const binCounts=[2,3,11,6,5,1,1];const opts=baseOpts('Jaccard Diversity Score','Số debate');opts.plugins.legend.display=false;divCtx._c=new Chart(divCtx,{type:'bar',data:{labels:binLabels,datasets:[{data:binCounts,backgroundColor:binCounts.map((_,i)=>`rgba(74,126,200,${0.3+i*0.1})`),borderColor:C.gov,borderWidth:1,borderRadius:2}]},options:opts});}
+
+  const cfCtx=document.getElementById('chartCF'); if(cfCtx&&!cfCtx._c){const madPts=[...Array(26).fill(null).map(()=>({x:8+(Math.random()-.5)*.12,y:9+(Math.random()-.5)*.12})),...Array(3).fill(null).map(()=>({x:8+(Math.random()-.5)*.12,y:7+(Math.random()-.5)*.12})),{x:7.05,y:6.05}];const blPts=Array.from({length:30},()=>({x:9.5+(Math.random()*.5),y:8+(Math.random()-.5)*.4}));const opts=baseOpts('Coherence Score (1–10)','Factuality Score (1–10)');opts.scales.x.min=5;opts.scales.x.max=11;opts.scales.y.min=5;opts.scales.y.max=11;cfCtx._c=new Chart(cfCtx,{type:'scatter',data:{datasets:[{label:'MAD-Policy (n=30)',data:madPts,backgroundColor:'rgba(74,126,200,0.75)',pointRadius:5},{label:'Baseline (n=30)',data:blPts,backgroundColor:'rgba(200,56,42,0.55)',pointStyle:'triangle',pointRadius:5}]},options:opts});}
+
+  const cohenCtx=document.getElementById('chartCohen'); if(cohenCtx&&!cohenCtx._c){const opts=baseOpts("Cohen's d value",'');opts.indexAxis='y';opts.plugins.legend.display=false;opts.scales.x.max=26;cohenCtx._c=new Chart(cohenCtx,{type:'bar',data:{labels:['Time (s)','Citations','Word Count'],datasets:[{data:[0.326,7.573,24.487],backgroundColor:['rgba(200,146,42,0.4)','rgba(74,126,200,0.6)','rgba(74,158,92,0.65)'],borderColor:[C.council,C.gov,C.green],borderWidth:1,borderRadius:3,barThickness:32}]},options:opts});}
+
+  const wcqCtx=document.getElementById('chartWCQ'); if(wcqCtx&&!wcqCtx._c){const vals=[465,507,516,513,475,462,458,468,481,502,460,495,500,473,494,507,496,494,493,487,492,501,505,496,479,483,513,493,496,479];const opts=baseOpts('Câu hỏi','WC Improvement (%)');opts.plugins.legend.display=false;wcqCtx._c=new Chart(wcqCtx,{type:'bar',data:{labels:labels30,datasets:[{data:vals,backgroundColor:'rgba(74,126,200,0.55)',borderColor:C.gov,borderWidth:1,borderRadius:2}]},options:opts});}
+
+  const citqCtx=document.getElementById('chartCitQ'); if(citqCtx&&!citqCtx._c){const vals=[718,673,809,673,764,855,627,627,627,855,673,809,627,627,627,764,627,673,627,718,627,855,673,673,673,536,673,855,764,764];const opts=baseOpts('Câu hỏi','Citation Improvement (%)');opts.plugins.legend.display=false;citqCtx._c=new Chart(citqCtx,{type:'bar',data:{labels:labels30,datasets:[{data:vals,backgroundColor:vals.map(v=>v>=800?'rgba(74,158,92,0.75)':v>=700?'rgba(74,126,200,0.65)':'rgba(200,146,42,0.5)'),borderColor:vals.map(v=>v>=800?C.green:v>=700?C.gov:C.council),borderWidth:1,borderRadius:2}]},options:opts});}
+
+  const legalCtx=document.getElementById('chartLegal'); if(legalCtx&&!legalCtx._c){const opts=baseOpts('','Score (%)');opts.plugins.legend.display=false;opts.scales.y.max=110;legalCtx._c=new Chart(legalCtx,{type:'bar',data:{labels:['Clause Type','Subjects F1','Domains F1','Overall F1'],datasets:[{data:[80.0,71.1,73.6,74.9],backgroundColor:['rgba(74,126,200,0.7)','rgba(74,126,200,0.55)','rgba(74,158,92,0.65)','rgba(255,255,255,0.8)'],borderColor:[C.gov,C.gov,C.green,'rgba(255,255,255,0.6)'],borderWidth:1,borderRadius:3,barThickness:40}]},options:opts});}
+
+  const bizCtx=document.getElementById('chartBiz'); if(bizCtx&&!bizCtx._c){const opts=baseOpts('','Score (%)');opts.plugins.legend.display=false;opts.scales.y.max=110;bizCtx._c=new Chart(bizCtx,{type:'bar',data:{labels:['Stance','CBAM','Focus F1','Overall F1'],datasets:[{data:[97.8,93.5,33.4,74.9],backgroundColor:['rgba(74,158,92,0.7)','rgba(74,126,200,0.65)','rgba(200,56,42,0.75)','rgba(200,146,42,0.8)'],borderColor:[C.green,C.gov,C.ent,C.council],borderWidth:1,borderRadius:3,barThickness:40}]},options:opts});}
+
+  const maeCtx=document.getElementById('chartMAE'); if(maeCtx&&!maeCtx._c){const opts=baseOpts('Dimension','MAE');opts.plugins.legend.display=false;opts.scales.y.max=1.2;maeCtx._c=new Chart(maeCtx,{type:'bar',data:{labels:['Coherence MAE','Factuality MAE'],datasets:[{data:[0.17,0.10],backgroundColor:['rgba(74,126,200,0.65)','rgba(74,158,92,0.65)'],borderColor:[C.gov,C.green],borderWidth:1,borderRadius:3,barThickness:50}]},options:opts});}
+
+  const agrCtx=document.getElementById('chartAgr'); if(agrCtx&&!agrCtx._c){const opts=baseOpts('Agreement Type','Rate (%)');opts.scales.y.max=110;opts.plugins.legend.display=true;agrCtx._c=new Chart(agrCtx,{type:'bar',data:{labels:['Coherence','Factuality'],datasets:[{label:'Exact match',data:[83.3,90.0],backgroundColor:'rgba(74,126,200,0.65)',borderColor:C.gov,borderWidth:1,borderRadius:2,barThickness:30},{label:'Within ±1',data:[100,100],backgroundColor:'rgba(74,158,92,0.55)',borderColor:C.green,borderWidth:1,borderRadius:2,barThickness:30}]},options:opts});}
+}
+
+/* ════════════════════════ EXPORT ════════════════════════ */
+function exportCSV() {
+  const rows=[['Chỉ số','MAD-Policy','Baseline','Cải thiện',"Cohen's d",'Effect'],['Word Count','2,888.0 ± 80.2','490 ± ~54','+495.6%','24.487','Large'],['Citations','17.7 ± 1.9','2.2','+715%','7.573','Large'],['Factuality','8.70 / 10','~8.0 / 10','+0.70','—','Better'],['Coherence','8.0 (MAE=0.17)','~8.7 / 10','-0.73','—','Low Var'],['Diversity Score','0.675 (Jaccard)','N/A','—','—','Multi-Agent'],['Time (s)','170.0s','~50.7s','+235.5%','0.326','Negligible']];
+  const csv=rows.map(r=>r.map(c=>`"${c}"`).join(',')).join('\n');
+  const b=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`MAD_Policy_Benchmark_${new Date().toISOString().slice(0,10)}.csv`;a.click();URL.revokeObjectURL(a.href);
+}
+function exportR() {
+  const idx = parseInt(document.getElementById('q-select').value);
+  const data = DEBATE_DATA[idx];
+  if (!data) { alert('Chưa có dữ liệu — replay debate trước.'); return; }
+  const content = ['BÁO CÁO PHÂN TÍCH CHÍNH SÁCH THUẾ CARBON','MAD-Policy — Multi-Agent Debate System',`Ngày: ${new Date().toLocaleString('vi-VN')}`,`Câu hỏi: ${data.question}`,'','═══ KẾT QUẢ BENCHMARK ═══',`Word Count: ${data.stats.word_count}`,`Citations: ${data.stats.citations}`,`Coherence: ${data.stats.coherence}/10`,`Factuality: ${data.stats.factuality}/10`,`Time: ${data.stats.time_seconds}s`,'','═══ KHUYẾN NGHỊ TIER 3 ═══',data.tier3?.decision_support?.recommended_option?.rationale||''].join('\n');
+  const b=new Blob([content],{type:'text/plain;charset=utf-8'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`MAD_Policy_Report_${new Date().toISOString().slice(0,10)}.txt`;a.click();URL.revokeObjectURL(a.href);
+}
 </script>
 </body>
 </html>
